@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flashcards Anabolizados - Seu Nome Aqui</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+  <title>Flashcards - Seu Nome Aqui</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet" />
   <style>
-    /* Reset básico */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -14,176 +13,95 @@
     }
 
     body {
-      font-family: 'Rajdhani', sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #e0e0e0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f2f2f2;
+      color: #333;
       min-height: 100vh;
       padding: 40px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      overflow-x: hidden;
-      background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      text-shadow: 0 0 5px #000;
     }
 
     h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      font-size: 3rem;
-      margin-bottom: 40px;
-      color: #00ffe7;
-      text-shadow:
-         0 0 10px #00ffe7,
-         0 0 20px #00ffe7,
-         0 0 30px #00ffe7,
-         0 0 40px #00ffe7;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      color: #222;
     }
 
     .container {
       display: flex;
       flex-wrap: wrap;
-      gap: 30px;
+      gap: 20px;
       justify-content: center;
-      max-height: 80vh;
-      overflow-y: auto;
-      padding: 10px;
+      max-width: 1200px;
       width: 100%;
-      max-width: 1400px;
-      scrollbar-width: thin;
-      scrollbar-color: #00ffe7 transparent;
-    }
-    /* Scrollbar estilizada */
-    .container::-webkit-scrollbar {
-      width: 8px;
-    }
-    .container::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .container::-webkit-scrollbar-thumb {
-      background-color: #00ffe7;
-      border-radius: 10px;
     }
 
     .flashcard {
-      background: rgba(0,0,0,0.8);
-      width: 320px;
-      height: 200px;
-      perspective: 1200px;
-      border-radius: 25px;
-      box-shadow:
-        0 0 15px #00ffe7,
-        0 0 30px #00ffe7 inset;
+      background: #ffffff;
+      width: 300px;
+      height: 180px;
+      perspective: 1000px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       cursor: pointer;
       position: relative;
-      transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.6s ease;
       transform-style: preserve-3d;
     }
 
-    .flashcard:hover {
-      transform: scale(1.07);
-      box-shadow:
-        0 0 25px #00fff2,
-        0 0 40px #00fff2 inset;
-      animation: glow 1.5s ease-in-out infinite alternate;
-    }
-
     .flashcard.flipped {
-      transform: rotateY(180deg) scale(1.07);
+      transform: rotateY(180deg);
     }
 
-    .card-front,
-    .card-back {
+    .card-front, .card-back {
       position: absolute;
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      border-radius: 25px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 25px 30px;
-      font-size: 18px;
-      user-select: none;
-      color: #e0e0e0;
+      padding: 20px;
+      font-size: 16px;
       text-align: center;
     }
 
     .card-front {
-      background: linear-gradient(145deg, #031f40, #022e63);
-      border: 3px solid #00ffe7;
-      box-shadow:
-        0 0 20px #00ffe7,
-        inset 0 0 10px #00ffe7;
+      background-color: #ffffff;
+      border: 1px solid #ddd;
     }
 
     .card-front h2 {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      font-size: 1.8rem;
-      margin-bottom: 15px;
-      letter-spacing: 1.5px;
-      color: #00ffe7;
-      text-shadow:
-         0 0 7px #00ffe7,
-         0 0 15px #00ffe7;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #555;
     }
 
     .card-back {
-      background: linear-gradient(145deg, #0a3d28, #1bc25b);
-      border: 3px solid #00ffad;
-      box-shadow:
-        0 0 20px #00ffad,
-        inset 0 0 10px #00ffad;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
       transform: rotateY(180deg);
-      color: #e0ffe0;
+      color: #222;
     }
 
     .card-back h3 {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      font-size: 1.6rem;
-      margin-bottom: 15px;
-      letter-spacing: 1.2px;
-      color: #00ffad;
-      text-shadow:
-         0 0 7px #00ffad,
-         0 0 15px #00ffad;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #444;
     }
 
-    /* Pergunta e resposta texto */
-    .question-text,
-    .answer-text {
-      font-weight: 600;
+    .question-text, .answer-text {
+      font-weight: 500;
       line-height: 1.4;
-      max-height: 5.5em;
-      overflow: hidden;
-    }
-
-    /* Efeito brilho animado no card */
-    @keyframes glow {
-      0%, 100% {
-        box-shadow:
-          0 0 8px #00ffe7,
-          0 0 20px #00ffe7,
-          0 0 40px #00ffe7;
-      }
-      50% {
-        box-shadow:
-          0 0 14px #00fff2,
-          0 0 30px #00fff2,
-          0 0 60px #00fff2;
-      }
     }
   </style>
 </head>
 <body>
-  <h1>Flashcards Anabolizados - Seu Nome Aqui</h1>
+  <h1>Flashcards - Seu Nome Aqui</h1>
   <div class="container">
 
     <div class="flashcard" onclick="this.classList.toggle('flipped')">
@@ -242,10 +160,5 @@
     </div>
 
   </div>
-
-  <script>
-    // Aqui o flip já tá no onclick dos flashcards no HTML.
-    // Se quiser deixar mais avançado depois, me chama!
-  </script>
 </body>
 </html>
