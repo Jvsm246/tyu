@@ -14,7 +14,8 @@
 
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #f2f2f2;
+      background: url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
       color: #333;
       min-height: 100vh;
       padding: 40px 20px;
@@ -26,7 +27,31 @@
     h1 {
       font-size: 2.5rem;
       margin-bottom: 30px;
-      color: #222;
+      color: #fff;
+      background-color: rgba(0,0,0,0.5);
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+
+    .scroll-area {
+      max-height: 600px;
+      overflow-y: auto;
+      width: 100%;
+      max-width: 1200px;
+      padding-right: 10px;
+    }
+
+    .scroll-area::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .scroll-area::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .scroll-area::-webkit-scrollbar-thumb {
+      background-color: #888;
+      border-radius: 10px;
     }
 
     .container {
@@ -34,8 +59,6 @@
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
-      max-width: 1200px;
-      width: 100%;
     }
 
     .flashcard {
@@ -102,63 +125,79 @@
 </head>
 <body>
   <h1>Flashcards - Seu Nome Aqui</h1>
-  <div class="container">
+  <div class="scroll-area">
+    <div class="container">
 
-    <div class="flashcard" onclick="this.classList.toggle('flipped')">
-      <div class="card-front">
-        <h2>Matemática</h2>
-        <p class="question-text">Quanto é 12 × 12?</p>
+      <!-- Flashcards repetidos ou novos exemplos -->
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="card-front">
+          <h2>Matemática</h2>
+          <p class="question-text">Quanto é 12 × 12?</p>
+        </div>
+        <div class="card-back">
+          <h3>Matemática</h3>
+          <p class="answer-text">Resposta: 144</p>
+        </div>
       </div>
-      <div class="card-back">
-        <h3>Matemática</h3>
-        <p class="answer-text">Resposta: 144</p>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="card-front">
+          <h2>História</h2>
+          <p class="question-text">Em que ano o Brasil foi descoberto?</p>
+        </div>
+        <div class="card-back">
+          <h3>História</h3>
+          <p class="answer-text">Resposta: 1500</p>
+        </div>
       </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="card-front">
+          <h2>Geografia</h2>
+          <p class="question-text">Qual o maior oceano do mundo?</p>
+        </div>
+        <div class="card-back">
+          <h3>Geografia</h3>
+          <p class="answer-text">Resposta: Oceano Pacífico</p>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="card-front">
+          <h2>Inglês</h2>
+          <p class="question-text">O que significa "break a leg"?</p>
+        </div>
+        <div class="card-back">
+          <h3>Inglês</h3>
+          <p class="answer-text">Significa "boa sorte".</p>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="card-front">
+          <h2>Ciência</h2>
+          <p class="question-text">Qual planeta é conhecido como o "planeta vermelho"?</p>
+        </div>
+        <div class="card-back">
+          <h3>Ciência</h3>
+          <p class="answer-text">Resposta: Marte</p>
+        </div>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="card-front">
+          <h2>Jogos</h2>
+          <p class="question-text">Qual é o jogo mais vendido do mundo?</p>
+        </div>
+        <div class="card-back">
+          <h3>Jogos</h3>
+          <p class="answer-text">Resposta: Minecraft</p>
+        </div>
+      </div>
+
+      <!-- Você pode duplicar mais blocos desses acima se quiser -->
+
     </div>
-
-    <div class="flashcard" onclick="this.classList.toggle('flipped')">
-      <div class="card-front">
-        <h2>Futebol</h2>
-        <p class="question-text">Qual jogador marcou mais gols na Copa de 2018?</p>
-      </div>
-      <div class="card-back">
-        <h3>Futebol</h3>
-        <p class="answer-text">Resposta: Harry Kane</p>
-      </div>
-    </div>
-
-    <div class="flashcard" onclick="this.classList.toggle('flipped')">
-      <div class="card-front">
-        <h2>Jogos</h2>
-        <p class="question-text">Qual é o jogo mais vendido do mundo?</p>
-      </div>
-      <div class="card-back">
-        <h3>Jogos</h3>
-        <p class="answer-text">Resposta: Minecraft</p>
-      </div>
-    </div>
-
-    <div class="flashcard" onclick="this.classList.toggle('flipped')">
-      <div class="card-front">
-        <h2>História</h2>
-        <p class="question-text">Em que ano o Brasil foi descoberto?</p>
-      </div>
-      <div class="card-back">
-        <h3>História</h3>
-        <p class="answer-text">Resposta: 1500</p>
-      </div>
-    </div>
-
-    <div class="flashcard" onclick="this.classList.toggle('flipped')">
-      <div class="card-front">
-        <h2>Inglês</h2>
-        <p class="question-text">O que significa "break a leg"?</p>
-      </div>
-      <div class="card-back">
-        <h3>Inglês</h3>
-        <p class="answer-text">Significa "boa sorte" de forma informal.</p>
-      </div>
-    </div>
-
   </div>
 </body>
 </html>
