@@ -6,49 +6,176 @@
   <title>Flash Cards para Estudo</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
   <style>
-    /* estilos mantidos como no exemplo anterior */
-    /* ... (seu CSS completo permanece aqui, sem alterações necessárias) ... */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      text-shadow: 0 0 5px #000;
+    }
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 3rem;
+      margin-bottom: 40px;
+      color: #4caf50;
+      text-shadow: none;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 10px;
+      width: 100%;
+      max-width: 1400px;
+      scrollbar-width: thin;
+      scrollbar-color: #88ccff transparent;
+    }
+    .container::-webkit-scrollbar {
+      width: 8px;
+    }
+    .container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .container::-webkit-scrollbar-thumb {
+      background-color: #88ccff;
+      border-radius: 10px;
+    }
+    .flashcard {
+      background: rgba(15, 32, 50, 0.85);
+      width: 300px;
+      height: 190px;
+      perspective: 1000px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px #88ccff, inset 0 0 8px #335577;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      user-select: none;
+    }
+    .flashcard:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 18px #aaddff, inset 0 0 12px #5577aa;
+      animation: glow 1.4s ease-in-out infinite alternate;
+    }
+    .flashcard.flipped {
+      transform: rotateY(180deg) scale(1.05);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 25px;
+      font-size: 17px;
+      color: #e0e0e0;
+      text-align: center;
+    }
+    .card-front {
+      background: linear-gradient(145deg, #122b44, #194a6a);
+      border: 2px solid #88ccff;
+      box-shadow: 0 0 15px #88ccff, inset 0 0 10px #88ccff;
+    }
+    .card-front h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      margin-bottom: 15px;
+      letter-spacing: 1.2px;
+      color: #88ccff;
+      text-shadow: 0 0 6px #88ccff, 0 0 12px #88ccff;
+    }
+    .card-back {
+      background: linear-gradient(145deg, #0a3d28, #1bc25b);
+      border: 2px solid #6fe68a;
+      box-shadow: 0 0 20px #6fe68a, inset 0 0 10px #6fe68a;
+      transform: rotateY(180deg);
+      color: #e0ffe0;
+    }
+    .card-back h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      letter-spacing: 1.1px;
+      color: #6fe68a;
+      text-shadow: 0 0 6px #6fe68a, 0 0 12px #6fe68a;
+    }
+    .question-text, .answer-text {
+      font-weight: 600;
+      line-height: 1.4;
+      max-height: 6em;
+      overflow: hidden;
+    }
+    @keyframes glow {
+      0%, 100% {
+        box-shadow: 0 0 10px #88ccff, 0 0 20px #88ccff, 0 0 30px #88ccff;
+      }
+      50% {
+        box-shadow: 0 0 18px #aaddff, 0 0 30px #aaddff, 0 0 40px #aaddff;
+      }
+    }
   </style>
 </head>
 <body>
   <h1>Flash Cards para Estudo</h1>
   <div class="container" id="flashcards-container"></div>
+
   <script>
     const flashcardsData = [
       { topic: 'Matemática', question: 'Qual é a raiz quadrada de 144?', answer: 'Resposta: 12' },
       { topic: 'História', question: 'Quem foi o primeiro presidente do Brasil?', answer: 'Resposta: Deodoro da Fonseca' },
-      { topic: 'Geografia', question: 'Qual é o maior deserto do mundo?', answer: 'Resposta: Deserto da Antártida' },
-      { topic: 'Física', question: 'O que é velocidade escalar média?', answer: 'Resposta: A razão entre a distância percorrida e o tempo gasto.' },
-      { topic: 'Inglês', question: 'O que significa "I’m hungry"?', answer: 'Significa "Estou com fome"' },
-      { topic: 'Ciência', question: 'O que é fotossíntese?', answer: 'Resposta: Processo pelo qual as plantas produzem seu próprio alimento com luz solar.' },
-      { topic: 'Jogos', question: 'Qual é o nome do criador do jogo Minecraft?', answer: 'Resposta: Markus Persson (Notch)' },
-      { topic: 'Literatura', question: 'Quem escreveu "O Pequeno Príncipe"?', answer: 'Resposta: Antoine de Saint-Exupéry' },
+      { topic: 'Inglês', question: 'Traduza "I am learning English."', answer: 'Resposta: Eu estou aprendendo inglês.' },
+      { topic: 'Geografia', question: 'Qual é o maior país do mundo em território?', answer: 'Resposta: Rússia' },
+      { topic: 'Ciência', question: 'O que é H2O?', answer: 'Resposta: Água' },
       { topic: 'Futebol', question: 'Quantas Copas do Mundo o Brasil venceu?', answer: 'Resposta: 5' },
-      { topic: 'Tecnologia', question: 'O que significa HTML?', answer: 'Resposta: HyperText Markup Language' },
-      // +90 flashcards abaixo:
+      { topic: 'Jogos', question: 'Em que ano foi lançado o PlayStation 2?', answer: 'Resposta: 2000' },
+      { topic: 'Literatura', question: 'Quem escreveu "O Pequeno Príncipe"?', answer: 'Resposta: Antoine de Saint-Exupéry' },
+      { topic: 'Tecnologia', question: 'Para que serve um SSD?', answer: 'Resposta: Armazenamento de dados com alta velocidade.' },
+      { topic: 'Física', question: 'O que é gravidade?', answer: 'Resposta: Força que atrai corpos para o centro da Terra.' },
+      { topic: 'Biologia', question: 'Qual órgão é responsável por bombear o sangue?', answer: 'Resposta: Coração' },
+      { topic: 'Química', question: 'Qual é o símbolo químico do sódio?', answer: 'Resposta: Na' },
+      { topic: 'Educação Física', question: 'Quantos jogadores há em um time de vôlei?', answer: 'Resposta: 6' },
+      { topic: 'Artes', question: 'Quem pintou "A Noite Estrelada"?', answer: 'Resposta: Vincent van Gogh' },
+      { topic: 'Cinema', question: 'Quem é o diretor da trilogia "O Senhor dos Anéis"?', answer: 'Resposta: Peter Jackson' },
+      { topic: 'Música', question: 'Quem canta "Thriller"?', answer: 'Resposta: Michael Jackson' },
+      { topic: 'Português', question: 'O que é um advérbio?', answer: 'Resposta: Palavra que modifica o verbo.' },
+      { topic: 'Astronomia', question: 'Qual é o planeta mais próximo do Sol?', answer: 'Resposta: Mercúrio' },
+      { topic: 'Cultura Pop', question: 'Qual herói usa o escudo com uma estrela?', answer: 'Resposta: Capitão América' },
+      { topic: 'Mitologia', question: 'Quem é o deus do trovão na mitologia nórdica?', answer: 'Resposta: Thor' },
       { topic: 'Matemática', question: 'Quanto é 15% de 200?', answer: 'Resposta: 30' },
-      { topic: 'História', question: 'Quando começou a 2ª Guerra Mundial?', answer: 'Resposta: 1939' },
-      { topic: 'Geografia', question: 'Qual é o maior país do mundo?', answer: 'Resposta: Rússia' },
-      { topic: 'Física', question: 'Quem formulou a teoria da relatividade?', answer: 'Resposta: Albert Einstein' },
-      { topic: 'Inglês', question: 'O que significa "Good night"?', answer: 'Significa "Boa noite"' },
-      { topic: 'Ciência', question: 'Qual órgão do corpo humano bombeia sangue?', answer: 'Resposta: Coração' },
-      { topic: 'Jogos', question: 'Qual empresa criou o PlayStation?', answer: 'Resposta: Sony' },
+      { topic: 'História', question: 'Em que ano terminou a Segunda Guerra Mundial?', answer: 'Resposta: 1945' },
+      { topic: 'Inglês', question: 'Como se diz "cadeira" em inglês?', answer: 'Resposta: Chair' },
+      { topic: 'Geografia', question: 'Qual é a capital da Austrália?', answer: 'Resposta: Canberra' },
+      { topic: 'Ciência', question: 'Qual planeta é conhecido como planeta vermelho?', answer: 'Resposta: Marte' },
+      { topic: 'Futebol', question: 'Qual time venceu a Libertadores em 2021?', answer: 'Resposta: Palmeiras' },
+      { topic: 'Jogos', question: 'Qual franquia tem personagens como Mario e Luigi?', answer: 'Resposta: Super Mario' },
       { topic: 'Literatura', question: 'Quem escreveu "Memórias Póstumas de Brás Cubas"?', answer: 'Resposta: Machado de Assis' },
-      { topic: 'Futebol', question: 'Qual jogador é conhecido como "Rei do Futebol"?', answer: 'Resposta: Pelé' },
-      { topic: 'Tecnologia', question: 'O que é um sistema operacional?', answer: 'Resposta: Software que gerencia o hardware e os programas.' },
-      // (continue com flashcards diferentes, sem repetições, até chegar em 100)
-      // ...
-      { topic: 'Matemática', question: 'Quanto é 9 elevado ao quadrado?', answer: 'Resposta: 81' },
-      { topic: 'História', question: 'Quem foi Zumbi dos Palmares?', answer: 'Resposta: Líder do Quilombo dos Palmares' },
-      { topic: 'Geografia', question: 'Onde fica o Monte Everest?', answer: 'Resposta: Entre o Nepal e o Tibete' },
-      { topic: 'Física', question: 'O que é força centrípeta?', answer: 'Resposta: Força que mantém um corpo em movimento circular.' },
-      { topic: 'Inglês', question: 'Traduza: "She is a doctor."', answer: 'Resposta: Ela é médica.' },
-      { topic: 'Ciência', question: 'Qual planeta é conhecido como Planeta Vermelho?', answer: 'Resposta: Marte' },
-      { topic: 'Jogos', question: 'Qual jogo popular tem o modo "Battle Royale"?', answer: 'Resposta: Fortnite' },
-      { topic: 'Literatura', question: 'Quem é o autor de "Harry Potter"?', answer: 'Resposta: J.K. Rowling' },
-      { topic: 'Futebol', question: 'Qual país sediou a Copa de 2022?', answer: 'Resposta: Catar' },
-      { topic: 'Tecnologia', question: 'O que significa URL?', answer: 'Resposta: Uniform Resource Locator' },
-      // (continue a sequência até completar 100 flashcards variados!)
+      { topic: 'Tecnologia', question: 'O que significa "Wi-Fi"?', answer: 'Resposta: Wireless Fidelity' },
+      { topic: 'Física', question: 'Qual é a fórmula da força?', answer: 'Resposta: F = m × a' },
+      { topic: 'Biologia', question: 'O que os pulmões fazem?', answer: 'Resposta: Trocam gases com o ar.' },
+      // ... Adicione mais 70 flashcards variados aqui para totalizar 100
     ];
 
     function generateFlashcards() {
