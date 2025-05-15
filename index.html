@@ -29,7 +29,7 @@
       font-weight: 700;
       font-size: 3rem;
       margin-bottom: 40px;
-      color: #aaccee; /* cor suave, sem brilho */
+      color: #4caf50; /* verde suave */
       text-shadow: none;
     }
     .container {
@@ -178,18 +178,17 @@
       // ... outros exemplos variados para completar 100 flashcards
     ];
 
-    // Gerar 100 flashcards com variações dos exemplos acima
     function generateFlashcards() {
       const container = document.getElementById('flashcards-container');
-      for(let i = 1; i <= 100; i++) {
-        const base = flashcardsData[(i - 1) % flashcardsData.length];
+      for(let i = 0; i < 100; i++) {
+        const base = flashcardsData[i % flashcardsData.length];
         const flashcard = document.createElement('div');
         flashcard.className = 'flashcard';
         flashcard.onclick = () => flashcard.classList.toggle('flipped');
         flashcard.innerHTML = `
           <div class="card-front">
             <h2>${base.topic}</h2>
-            <p class="question-text">${base.question} (#${i})</p>
+            <p class="question-text">${base.question}</p>
           </div>
           <div class="card-back">
             <h3>${base.topic}</h3>
