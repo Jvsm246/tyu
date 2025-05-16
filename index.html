@@ -1,200 +1,223 @@
-<!DOCTYPE html>  <html lang="pt-BR">  
-<head>  
-  <meta charset="UTF-8" />  
-  <meta name="viewport" content="width=device-width, initial-scale=1" />  
-  <title>Flash Cards para Estudo</title>  
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600&display=swap" rel="stylesheet" />  
-  <style>  
-    * {  
-      box-sizing: border-box;  
-      margin: 0;  
-      padding: 0;  
-    }  
-    body {  
-      font-family: 'Rajdhani', sans-serif;  
-      background: url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;  
-      background-size: cover;  
-      color: #e0e0e0;  
-      min-height: 100vh;  
-      padding: 40px 20px;  
-      display: flex;  
-      flex-direction: column;  
-      align-items: center;  
-      overflow-x: hidden;  
-      text-shadow: 0 0 5px #000;  
-    }  
-    h1 {  
-      font-family: 'Orbitron', sans-serif;  
-      font-weight: 700;  
-      font-size: 3rem;  
-      margin-bottom: 40px;  
-      color: #4caf50;  
-      text-shadow: none;  
-    }  
-    .container {  
-      display: flex;  
-      flex-wrap: wrap;  
-      gap: 20px;  
-      justify-content: center;  
-      max-height: 80vh;  
-      overflow-y: auto;  
-      padding: 10px;  
-      width: 100%;  
-      max-width: 1400px;  
-      scrollbar-width: thin;  
-      scrollbar-color: #88ccff transparent;  
-    }  
-    .container::-webkit-scrollbar {  
-      width: 8px;  
-    }  
-    .container::-webkit-scrollbar-track {  
-      background: transparent;  
-    }  
-    .container::-webkit-scrollbar-thumb {  
-      background-color: #88ccff;  
-      border-radius: 10px;  
-    }  
-    .flashcard {  
-      background: rgba(15, 32, 50, 0.85);  
-      width: 300px;  
-      height: 190px;  
-      perspective: 1000px;  
-      border-radius: 20px;  
-      box-shadow: 0 0 10px #88ccff, inset 0 0 8px #335577;  
-      cursor: pointer;  
-      position: relative;  
-      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);  
-      transform-style: preserve-3d;  
-      user-select: none;  
-    }  
-    .flashcard:hover {  
-      transform: scale(1.05);  
-      box-shadow: 0 0 18px #aaddff, inset 0 0 12px #5577aa;  
-      animation: glow 1.4s ease-in-out infinite alternate;  
-    }  
-    .flashcard.flipped {  
-      transform: rotateY(180deg) scale(1.05);  
-    }  
-    .card-front, .card-back {  
-      position: absolute;  
-      width: 100%;  
-      height: 100%;  
-      backface-visibility: hidden;  
-      border-radius: 20px;  
-      box-shadow: 0 4px 12px rgba(0,0,0,0.7);  
-      display: flex;  
-      flex-direction: column;  
-      justify-content: center;  
-      align-items: center;  
-      padding: 20px 25px;  
-      font-size: 17px;  
-      color: #e0e0e0;  
-      text-align: center;  
-    }  
-    .card-front {  
-      background: linear-gradient(145deg, #122b44, #194a6a);  
-      border: 2px solid #88ccff;  
-      box-shadow: 0 0 15px #88ccff, inset 0 0 10px #88ccff;  
-    }  
-    .card-front h2 {  
-      font-family: 'Orbitron', sans-serif;  
-      font-weight: 700;  
-      font-size: 1.6rem;  
-      margin-bottom: 15px;  
-      letter-spacing: 1.2px;  
-      color: #88ccff;  
-      text-shadow: 0 0 6px #88ccff, 0 0 12px #88ccff;  
-    }  
-    .card-back {  
-      background: linear-gradient(145deg, #0a3d28, #1bc25b);  
-      border: 2px solid #6fe68a;  
-      box-shadow: 0 0 20px #6fe68a, inset 0 0 10px #6fe68a;  
-      transform: rotateY(180deg);  
-      color: #e0ffe0;  
-    }  
-    .card-back h3 {  
-      font-family: 'Orbitron', sans-serif;  
-      font-weight: 700;  
-      font-size: 1.4rem;  
-      margin-bottom: 15px;  
-      letter-spacing: 1.1px;  
-      color: #6fe68a;  
-      text-shadow: 0 0 6px #6fe68a, 0 0 12px #6fe68a;  
-    }  
-    .question-text, .answer-text {  
-      font-weight: 600;  
-      line-height: 1.4;  
-      max-height: 6em;  
-      overflow: hidden;  
-    }  
-    @keyframes glow {  
-      0%, 100% {  
-        box-shadow: 0 0 10px #88ccff, 0 0 20px #88ccff, 0 0 30px #88ccff;  
-      }  
-      50% {  
-        box-shadow: 0 0 18px #aaddff, 0 0 30px #aaddff, 0 0 40px #aaddff;  
-      }  
-    }  
-  </style>  
-</head>  
-<body>  
-  <h1>Flash Cards para Estudo</h1>  
-  <div class="container" id="flashcards-container"></div>    <script>  
-    const flashcardsData = [  
-      { topic: 'Matemática', question: 'Qual é a raiz quadrada de 144?', answer: 'Resposta: 12' },  
-      { topic: 'História', question: 'Quem foi o primeiro presidente do Brasil?', answer: 'Resposta: Deodoro da Fonseca' },  
-      { topic: 'Inglês', question: 'Traduza "I am learning English."', answer: 'Resposta: Eu estou aprendendo inglês.' },  
-      { topic: 'Geografia', question: 'Qual é o maior país do mundo em território?', answer: 'Resposta: Rússia' },  
-      { topic: 'Ciência', question: 'O que é H2O?', answer: 'Resposta: Água' },  
-      { topic: 'Futebol', question: 'Quantas Copas do Mundo o Brasil venceu?', answer: 'Resposta: 5' },  
-      { topic: 'Jogos', question: 'Em que ano foi lançado o PlayStation 2?', answer: 'Resposta: 2000' },  
-      { topic: 'Literatura', question: 'Quem escreveu "O Pequeno Príncipe"?', answer: 'Resposta: Antoine de Saint-Exupéry' },  
-      { topic: 'Tecnologia', question: 'Para que serve um SSD?', answer: 'Resposta: Armazenamento de dados com alta velocidade.' },  
-      { topic: 'Física', question: 'O que é gravidade?', answer: 'Resposta: Força que atrai corpos para o centro da Terra.' },  
-      { topic: 'Biologia', question: 'Qual órgão é responsável por bombear o sangue?', answer: 'Resposta: Coração' },  
-      { topic: 'Química', question: 'Qual é o símbolo químico do sódio?', answer: 'Resposta: Na' },  
-      { topic: 'Educação Física', question: 'Quantos jogadores há em um time de vôlei?', answer: 'Resposta: 6' },  
-      { topic: 'Artes', question: 'Quem pintou "A Noite Estrelada"?', answer: 'Resposta: Vincent van Gogh' },  
-      { topic: 'Cinema', question: 'Quem é o diretor da trilogia "O Senhor dos Anéis"?', answer: 'Resposta: Peter Jackson' },  
-      { topic: 'Música', question: 'Quem canta "Thriller"?', answer: 'Resposta: Michael Jackson' },  
-      { topic: 'Português', question: 'O que é um advérbio?', answer: 'Resposta: Palavra que modifica o verbo.' },  
-      { topic: 'Astronomia', question: 'Qual é o planeta mais próximo do Sol?', answer: 'Resposta: Mercúrio' },  
-      { topic: 'Cultura Pop', question: 'Qual herói usa o escudo com uma estrela?', answer: 'Resposta: Capitão América' },  
-      { topic: 'Mitologia', question: 'Quem é o deus do trovão na mitologia nórdica?', answer: 'Resposta: Thor' },  
-      { topic: 'Matemática', question: 'Quanto é 15% de 200?', answer: 'Resposta: 30' },  
-      { topic: 'História', question: 'Em que ano terminou a Segunda Guerra Mundial?', answer: 'Resposta: 1945' },  
-      { topic: 'Inglês', question: 'Como se diz "cadeira" em inglês?', answer: 'Resposta: Chair' },  
-      { topic: 'Geografia', question: 'Qual é a capital da Austrália?', answer: 'Resposta: Canberra' },  
-      { topic: 'Ciência', question: 'Qual planeta é conhecido como planeta vermelho?', answer: 'Resposta: Marte' },  
-      { topic: 'Futebol', question: 'Qual time venceu a Libertadores em 2021?', answer: 'Resposta: Palmeiras' },  
-      { topic: 'Jogos', question: 'Qual franquia tem personagens como Mario e Luigi?', answer: 'Resposta: Super Mario' },  
-      { topic: 'Literatura', question: 'Quem escreveu "Memórias Póstumas de Brás Cubas"?', answer: 'Resposta: Machado de Assis' },  
-      { topic: 'Tecnologia', question: 'O que significa "Wi-Fi"?', answer: 'Resposta: Wireless Fidelity' },  
-      { topic: 'Física', question: 'Qual é a fórmula da força?', answer: 'Resposta: F = m × a' },  
-      { topic: 'Biologia', question: 'O que os pulmões fazem?', answer: 'Resposta: Trocam gases com o ar.' },  
-      // ... Adicione mais 70 flashcards variados aqui para totalizar 100  
-    ];  
-  
-    function generateFlashcards() {  
-      const container = document.getElementById('flashcards-container');  
-      flashcardsData.forEach(base => {  
-        const flashcard = document.createElement('div');  
-        flashcard.className = 'flashcard';  
-        flashcard.onclick = () => flashcard.classList.toggle('flipped');  
-        flashcard.innerHTML = `  
-          <div class="card-front">  
-            <h2>${base.topic}</h2>  
-            <p class="question-text">${base.question}</p>  
-          </div>  
-          <div class="card-back">  
-            <h3>${base.topic}</h3>  
-            <p class="answer-text">${base.answer}</p>  
-          </div>  
-        `;  
-        container.appendChild(flashcard);  
-      });  
-    }  
-  
-    generateFlashcards();  
-  </script>  </body>  
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flash Cards para Estudo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    *
+    {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body
+    {
+      font-family: 'Rajdhani', sans-serif;
+      background: url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      text-shadow: 0 0 5px #000;
+    }
+    h1
+    {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 3rem;
+      margin-bottom: 40px;
+      color: #b366ff; /* roxo neon */
+      text-shadow: 0 0 12px #b366ff, 0 0 25px #d480ff;
+    }
+    .container
+    {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 10px;
+      width: 100%;
+      max-width: 1400px;
+      scrollbar-width: thin;
+      scrollbar-color: #b366ff transparent; /* roxo */
+    }
+    .container::-webkit-scrollbar
+    {
+      width: 8px;
+    }
+    .container::-webkit-scrollbar-track
+    {
+      background: transparent;
+    }
+    .container::-webkit-scrollbar-thumb
+    {
+      background-color: #b366ff; /* roxo */
+      border-radius: 10px;
+    }
+    .flashcard
+    {
+      background: rgba(38, 10, 60, 0.85); /* escuro com um toque roxo */
+      width: 300px;
+      height: 190px;
+      perspective: 1000px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px #b366ff, inset 0 0 8px #7a33a6;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      user-select: none;
+    }
+    .flashcard:hover
+    {
+      transform: scale(1.05);
+      box-shadow: 0 0 18px #d480ff, inset 0 0 12px #9c55cc;
+      animation: glow 1.4s ease-in-out infinite alternate;
+    }
+    .flashcard.flipped
+    {
+      transform: rotateY(180deg) scale(1.05);
+    }
+    .card-front, .card-back
+    {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 25px;
+      font-size: 17px;
+      color: #e0e0e0;
+      text-align: center;
+    }
+    .card-front
+    {
+      background: linear-gradient(145deg, #38165e, #6b3fa0);
+      border: 2px solid #b366ff;
+      box-shadow: 0 0 15px #b366ff, inset 0 0 10px #b366ff;
+    }
+    .card-front h2
+    {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      margin-bottom: 15px;
+      letter-spacing: 1.2px;
+      color: #d480ff;
+      text-shadow: 0 0 6px #d480ff, 0 0 12px #d480ff;
+    }
+    .card-back
+    {
+      background: linear-gradient(145deg, #3b1c5e, #9f59ff);
+      border: 2px solid #d480ff;
+      box-shadow: 0 0 20px #d480ff, inset 0 0 10px #d480ff;
+      transform: rotateY(180deg);
+      color: #f3e8ff;
+    }
+    .card-back h3
+    {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      letter-spacing: 1.1px;
+      color: #d480ff;
+      text-shadow: 0 0 6px #d480ff, 0 0 12px #d480ff;
+    }
+    .question-text, .answer-text
+    {
+      font-weight: 600;
+      line-height: 1.4;
+      max-height: 6em;
+      overflow: hidden;
+    }
+    @keyframes glow
+    {
+      0%, 100%
+      {
+        box-shadow: 0 0 10px #b366ff, 0 0 20px #b366ff, 0 0 30px #b366ff;
+      }
+      50%
+      {
+        box-shadow: 0 0 18px #d480ff, 0 0 30px #d480ff, 0 0 40px #d480ff;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Flash Cards para Estudo</h1>
+  <div class="container" id="flashcards-container"></div>
+
+  <script>
+    const flashcardsData = [
+      { topic: 'Matemática', question: 'Qual é a raiz quadrada de 144?', answer: 'Resposta: 12' },
+      { topic: 'História', question: 'Quem foi o primeiro presidente do Brasil?', answer: 'Resposta: Deodoro da Fonseca' },
+      { topic: 'Inglês', question: 'Traduza "I am learning English."', answer: 'Resposta: Eu estou aprendendo inglês.' },
+      { topic: 'Geografia', question: 'Qual é o maior país do mundo em território?', answer: 'Resposta: Rússia' },
+      { topic: 'Ciência', question: 'O que é H2O?', answer: 'Resposta: Água' },
+      { topic: 'Futebol', question: 'Quantas Copas do Mundo o Brasil venceu?', answer: 'Resposta: 5' },
+      { topic: 'Jogos', question: 'Em que ano foi lançado o PlayStation 2?', answer: 'Resposta: 2000' },
+      { topic: 'Literatura', question: 'Quem escreveu "O Pequeno Príncipe"?', answer: 'Resposta: Antoine de Saint-Exupéry' },
+      { topic: 'Tecnologia', question: 'Para que serve um SSD?', answer: 'Resposta: Armazenamento de dados com alta velocidade.' },
+      { topic: 'Física', question: 'O que é gravidade?', answer: 'Resposta: Força que atrai corpos para o centro da Terra.' },
+      { topic: 'Biologia', question: 'Qual órgão é responsável por bombear o sangue?', answer: 'Resposta: Coração' },
+      { topic: 'Química', question: 'Qual é o símbolo químico do sódio?', answer: 'Resposta: Na' },
+      { topic: 'Educação Física', question: 'Quantos jogadores há em um time de vôlei?', answer: 'Resposta: 6' },
+      { topic: 'Artes', question: 'Quem pintou "A Noite Estrelada"?', answer: 'Resposta: Vincent van Gogh' },
+      { topic: 'Cinema', question: 'Quem é o diretor da trilogia "O Senhor dos Anéis"?', answer: 'Resposta: Peter Jackson' },
+      { topic: 'Música', question: 'Quem canta "Thriller"?', answer: 'Resposta: Michael Jackson' },
+      { topic: 'Português', question: 'O que é um advérbio?', answer: 'Resposta: Palavra que modifica o verbo.' },
+      { topic: 'Astronomia', question: 'Qual é o planeta mais próximo do Sol?', answer: 'Resposta: Mercúrio' },
+      { topic: 'Cultura Pop', question: 'Qual herói usa o escudo com uma estrela?', answer: 'Resposta: Capitão América' },
+      { topic: 'Mitologia', question: 'Quem é o deus do trovão na mitologia nórdica?', answer: 'Resposta: Thor' },
+      { topic: 'Matemática', question: 'Quanto é 15% de 200?', answer: 'Resposta: 30' },
+      { topic: 'História', question: 'Em que ano terminou a Segunda Guerra Mundial?', answer: 'Resposta: 1945' },
+      { topic: 'Inglês', question: 'Como se diz "cadeira" em inglês?', answer: 'Resposta: Chair' },
+      { topic: 'Geografia', question: 'Qual é a capital da Austrália?', answer: 'Resposta: Canberra' },
+      { topic: 'Ciência', question: 'Qual planeta é conhecido como planeta vermelho?', answer: 'Resposta: Marte' },
+      { topic: 'Futebol', question: 'Qual time venceu a Libertadores em 2021?', answer: 'Resposta: Palmeiras' },
+      { topic: 'Jogos', question: 'Qual franquia tem personagens como Mario e Luigi?', answer: 'Resposta: Super Mario' },
+      { topic: 'Literatura', question: 'Quem escreveu "Memórias Póstumas de Brás Cubas"?', answer: 'Resposta: Machado de Assis' },
+      { topic: 'Tecnologia', question: 'O que significa "Wi-Fi"?', answer: 'Resposta: Wireless Fidelity' },
+      { topic: 'Física', question: 'Qual é a fórmula da força?', answer: 'Resposta: F = m × a' },
+      { topic: 'Biologia', question: 'O que os pulmões fazem?', answer: 'Resposta: Trocam gases com o ar.' },
+      // ... Adicione mais 70 flashcards variados aqui para totalizar 100
+    ];
+
+    function generateFlashcards() {
+      const container = document.getElementById('flashcards-container');
+      flashcardsData.forEach(base => {
+        const flashcard = document.createElement('div');
+        flashcard.className = 'flashcard';
+        flashcard.onclick = () => flashcard.classList.toggle('flipped');
+        flashcard.innerHTML = `
+          <div class="card-front">
+            <h2>${base.topic}</h2>
+            <p class="question-text">${base.question}</p>
+          </div>
+          <div class="card-back">
+            <h3>${base.topic}</h3>
+            <p class="answer-text">${base.answer}</p>
+          </div>
+        `;
+        container.appendChild(flashcard);
+      });
+    }
+
+    generateFlashcards();
+  </script>
+</body>
 </html>
