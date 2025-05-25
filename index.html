@@ -2,185 +2,304 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Flashcards do Zé</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flash Cards para Estudo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #cceeff, #e6f7ff);
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #e0e0e0;
+      min-height: 100vh;
       padding: 40px 20px;
-      color: #003344;
-      scroll-behavior: smooth;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      text-shadow: 0 0 5px #000;
     }
-
     h1 {
-      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 3rem;
       margin-bottom: 40px;
-      font-size: 2.5rem;
-      color: #005577;
+      color:#00FFB2;
+      text-shadow: 0 0 10px #88ccff, 0 0 20px #88ccff;
     }
-
-    button {
-      display: block;
-      margin: 0 auto 30px auto;
-      padding: 12px 25px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      border-radius: 12px;
-      border: none;
-      background: #88ccff;
-      color: #002233;
-      cursor: pointer;
-      box-shadow: 0 0 10px #88ccff;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #66bbff;
-    }
-
-    #flashcards-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    .container {
+      display: flex;
+      flex-wrap: wrap;
       gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
+      justify-content: center;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 10px;
+      width: 100%;
+      max-width: 1400px;
+      scrollbar-width: thin;
+      scrollbar-color: #88ccff transparent;
     }
-
+    .container::-webkit-scrollbar {
+      width: 8px;
+    }
+    .container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .container::-webkit-scrollbar-thumb {
+      background-color: #88ccff;
+      border-radius: 10px;
+    }
     .flashcard {
-      background-color: #ffffffcc;
+      background: rgba(15, 32, 50, 0.85);
+      width: 300px;
+      height: 190px;
+      perspective: 1000px;
       border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 10px #88ccff, inset 0 0 8px #335577;
       cursor: pointer;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
       position: relative;
-      height: 200px;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      user-select: none;
     }
-
+    .flashcard:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 18px #aaddff, inset 0 0 12px #5577aa;
+      animation: glow 1.4s ease-in-out infinite alternate;
+    }
     .flashcard.flipped {
-      transform: rotateY(180deg);
+      transform: rotateY(180deg) scale(1.05);
     }
-
-    .card-front,
-    .card-back {
+    .card-front, .card-back {
       position: absolute;
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.7);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 10px;
+      padding: 20px 25px;
+      font-size: 17px;
+      color: #e0e0e0;
       text-align: center;
     }
-
-    .card-back {
-      transform: rotateY(180deg);
-      background-color: #d9f0ff;
-      border-radius: 20px;
+    .card-front {
+      background: linear-gradient(145deg, #2c144e, #3f1c63);
+      border: 2px solid #88ccff;
+      box-shadow: 0 0 15px #88ccff, inset 0 0 10px #88ccff;
     }
-
+    .card-front h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      margin-bottom: 15px;
+      letter-spacing: 1.2px;
+      color: #88ccff;
+      text-shadow: 0 0 6px #88ccff, 0 0 12px #88ccff;
+    }
+    .card-back {
+      background: linear-gradient(145deg, #0a3d28, #1bc25b);
+      border: 2px solid #6fe68a;
+      box-shadow: 0 0 20px #6fe68a, inset 0 0 10px #6fe68a;
+      transform: rotateY(180deg);
+      color: #e0ffe0;
+    }
+    .card-back h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      letter-spacing: 1.1px;
+      color: #6fe68a;
+      text-shadow: 0 0 6px #6fe68a, 0 0 12px #6fe68a;
+    }
     .question-text, .answer-text {
-      font-size: 1.1rem;
-      margin-top: 10px;
+      font-weight: 600;
+      line-height: 1.4;
+      max-height: 6em;
+      overflow: hidden;
+    }
+    @keyframes glow {
+      0%, 100% {
+        box-shadow: 0 0 10px #88ccff, 0 0 20px #88ccff, 0 0 30px #88ccff;
+      }
+      50% {
+        box-shadow: 0 0 18px #aaddff, 0 0 30px #aaddff, 0 0 40px #aaddff;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Flashcards do Zé</h1>
-  <button onclick="shuffleFlashcards()">Embaralhar Cards</button>
-  <div id="flashcards-container"></div>
+  <h1>Flash Cards para Estudo</h1>
+  <div class="container" id="flashcards-container"></div>
 
   <script>
     const flashcardsData = [
       { topic: 'Matemática', question: 'Qual é a raiz quadrada de 144?', answer: '12' },
       { topic: 'História', question: 'Quem foi o primeiro presidente do Brasil?', answer: 'Deodoro da Fonseca' },
       { topic: 'Inglês', question: 'Traduza "I am learning English."', answer: 'Eu estou aprendendo inglês.' },
-      { topic: 'Geografia', question: 'Qual é a capital do Canadá?', answer: 'Ottawa' },
+      { topic: 'Geografia', question: 'Qual é o maior país do mundo em território?', answer: 'Rússia' },
+      { topic: 'Ciência', question: 'O que é H2O?', answer: 'Água' },
       { topic: 'Futebol', question: 'Quantas Copas do Mundo o Brasil venceu?', answer: '5' },
-      { topic: 'Curiosidade', question: 'Qual é o menor osso do corpo humano?', answer: 'Estribo (localizado no ouvido)' },
-      { topic: 'Ciência', question: 'Qual planeta é conhecido como planeta vermelho?', answer: 'Marte' },
-      { topic: 'Tecnologia', question: 'O que significa "HTML"?', answer: 'HyperText Markup Language' },
-      { topic: 'Cinema', question: 'Quem dirigiu o filme "Titanic"?', answer: 'James Cameron' },
-      { topic: 'Jogos', question: 'Qual empresa desenvolveu o jogo "The Legend of Zelda"?', answer: 'Nintendo' },
+      { topic: 'Jogos', question: 'Em que ano foi lançado o PlayStation 2?', answer: '2000' },
+      { topic: 'Literatura', question: 'Quem escreveu "O Pequeno Príncipe"?', answer: 'Antoine de Saint-Exupéry' },
+      { topic: 'Tecnologia', question: 'Para que serve um SSD?', answer: 'Armazenamento de dados com alta velocidade.' },
+      { topic: 'Física', question: 'O que é gravidade?', answer: 'Força que atrai corpos para o centro da Terra.' },
+      { topic: 'Curiosidades', question: 'Qual animal é o mais rápido do mundo?', answer: 'Falcão-peregrino' },
+      { topic: 'Cinema', question: 'Quem dirigiu "Titanic"?', answer: 'James Cameron' },
+      { topic: 'Biologia', question: 'Qual órgão é responsável por bombear o sangue?', answer: 'Coração' },
+      { topic: 'Música', question: 'Quem canta "Thriller"?', answer: 'Michael Jackson' },
+      { topic: 'Português', question: 'Qual é o plural de "pão"?', answer: 'Pães' },
+      { topic: 'Educação Física', question: 'Quantos minutos tem uma partida oficial de futebol?', answer: '90 minutos' },
+      { topic: 'Astronomia', question: 'Qual é o planeta mais próximo do Sol?', answer: 'Mercúrio' },
+      { topic: 'Filosofia', question: 'Quem disse "Penso, logo existo"?', answer: 'René Descartes' },
+      { topic: 'Artes', question: 'Quem pintou a "Mona Lisa"?', answer: 'Leonardo da Vinci' },
+      { topic: 'Cultura Pop', question: 'Quem é o protagonista de "Naruto"?', answer: 'Naruto Uzumaki' },
+      { topic: 'Mitologia', question: 'Quem é o deus do trovão na mitologia nórdica?', answer: 'Thor' },
+      { topic: 'História do Brasil', question: 'Quando ocorreu a Independência do Brasil?', answer: '7 de setembro de 1822' },
+      { topic: 'Culinária', question: 'O que é sushi?', answer: 'Prato japonês à base de arroz e peixe cru' },
+      { topic: 'Tecnologia', question: 'O que significa "CPU"?', answer: 'Unidade Central de Processamento' },
+      { topic: 'Física', question: 'Qual a fórmula da velocidade média?', answer: 'Vm = ΔS / Δt' },
+      { topic: 'Inglês', question: 'O que significa "Could you help me?"', answer: 'Você poderia me ajudar?' },
+      { topic: 'Curiosidades', question: 'Qual é o menor osso do corpo humano?', answer: 'Estribo (no ouvido)' },
+      { topic: 'Cinema', question: 'Qual filme ganhou o Oscar de Melhor Filme em 1994?', answer: 'Forrest Gump' },
+      { topic: 'Matemática', question: 'Quanto é 15% de 200?', answer: '30' },
+      { topic: 'Geografia', question: 'Onde fica o Monte Everest?', answer: 'Entre o Nepal e o Tibete' },
+      { topic: 'Futebol', question: 'Quem é o maior artilheiro da Seleção Brasileira?', answer: 'Neymar' },
+      { topic: 'Biologia', question: 'Qual é a função dos pulmões?', answer: 'Troca gasosa (oxigênio e gás carbônico)' },
+      { topic: 'Português', question: 'Qual a função de um advérbio?', answer: 'Modificar o verbo, adjetivo ou outro advérbio' },
+      { topic: 'Literatura', question: 'Qual obra começa com “Todas as famílias felizes se parecem”?', answer: 'Anna Kariênina' },
+      { topic: 'História', question: 'Quem foi Napoleão Bonaparte?', answer: 'Imperador francês e líder militar' },
+      { topic: 'Música', question: 'Qual banda canta "Bohemian Rhapsody"?', answer: 'Queen' },
+      { topic: 'Cultura Pop', question: 'Em que casa de Hogwarts está Harry Potter?', answer: 'Grifinória' },
+      { topic: 'Inglês', question: 'Como se diz "Eu gosto de pizza" em inglês?', answer: 'I like pizza' },
+      { topic: 'Ciência', question: 'O que é um átomo?', answer: 'A menor unidade básica da matéria' },
+      { topic: 'Curiosidades', question: 'Qual é o planeta conhecido como "Planeta Vermelho"?', answer: 'Marte' },
+      { topic: 'Física', question: 'O que é energia cinética?', answer: 'Energia de um corpo em movimento' },
+      { topic: 'Jogos', question: 'Qual é o personagem principal do jogo "The Legend of Zelda"?', answer: 'Link' },
+      { topic: 'Tecnologia', question: 'O que significa "RAM"?', answer: 'Memória de acesso aleatório' },
+      { topic: 'Matemática', question: 'Quanto é 9 x 7?', answer: '63' },
+      { topic: 'História', question: 'Quando foi a Revolução Francesa?', answer: '1789' },
+      { topic: 'Geografia', question: 'Qual é a capital do Canadá?', answer: 'Ottawa' },
+      { topic: 'Futebol', question: 'Quem foi o jogador conhecido como "Pelé"?', answer: 'Edson Arantes do Nascimento' },
+      { topic: 'Biologia', question: 'Qual é o maior órgão do corpo humano?', answer: 'Pele' },
+      { topic: 'Português', question: 'O que é um verbo transitivo?', answer: 'Verbo que exige complemento' },
       { topic: 'Literatura', question: 'Quem escreveu "Dom Casmurro"?', answer: 'Machado de Assis' },
-{ topic: 'Física', question: 'O que é velocidade da luz no vácuo?', answer: 'Aproximadamente 299.792.458 m/s' },
-{ topic: 'Futebol', question: 'Qual time venceu a Champions League em 2023?', answer: 'Manchester City' },
-{ topic: 'Biologia', question: 'Qual órgão é responsável por filtrar o sangue?', answer: 'Rins' },
-{ topic: 'Música', question: 'Qual banda lançou o álbum "The Dark Side of the Moon"?', answer: 'Pink Floyd' },
-{ topic: 'Química', question: 'Qual é o símbolo químico do ouro?', answer: 'Au' },
-{ topic: 'História', question: 'Em que ano caiu o Muro de Berlim?', answer: '1989' },
-{ topic: 'Cinema', question: 'Qual ator interpretou Wolverine?', answer: 'Hugh Jackman' },
-{ topic: 'Curiosidade', question: 'Quantos litros de sangue tem um adulto?', answer: 'Cerca de 5 litros' },
-{ topic: 'Tecnologia', question: 'Qual foi o primeiro sistema operacional da Microsoft?', answer: 'MS-DOS' },
-
-{ topic: 'Futebol', question: 'Quem é o maior artilheiro da história do Real Madrid?', answer: 'Cristiano Ronaldo' },
-{ topic: 'Geografia', question: 'Em que continente fica o Deserto do Saara?', answer: 'África' },
-{ topic: 'Matemática', question: 'Quanto é 7 x 8?', answer: '56' },
-{ topic: 'Esportes', question: 'Quantos jogadores tem um time de vôlei em quadra?', answer: '6' },
-{ topic: 'Astronomia', question: 'Qual é o maior planeta do Sistema Solar?', answer: 'Júpiter' },
-{ topic: 'Curiosidade', question: 'Qual animal tem a mordida mais forte?', answer: 'Crocodilo' },
-{ topic: 'Inglês', question: 'Traduza "She is sleeping."', answer: 'Ela está dormindo.' },
-{ topic: 'História', question: 'Quem descobriu o Brasil?', answer: 'Pedro Álvares Cabral' },
-{ topic: 'Geografia', question: 'Qual é o país com mais fusos horários?', answer: 'França' },
-{ topic: 'Ciência', question: 'Qual gás é essencial para a respiração?', answer: 'Oxigênio' },
-
-{ topic: 'Jogos', question: 'Qual é o nome do protagonista de "God of War"?', answer: 'Kratos' },
-{ topic: 'Cinema', question: 'Qual filme ganhou o Oscar de melhor filme em 2020?', answer: 'Parasita' },
-{ topic: 'Tecnologia', question: 'Quem fundou a Apple junto com Steve Wozniak?', answer: 'Steve Jobs' },
-{ topic: 'Música', question: 'Qual cantor é conhecido como "Rei do Pop"?', answer: 'Michael Jackson' },
-{ topic: 'Biologia', question: 'O que faz a clorofila?', answer: 'Captura luz para a fotossíntese' },
-{ topic: 'Literatura', question: 'Quem escreveu "O Pequeno Príncipe"?', answer: 'Antoine de Saint-Exupéry' },
-{ topic: 'Futebol', question: 'Quantos jogadores há em campo no futebol profissional?', answer: '22 (11 por time)' },
-{ topic: 'História', question: 'Quem foi Napoleão Bonaparte?', answer: 'Imperador francês' },
-{ topic: 'Geografia', question: 'Qual é o maior oceano do mundo?', answer: 'Oceano Pacífico' },
-{ topic: 'Matemática', question: 'O que é um número primo?', answer: 'Número divisível apenas por 1 e por ele mesmo' },
-
-{ topic: 'Inglês', question: 'Traduza "They are going to school."', answer: 'Eles estão indo para a escola.' },
-{ topic: 'Curiosidade', question: 'Qual é o metal mais leve?', answer: 'Lítio' },
-{ topic: 'Ciência', question: 'Qual órgão produz insulina?', answer: 'Pâncreas' },
-{ topic: 'Física', question: 'O que é gravidade?', answer: 'Força que atrai corpos para o centro da Terra' },
-{ topic: 'Cinema', question: 'Qual filme tem o personagem Jack Sparrow?', answer: 'Piratas do Caribe' },
-{ topic: 'Tecnologia', question: 'O que significa "Wi-Fi"?', answer: 'Wireless Fidelity' },
-{ topic: 'Jogos', question: 'Qual jogo tem os personagens Master Chief e Cortana?', answer: 'Halo' },
-{ topic: 'Literatura', question: 'Quem escreveu "A Metamorfose"?', answer: 'Franz Kafka' },
-{ topic: 'Esportes', question: 'Em qual país surgiu o judô?', answer: 'Japão' },
-{ topic: 'Música', question: 'Quem canta "Shape of You"?', answer: 'Ed Sheeran' },
-
-// Continue com mais 50 abaixo se quiser que eu gere ou edite direto no HTML completo
+      { topic: 'Música', question: 'Qual instrumento tem teclas pretas e brancas?', answer: 'Piano' },
+      { topic: 'Cinema', question: 'Quem é conhecido como "O Homem-Aranha"?', answer: 'Peter Parker' },
+      { topic: 'Astronomia', question: 'Qual é a galáxia em que vivemos?', answer: 'Via Láctea' },
+      { topic: 'Filosofia', question: 'O que é o existencialismo?', answer: 'Corrente filosófica que valoriza a liberdade individual' },
+      { topic: 'Culinária', question: 'De onde é originária a pizza?', answer: 'Itália' },
+      { topic: 'Tecnologia', question: 'O que é um algoritmo?', answer: 'Conjunto de instruções para resolver um problema' },
+      { topic: 'Curiosidades', question: 'Qual é o animal símbolo da Austrália?', answer: 'Canguru' },
+      { topic: 'Jogos', question: 'Qual é o objetivo principal do Minecraft?', answer: 'Construir e explorar mundos' },
+      { topic: 'Física', question: 'O que é a Lei da Inércia?', answer: 'Um corpo em repouso ou movimento tende a manter seu estado' },
+      { topic: 'Matemática', question: 'Quanto é 100 dividido por 4?', answer: '25' },
+      { topic: 'Inglês', question: 'Como se diz "Obrigado" em inglês?', answer: 'Thank you' },
+      { topic: 'História do Brasil', question: 'Quem foi Tiradentes?', answer: 'Líder da Inconfidência Mineira' },
+      { topic: 'Geografia', question: 'Qual é o rio mais extenso do mundo?', answer: 'Rio Nilo' },
+      { topic: 'Futebol', question: 'Qual time venceu a Copa do Mundo de 2018?', answer: 'França' },
+      { topic: 'Biologia', question: 'O que é fotossíntese?', answer: 'Processo pelo qual plantas produzem alimento' },
+      { topic: 'Português', question: 'Qual é o sinônimo de "rápido"?', answer: 'Veloz' },
+      { topic: 'Literatura', question: 'Quem escreveu "O Hobbit"?', answer: 'J.R.R. Tolkien' },
+      { topic: 'Música', question: 'Quem é conhecido como "Rei do Pop"?', answer: 'Michael Jackson' },
+      { topic: 'Cinema', question: 'Qual é o nome do robô em "Wall-E"?', answer: 'Wall-E' },
+      { topic: 'Astronomia', question: 'O que é um eclipse solar?', answer: 'Quando a Lua bloqueia a luz do Sol' },
+      { topic: 'Filosofia', question: 'O que é ética?', answer: 'Estudo dos valores morais e comportamento humano' },
+      { topic: 'Culinária', question: 'Qual é o principal ingrediente do guacamole?', answer: 'Abacate' },
+      { topic: 'Tecnologia', question: 'O que é um navegador web?', answer: 'Programa para acessar a internet' },
+      { topic: 'Curiosidades', question: 'Qual é a maior ave do mundo?', answer: 'Avestruz' },
+      { topic: 'Jogos', question: 'Qual jogo popular usa cubos coloridos?', answer: 'Tetris' },
+      { topic: 'Física', question: 'O que é a força da gravidade?', answer: 'Força que atrai objetos com massa uns aos outros' },
+      { topic: 'Matemática', question: 'Qual é o valor de π (pi) aproximado?', answer: '3,14' },
+      { topic: 'Inglês', question: 'Como se diz "Eu gosto de estudar" em inglês?', answer: 'I like to study' },
+      { topic: 'História', question: 'Em que ano começou a Segunda Guerra Mundial?', answer: '1939' },
+      { topic: 'Geografia', question: 'Qual é a capital da Austrália?', answer: 'Canberra' },
+      { topic: 'Futebol', question: 'Quem é o maior artilheiro da história da Copa do Mundo?', answer: 'Miroslav Klose' },
+      { topic: 'Biologia', question: 'Qual é o principal componente do sangue?', answer: 'Plasma' },
+      { topic: 'Português', question: 'O que é um substantivo?', answer: 'Palavra que nomeia seres, objetos, lugares, sentimentos' },
+      { topic: 'Literatura', question: 'Quem escreveu "Macunaíma"?', answer: 'Mário de Andrade' },
+      { topic: 'Música', question: 'Qual instrumento tem 6 cordas e é muito usado no rock?', answer: 'Guitarra' },
+      { topic: 'Cinema', question: 'Quem interpretou Jack em "Titanic"?', answer: 'Leonardo DiCaprio' },
+      { topic: 'Astronomia', question: 'Qual é o maior planeta do sistema solar?', answer: 'Júpiter' },
+      { topic: 'Filosofia', question: 'O que significa "dualismo"?', answer: 'Doutrina que divide a realidade em duas partes distintas' },
+      { topic: 'Culinária', question: 'Qual é o nome do prato feito com arroz, feijão e carne?', answer: 'Prato típico brasileiro, chamado "PF" ou "prato feito"' },
+      { topic: 'Tecnologia', question: 'O que significa "HTML"?', answer: 'HyperText Markup Language' },
+      { topic: 'Curiosidades', question: 'Qual país tem o maior número de ilhas?', answer: 'Suécia' },
+      { topic: 'Jogos', question: 'Qual é o nome do jogo de cartas colecionáveis criado pela Nintendo?', answer: 'Pokémon TCG' },
+      { topic: 'Física', question: 'Qual a unidade de medida da força?', answer: 'Newton (N)' },
+      { topic: 'Matemática', question: 'O que significa o símbolo ∑?', answer: 'Soma de uma série de termos' },
+      { topic: 'Inglês', question: 'Traduza "She is my friend."', answer: 'Ela é minha amiga.' },
+      { topic: 'História', question: 'Quem foi Martin Luther King?', answer: 'Líder dos direitos civis nos EUA' },
+      { topic: 'Geografia', question: 'Qual é o continente com maior população?', answer: 'Ásia' },
+      { topic: 'Futebol', question: 'Qual país sediou a Copa do Mundo de 2014?', answer: 'Brasil' },
+      { topic: 'Biologia', question: 'O que é DNA?', answer: 'Molécula que carrega a informação genética' },
+      { topic: 'Português', question: 'Qual é a função do pronome?', answer: 'Substituir ou acompanhar um substantivo' },
+      { topic: 'Literatura', question: 'Qual é a obra mais famosa de Machado de Assis?', answer: 'Dom Casmurro' },
+      { topic: 'Música', question: 'Quem compôs a 5ª Sinfonia?', answer: 'Ludwig van Beethoven' },
+      { topic: 'Cinema', question: 'Qual é o filme em que um brinquedo de cowboy ganha vida?', answer: 'Toy Story' },
+      { topic: 'Astronomia', question: 'O que é um cometa?', answer: 'Corpo celeste com núcleo de gelo e poeira' },
+      { topic: 'Filosofia', question: 'O que significa "ética"?', answer: 'Conjunto de princípios morais' },
+      { topic: 'Culinária', question: 'Qual país é famoso pelo sushi?', answer: 'Japão' },
+      { topic: 'Tecnologia', question: 'O que é um sistema operacional?', answer: 'Software que gerencia hardware e aplicativos' },
+      { topic: 'Curiosidades', question: 'Qual é o maior deserto do mundo?', answer: 'Deserto da Antártica' },
+      { topic: 'Jogos', question: 'Qual personagem principal do jogo "Super Mario"?', answer: 'Mario' },
+      { topic: 'Física', question: 'Qual a velocidade da luz?', answer: 'Aproximadamente 300.000 km/s' },
+      { topic: 'Matemática', question: 'Qual é a fórmula da área do círculo?', answer: 'π × raio²' },
+      { topic: 'Inglês', question: 'O que significa "Can I help you?"', answer: 'Posso ajudá-lo?' },
+      { topic: 'História', question: 'Quem foi o primeiro homem a pisar na Lua?', answer: 'Neil Armstrong' },
+      { topic: 'Geografia', question: 'Qual o país conhecido como "Terra do Sol Nascente"?', answer: 'Japão' },
+      { topic: 'Futebol', question: 'Quem é conhecido como "Fenômeno" no futebol?', answer: 'Ronaldo Nazário' },
+      { topic: 'Biologia', question: 'O que são mitocôndrias?', answer: 'Organelas responsáveis pela produção de energia' },
+      { topic: 'Português', question: 'Qual é o antônimo de "feliz"?', answer: 'Triste' },
+      { topic: 'Literatura', question: 'Quem escreveu "A Moreninha"?', answer: 'Joaquim Manuel de Macedo' },
+      { topic: 'Música', question: 'O que é um solo na música?', answer: 'Parte em que um instrumento toca sozinho' },
+      { topic: 'Cinema', question: 'Qual é o nome do filme com dinossauros criado por Steven Spielberg?', answer: 'Jurassic Park' },
+      { topic: 'Astronomia', question: 'O que é uma estrela?', answer: 'Corpo celeste que emite luz própria' },
+      { topic: 'Filosofia', question: 'Quem foi Sócrates?', answer: 'Filósofo grego fundador da ética' },
+      { topic: 'Culinária', question: 'Qual ingrediente é base para o pão?', answer: 'Farinha de trigo' },
+      { topic: 'Tecnologia', question: 'O que é Wi-Fi?', answer: 'Tecnologia para conexão sem fio à internet' },
+      { topic: 'Curiosidades', question: 'Qual país tem o maior carnaval do mundo?', answer: 'Brasil' },
+      { topic: 'Jogos', question: 'Qual é o nome do jogo onde se constrói com blocos?', answer: 'Minecraft' }
+    ];
 
     const container = document.getElementById('flashcards-container');
 
-    function renderFlashcards(data) {
-      container.innerHTML = '';
-      data.forEach(({ topic, question, answer }) => {
-        const card = document.createElement('div');
-        card.className = 'flashcard';
-        card.innerHTML = `
-          <div class="card-front">
-            <h2>${topic}</h2>
-            <div class="question-text">${question}</div>
-          </div>
-          <div class="card-back">
-            <h3>Resposta</h3>
-            <div class="answer-text">${answer}</div>
-          </div>
-        `;
-        card.addEventListener('click', () => card.classList.toggle('flipped'));
-        container.appendChild(card);
+    flashcardsData.forEach(({ topic, question, answer }) => {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+      card.tabIndex = 0;
+
+      const front = document.createElement('div');
+      front.className = 'card-front';
+      front.innerHTML = `<h2>${topic}</h2><p class="question-text">${question}</p>`;
+
+      const back = document.createElement('div');
+      back.className = 'card-back';
+      back.innerHTML = `<h3>Resposta</h3><p class="answer-text">${answer}</p>`;
+
+      card.appendChild(front);
+      card.appendChild(back);
+
+      card.addEventListener('click', () => card.classList.toggle('flipped'));
+      card.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          card.classList.toggle('flipped');
+          e.preventDefault();
+        }
       });
-    }
 
-    function shuffleFlashcards() {
-      const shuffled = [...flashcardsData].sort(() => 0.5 - Math.random());
-      renderFlashcards(shuffled);
-    }
-
-    shuffleFlashcards();
+      container.appendChild(card);
+    });
   </script>
 </body>
 </html>
