@@ -1,973 +1,115 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Cyber Password Generator</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
+<title>Gerador de Senhas</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-html{
-scroll-behavior:smooth;
-}
-
 body{
-
-font-family:'Rajdhani',sans-serif;
-
-background:
-linear-gradient(rgba(0,0,0,.72),rgba(0,0,0,.82)),
-url("https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1700&q=80");
-
-background-size:cover;
-background-position:center;
-background-attachment:fixed;
-
-min-height:100vh;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-padding:40px;
-
-overflow-x:hidden;
-
-color:white;
-
-}
-
-body::before{
-
-content:"";
-
-position:fixed;
-
-top:0;
-left:0;
-
-width:100%;
-height:100%;
-
-background:
-
-radial-gradient(circle at top,#00ffbf22,transparent 50%),
-radial-gradient(circle at bottom,#00b7ff22,transparent 50%);
-
-pointer-events:none;
-
-animation=fundo 10s linear infinite;
-
-}
-
-@keyframes fundo{
-
-0%{
-
-transform:rotate(0deg);
-
-}
-
-100%{
-
-transform:rotate(360deg);
-
-}
-
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#111827;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:white;
 }
 
 .container{
-
-width:100%;
-max-width:700px;
-
-padding:40px;
-
-border-radius:30px;
-
-backdrop-filter:blur(18px);
-
-background:rgba(18,18,35,.65);
-
-border:1px solid rgba(255,255,255,.08);
-
-box-shadow:
-
-0 0 15px rgba(0,255,170,.20),
-
-0 0 40px rgba(0,255,170,.10),
-
-0 30px 60px rgba(0,0,0,.55);
-
-animation:entrada 1s ease;
-
-}
-
-@keyframes entrada{
-
-from{
-
-opacity:0;
-transform:translateY(60px);
-
-}
-
-to{
-
-opacity:1;
-transform:translateY(0);
-
-}
-
+    background:#1f2937;
+    padding:30px;
+    border-radius:15px;
+    width:350px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,255,255,.3);
 }
 
 h1{
-
-font-family:'Orbitron',sans-serif;
-
-text-align:center;
-
-font-size:2.8rem;
-
-color:#00ffb3;
-
-text-shadow:
-
-0 0 15px #00ffb3,
-0 0 30px #00ffb3;
-
-margin-bottom:15px;
-
+    color:#00e5ff;
 }
 
-.sub{
-
-text-align:center;
-
-opacity:.75;
-
-margin-bottom:35px;
-
-font-size:18px;
-
-letter-spacing:1px;
-
+input{
+    width:100%;
+    padding:12px;
+    font-size:18px;
+    border:none;
+    border-radius:8px;
+    margin:15px 0;
+    text-align:center;
 }
 
-.password-box{
-
-display:flex;
-
-gap:15px;
-
-margin-bottom:25px;
-
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    background:#00e5ff;
+    color:#000;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-.password{
-
-flex:1;
-
-padding:18px;
-
-font-size:22px;
-
-border:none;
-
-border-radius:18px;
-
-background:#08141d;
-
-color:#00ffb3;
-
-outline:none;
-
-font-weight:bold;
-
-letter-spacing:2px;
-
-box-shadow:inset 0 0 12px rgba(0,255,180,.15);
-
+button:hover{
+    background:#00bcd4;
 }
-
-.copy{
-
-width:70px;
-
-border:none;
-
-border-radius:18px;
-
-font-size:26px;
-
-cursor:pointer;
-
-background:#00ffb3;
-
-transition:.3s;
-
-font-weight:bold;
-
-}
-
-.copy:hover{
-
-transform:scale(1.08);
-
-box-shadow:0 0 20px #00ffb3;
-
-}
-
-.section{
-
-margin-top:28px;
-
-}
-
-.section h2{
-
-font-size:22px;
-
-margin-bottom:12px;
-
-color:#00ffb3;
-
-font-family:'Orbitron',sans-serif;
-
-}
-
-.slider-value{
-
-text-align:center;
-
-font-size:22px;
-
-margin-bottom:10px;
-
-font-weight:bold;
-
-color:#00ffb3;
-
-}
-
-input[type=range]{
-
-width:100%;
-
-cursor:pointer;
-
-}
-
-.options{
-
-display:grid;
-
-grid-template-columns:repeat(2,1fr);
-
-gap:18px;
-
-margin-top:25px;
-
-}
-
-.option{
-
-background:#08141d;
-
-padding:16px;
-
-border-radius:16px;
-
-display:flex;
-
-align-items:center;
-
-gap:12px;
-
-transition:.25s;
-
-cursor:pointer;
-
-}
-
-.option:hover{
-
-transform:translateY(-3px);
-
-background:#0d1d29;
-
-}
-
-.option input{
-
-width:20px;
-height:20px;
-
-accent-color:#00ffb3;
-
-}
- .bar{
-
-width:100%;
-height:14px;
-
-background:#1b2430;
-
-border-radius:30px;
-
-overflow:hidden;
-
-margin-top:18px;
-
-box-shadow:inset 0 0 10px rgba(0,0,0,.5);
-
-}
-
-.bar div{
-
-height:100%;
-
-width:0%;
-
-border-radius:30px;
-
-transition:.45s;
-
-background:linear-gradient(90deg,#ff3131,#ffae00,#ffee00,#00ff88);
-
-box-shadow:0 0 20px #00ff88;
-
-}
-
-.force{
-
-margin-top:12px;
-
-text-align:center;
-
-font-size:20px;
-
-font-weight:bold;
-
-letter-spacing:1px;
-
-}
-
-.generate{
-
-width:100%;
-
-margin-top:30px;
-
-padding:18px;
-
-border:none;
-
-border-radius:18px;
-
-font-size:20px;
-
-font-family:'Orbitron',sans-serif;
-
-background:linear-gradient(135deg,#00ffb3,#00b8ff);
-
-cursor:pointer;
-
-transition:.35s;
-
-color:#000;
-
-font-weight:bold;
-
-}
-
-.generate:hover{
-
-transform:translateY(-4px);
-
-box-shadow:
-
-0 0 20px #00ffb3,
-
-0 0 50px #00ffb3;
-
-}
-
-.history{
-
-margin-top:35px;
-
-background:#08141d;
-
-padding:20px;
-
-border-radius:18px;
-
-max-height:240px;
-
-overflow-y:auto;
-
-}
-
-.history h3{
-
-font-family:'Orbitron',sans-serif;
-
-margin-bottom:15px;
-
-color:#00ffb3;
-
-}
-
-.history ul{
-
-list-style:none;
-
-}
-
-.history li{
-
-padding:12px;
-
-border-bottom:1px solid rgba(255,255,255,.08);
-
-font-family:monospace;
-
-font-size:17px;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-transition:.25s;
-
-}
-
-.history li:hover{
-
-background:#0d1d29;
-
-}
-
-.toast{
-
-position:fixed;
-
-right:25px;
-
-bottom:25px;
-
-padding:16px 28px;
-
-border-radius:14px;
-
-background:#00ffb3;
-
-color:#000;
-
-font-weight:bold;
-
-font-size:18px;
-
-transform:translateY(120px);
-
-transition:.4s;
-
-box-shadow:0 0 20px #00ffb3;
-
-z-index:9999;
-
-}
-
-.toast.show{
-
-transform:translateY(0);
-
-}
-
-@keyframes pulse{
-
-0%{
-
-transform:scale(1);
-
-}
-
-50%{
-
-transform:scale(1.04);
-
-}
-
-100%{
-
-transform:scale(1);
-
-}
-
-}
-
-.password{
-
-animation:pulse 2.5s infinite;
-
-}
-
-::-webkit-scrollbar{
-
-width:8px;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-background:#00ffb3;
-
-border-radius:20px;
-
-}
-
-::-webkit-scrollbar-track{
-
-background:#111;
-
-}
-
-@media(max-width:700px){
-
-.container{
-
-padding:25px;
-
-}
-
-h1{
-
-font-size:2rem;
-
-}
-
-.password-box{
-
-flex-direction:column;
-
-}
-
-.copy{
-
-width:100%;
-
-height:60px;
-
-}
-
-.options{
-
-grid-template-columns:1fr;
-
-}
-
-.generate{
-
-font-size:18px;
-
-}
-
-}
-
 </style>
 
 </head>
-
 <body>
- <div class="container">
 
-    <h1>🔐 CYBER PASSWORD</h1>
+<div class="container">
 
-    <p class="sub">
-        Gerador de Senhas Ultra Seguras
-    </p>
+<h1>🔐 Gerador de Senhas</h1>
 
-    <div class="password-box">
+<input type="text" id="senha" readonly>
 
-        <input
-            type="text"
-            id="password"
-            class="password"
-            readonly
-        >
+<button onclick="gerarSenha()">
+Gerar Senha
+</button>
 
-        <button
-            class="copy"
-            id="copyBtn"
-            title="Copiar Senha">
-            📋
-        </button>
-
-    </div>
-
-    <div class="section">
-
-        <h2>Comprimento</h2>
-
-        <div
-            class="slider-value"
-            id="lengthValue">
-            16
-        </div>
-
-        <input
-            type="range"
-            id="length"
-            min="6"
-            max="64"
-            value="16">
-
-    </div>
-
-    <div class="options">
-
-        <label class="option">
-            <input
-                type="checkbox"
-                id="uppercase"
-                checked>
-
-            Letras Maiúsculas
-        </label>
-
-        <label class="option">
-            <input
-                type="checkbox"
-                id="lowercase"
-                checked>
-
-            Letras Minúsculas
-        </label>
-
-        <label class="option">
-            <input
-                type="checkbox"
-                id="numbers"
-                checked>
-
-            Números
-        </label>
-
-        <label class="option">
-            <input
-                type="checkbox"
-                id="symbols"
-                checked>
-
-            Símbolos
-        </label>
-
-        <label class="option">
-            <input
-                type="checkbox"
-                id="similar">
-
-            Evitar Caracteres Parecidos
-        </label>
-
-        <label class="option">
-            <input
-                type="checkbox"
-                id="startLetter">
-
-            Começar com Letra
-        </label>
-
-    </div>
-
-    <div class="section">
-
-        <h2>Força da Senha</h2>
-
-        <div class="bar">
-
-            <div id="strengthBar"></div>
-
-        </div>
-
-        <div
-            class="force"
-            id="strengthText">
-
-            Muito Forte
-
-        </div>
-
-    </div>
-
-    <button
-        class="generate"
-        id="generate">
-
-        ⚡ GERAR SENHA
-
-    </button>
-
-    <div class="history">
-
-        <h3>
-
-            📜 Histórico
-
-        </h3>
-
-        <ul id="history">
-
-        </ul>
-
-    </div>
-
-</div>
-
-<div
-class="toast"
-id="toast">
-
-Senha copiada!
+<button onclick="copiarSenha()">
+Copiar Senha
+</button>
 
 </div>
 
 <script>
 
-const password =
-document.getElementById("password");
+function gerarSenha(){
 
-const copyBtn =
-document.getElementById("copyBtn");
+const caracteres="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*";
 
-const generate =
-document.getElementById("generate");
+let senha="";
 
-const length =
-document.getElementById("length");
+for(let i=0;i<16;i++){
 
-const lengthValue =
-document.getElementById("lengthValue");
-
-const strengthBar =
-document.getElementById("strengthBar");
-
-const strengthText =
-document.getElementById("strengthText");
-
-const history =
-document.getElementById("history");
-
-const toast =
-document.getElementById("toast");
-
-const uppercase =
-document.getElementById("uppercase");
-
-const lowercase =
-document.getElementById("lowercase");
-
-const numbers =
-document.getElementById("numbers");
-
-const symbols =
-document.getElementById("symbols");
-
-const similar =
-document.getElementById("similar");
-
-const startLetter =
-document.getElementById("startLetter");
-
-let historyPasswords = [];
-
-const UPPER =
-"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-const LOWER =
-"abcdefghijklmnopqrstuvwxyz";
-
-const NUMBER =
-"0123456789";
-
-const SYMBOL =
-"!@#$%&*()-_=+[]{}<>?/";
-
-length.oninput=()=>{
-
-lengthValue.textContent=
-length.value;
-
-};
- function random(max){
-
-const array=new Uint32Array(1);
-
-crypto.getRandomValues(array);
-
-return array[0]%max;
+senha+=caracteres.charAt(Math.floor(Math.random()*caracteres.length));
 
 }
 
-function toastShow(){
-
-toast.classList.add("show");
-
-setTimeout(()=>{
-
-toast.classList.remove("show");
-
-},2000);
+document.getElementById("senha").value=senha;
 
 }
 
-function copyPassword(){
+function copiarSenha(){
 
-if(password.value==="") return;
+const campo=document.getElementById("senha");
 
-navigator.clipboard.writeText(password.value);
+campo.select();
 
-toast.innerHTML="✅ Senha copiada!";
+document.execCommand("copy");
 
-toastShow();
-
-}
-
-copyBtn.onclick=copyPassword;
-
-function updateStrength(pass){
-
-let score=0;
-
-if(pass.length>=8)score++;
-
-if(pass.length>=12)score++;
-
-if(/[A-Z]/.test(pass))score++;
-
-if(/[a-z]/.test(pass))score++;
-
-if(/[0-9]/.test(pass))score++;
-
-if(/[^A-Za-z0-9]/.test(pass))score++;
-
-let width=(score/6)*100;
-
-strengthBar.style.width=width+"%";
-
-if(score<=2){
-
-strengthText.innerHTML="🔴 Fraca";
-
-strengthBar.style.background="#ff4040";
+alert("Senha copiada!");
 
 }
 
-else if(score<=4){
+gerarSenha();
 
-strengthText.innerHTML="🟡 Média";
+</script>
 
-strengthBar.style.background="#ffc107";
-
-}
-
-else{
-
-strengthText.innerHTML="🟢 Muito Forte";
-
-strengthBar.style.background="#00ff88";
-
-}
-
-}
-
-function saveHistory(pass){
-
-historyPasswords.unshift(pass);
-
-if(historyPasswords.length>15)
-
-historyPasswords.pop();
-
-history.innerHTML="";
-
-historyPasswords.forEach(item=>{
-
-const li=document.createElement("li");
-
-li.innerHTML=`
-
-<span>${item}</span>
-
-<button class="copy">📋</button>
-
-`;
-
-li.querySelector("button").onclick=()=>{
-
-navigator.clipboard.writeText(item);
-
-toast.innerHTML="📋 Senha copiada!";
-
-toastShow();
-
-};
-
-history.appendChild(li);
-
-});
-
-}
-
-function generatePassword(){
-
-let chars="";
-
-if(uppercase.checked)
-
-chars+=UPPER;
-
-if(lowercase.checked)
-
-chars+=LOWER;
-
-if(numbers.checked)
-
-chars+=NUMBER;
-
-if(symbols.checked)
-
-chars+=SYMBOL;
-
-if(chars===""){
-
-alert("Selecione pelo menos uma opção.");
-
-return;
-
-}
-
-let result="";
-
-for(let i=0;i<length.value;i++){
-
-result+=chars[random(chars.length)];
-
-}
+</body>
+</html>
