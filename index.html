@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Senhas</title>
+<title>Gerador de Senhas Profissional</title>
 
 <style>
 
@@ -16,7 +16,7 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
+    min-height:100vh;
     color:white;
 }
 
@@ -26,7 +26,7 @@ body{
     border-radius:15px;
     width:350px;
     text-align:center;
-    box-shadow:0 0 20px rgba(0,255,255,.3);
+    box-shadow:0 0 25px rgba(0,255,255,.3);
 }
 
 h1{
@@ -41,6 +41,17 @@ input{
     border-radius:8px;
     margin:15px 0;
     text-align:center;
+}
+
+label{
+    display:block;
+    margin:10px;
+}
+
+select{
+    padding:8px;
+    border-radius:8px;
+    width:100%;
 }
 
 button{
@@ -60,9 +71,15 @@ button:hover{
     background:#00bcd4;
 }
 
+#forca{
+    margin-top:15px;
+    font-weight:bold;
+}
+
 </style>
 
 </head>
+
 
 <body>
 
@@ -70,7 +87,41 @@ button:hover{
 
 <h1>🔐 Gerador de Senhas</h1>
 
-<input type="text" id="senha" readonly>
+<input id="senha" readonly>
+
+
+<label>
+Tamanho da senha:
+</label>
+
+<select id="tamanho">
+<option value="8">8 caracteres</option>
+<option value="12">12 caracteres</option>
+<option value="16" selected>16 caracteres</option>
+<option value="24">24 caracteres</option>
+</select>
+
+
+<label>
+<input type="checkbox" id="maiuscula" checked>
+Letras maiúsculas
+</label>
+
+<label>
+<input type="checkbox" id="numeros" checked>
+Números
+</label>
+
+<label>
+<input type="checkbox" id="simbolos" checked>
+Símbolos
+</label>
+
+
+<div id="forca">
+Força: -
+</div>
+
 
 <button onclick="gerarSenha()">
 Gerar Senha
@@ -80,6 +131,7 @@ Gerar Senha
 Copiar Senha
 </button>
 
+
 </div>
 
 
@@ -87,24 +139,79 @@ Copiar Senha
 
 function gerarSenha(){
 
-const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*";
+let caracteres="";
 
-let senha = "";
+if(document.getElementById("maiuscula").checked){
+caracteres += "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+}else{
+caracteres += "abcdefghijklmnopqrstuvwxyz";
+}
 
-for(let i = 0; i < 16; i++){
+if(document.getElementById("numeros").checked){
+caracteres += "0123456789";
+}
 
-senha += caracteres[Math.floor(Math.random() * caracteres.length)];
+if(document.getElementById("simbolos").checked){
+caracteres += "!@#$%&*";
+}
+
+
+let tamanho=document.getElementById("tamanho").value;
+
+let senha="";
+
+
+for(let i=0;i<tamanho;i++){
+
+senha += caracteres[Math.floor(Math.random()*caracteres.length)];
 
 }
 
-document.getElementById("senha").value = senha;
+
+document.getElementById("senha").value=senha;
+
+avaliarSenha(senha);
 
 }
+
+
+
+function avaliarSenha(senha){
+
+let resultado=document.getElementById("forca");
+
+let pontos=0;
+
+
+if(senha.length>=12) pontos++;
+if(/[A-Z]/.test(senha)) pontos++;
+if(/[0-9]/.test(senha)) pontos++;
+if(/[!@#$%&*]/.test(senha)) pontos++;
+
+
+if(pontos<=1){
+resultado.innerHTML="Força: 🔴 Fraca";
+}
+
+else if(pontos==2){
+resultado.innerHTML="Força: 🟠 Média";
+}
+
+else if(pontos==3){
+resultado.innerHTML="Força: 🟡 Forte";
+}
+
+else{
+resultado.innerHTML="Força: 🟢 Muito forte";
+}
+
+}
+
 
 
 function copiarSenha(){
 
-const campo = document.getElementById("senha");
+let campo=document.getElementById("senha");
 
 navigator.clipboard.writeText(campo.value);
 
@@ -113,7 +220,7 @@ alert("Senha copiada!");
 }
 
 
-window.onload = gerarSenha;
+window.onload=gerarSenha;
 
 </script>
 
