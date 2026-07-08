@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Gerador de Senhas</title>
 
 <style>
+
 body{
     margin:0;
     font-family:Arial,sans-serif;
@@ -31,7 +34,7 @@ h1{
 }
 
 input{
-    width:100%;
+    width:90%;
     padding:12px;
     font-size:18px;
     border:none;
@@ -56,9 +59,11 @@ button{
 button:hover{
     background:#00bcd4;
 }
+
 </style>
 
 </head>
+
 <body>
 
 <div class="container">
@@ -77,39 +82,44 @@ Copiar Senha
 
 </div>
 
+
 <script>
 
 function gerarSenha(){
 
-const caracteres="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*";
+const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*";
 
-let senha="";
+let senha = "";
 
-for(let i=0;i<16;i++){
+for(let i = 0; i < 16; i++){
 
-senha+=caracteres.charAt(Math.floor(Math.random()*caracteres.length));
+senha += caracteres[Math.floor(Math.random() * caracteres.length)];
+
+}
+
+document.getElementById("senha").value = senha;
 
 }
 
-document.getElementById("senha").value=senha;
-
-}
 
 function copiarSenha(){
 
-const campo=document.getElementById("senha");
+const campo = document.getElementById("senha");
 
-campo.select();
-
-document.execCommand("copy");
+navigator.clipboard.writeText(campo.value);
 
 alert("Senha copiada!");
 
 }
 
-gerarSenha();
+
+window.onload = gerarSenha;
 
 </script>
 
+
 </body>
+
 </html>
+
+
