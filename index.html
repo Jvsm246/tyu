@@ -2,231 +2,1053 @@
 <html lang="pt-BR">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Gerador de Senhas Profissional</title>
-
-<style>
-
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#111827;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
-    color:white;
-}
-
-.container{
-    background:#1f2937;
-    padding:30px;
-    border-radius:15px;
-    width:350px;
-    text-align:center;
-    box-shadow:0 0 25px rgba(0,255,255,.3);
-}
-
-h1{
-    color:#00e5ff;
-}
-
-input{
-    width:90%;
-    padding:12px;
-    font-size:18px;
-    border:none;
-    border-radius:8px;
-    margin:15px 0;
-    text-align:center;
-}
-
-label{
-    display:block;
-    margin:10px;
-}
-
-select{
-    padding:8px;
-    border-radius:8px;
-    width:100%;
-}
-
-button{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border:none;
-    border-radius:8px;
-    background:#00e5ff;
-    color:#000;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#00bcd4;
-}
-
-#forca{
-    margin-top:15px;
-    font-weight:bold;
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Mistério do Pão Desaparecido</title>
 </head>
-
 
 <body>
 
-<div class="container">
+    <!-- ========================= -->
+    <!-- CABEÇALHO DO JOGO -->
+    <!-- ========================= -->
 
-<h1>🔐 Gerador de Senhas</h1>
+    <header>
+        <h1>🥖 O Mistério do Pão Desaparecido</h1>
 
-<input id="senha" readonly>
+        <p>
+            Um jogo de investigação onde você deverá analisar pistas,
+            conversar com os suspeitos e descobrir quem roubou o pão.
+        </p>
 
+        <hr>
 
-<label>
-Tamanho da senha:
-</label>
+        <h2>📋 Menu Principal</h2>
 
-<select id="tamanho">
-<option value="8">8 caracteres</option>
-<option value="12">12 caracteres</option>
-<option value="16" selected>16 caracteres</option>
-<option value="24">24 caracteres</option>
-</select>
+        <nav>
 
+            <ul>
 
-<label>
-<input type="checkbox" id="maiuscula" checked>
-Letras maiúsculas
-</label>
+                <li><a href="#introducao">Introdução</a></li>
 
-<label>
-<input type="checkbox" id="numeros" checked>
-Números
-</label>
+                <li><a href="#ia">Detetive IA</a></li>
 
-<label>
-<input type="checkbox" id="simbolos" checked>
-Símbolos
-</label>
+                <li><a href="#personagens">Personagens</a></li>
 
+                <li><a href="#joao">João</a></li>
 
-<div id="forca">
-Força: -
-</div>
+                <li><a href="#pai">Pai</a></li>
 
+                <li><a href="#mae">Mãe</a></li>
 
-<button onclick="gerarSenha()">
-Gerar Senha
-</button>
+                <li><a href="#pedro">Pedro</a></li>
 
-<button onclick="copiarSenha()">
-Copiar Senha
-</button>
+                <li><a href="#lucas">Lucas</a></li>
 
+                <li><a href="#diego">Diego</a></li>
 
-</div>
+                <li><a href="#rafael">Rafael</a></li>
 
+                <li><a href="#bruno">Bruno</a></li>
 
-<script>
+                <li><a href="#escolha">Escolher o Culpado</a></li>
 
-function gerarSenha(){
+                <li><a href="#finalbom">Final Bom</a></li>
 
-let caracteres="";
+                <li><a href="#finalruim">Final Ruim</a></li>
 
-if(document.getElementById("maiuscula").checked){
-caracteres += "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-}else{
-caracteres += "abcdefghijklmnopqrstuvwxyz";
-}
+                <li><a href="#finalsecreto">Final Secreto</a></li>
 
-if(document.getElementById("numeros").checked){
-caracteres += "0123456789";
-}
+            </ul>
 
-if(document.getElementById("simbolos").checked){
-caracteres += "!@#$%&*";
-}
+        </nav>
 
+        <hr>
 
-let tamanho=document.getElementById("tamanho").value;
+    </header>
 
-let senha="";
+    <!-- ========================= -->
+    <!-- INÍCIO DO CONTEÚDO -->
+    <!-- ========================= -->
 
+    <main>
+                <!-- ========================= -->
+        <!-- INTRODUÇÃO -->
+        <!-- ========================= -->
 
-for(let i=0;i<tamanho;i++){
+        <section id="introducao">
 
-senha += caracteres[Math.floor(Math.random()*caracteres.length)];
+            <h2>📖 Introdução</h2>
 
-}
+            <p>
+                Era um domingo tranquilo. João decidiu convidar alguns amigos
+                para passar a tarde em sua casa jogando videogame. Enquanto
+                todos conversavam e se divertiam, sua mãe preparava o café da
+                tarde na cozinha.
+            </p>
 
+            <p>
+                Alguns minutos depois, ela voltou assustada.
+            </p>
 
-document.getElementById("senha").value=senha;
+            <p>
+                <strong>Mãe:</strong> "João... o pão sumiu!"
+            </p>
 
-avaliarSenha(senha);
+            <p>
+                Todos se olharam em silêncio.
+            </p>
 
-}
+            <p>
+                <strong>Pai:</strong> "Como assim? Tinha um pacote inteiro aqui."
+            </p>
 
+            <p>
+                Pedro respondeu rapidamente:
+            </p>
 
+            <p>
+                <strong>Pedro:</strong> "Eu nem cheguei perto da cozinha."
+            </p>
 
-function avaliarSenha(senha){
+            <p>
+                Lucas deu risada.
+            </p>
 
-let resultado=document.getElementById("forca");
+            <p>
+                <strong>Lucas:</strong> "Alguém aqui ficou com fome antes do café."
+            </p>
 
-let pontos=0;
+            <p>
+                Diego apenas observava tudo em silêncio.
+            </p>
 
+            <p>
+                Rafael olhava para os lados tentando entender o que estava
+                acontecendo.
+            </p>
 
-if(senha.length>=12) pontos++;
-if(/[A-Z]/.test(senha)) pontos++;
-if(/[0-9]/.test(senha)) pontos++;
-if(/[!@#$%&*]/.test(senha)) pontos++;
+            <p>
+                Bruno parecia tranquilo, mas evitava olhar diretamente para
+                João.
+            </p>
 
+            <p>
+                João percebeu que ninguém iria confessar tão facilmente.
+            </p>
 
-if(pontos<=1){
-resultado.innerHTML="Força: 🔴 Fraca";
-}
+            <p>
+                Então ele teve uma ideia.
+            </p>
 
-else if(pontos==2){
-resultado.innerHTML="Força: 🟠 Média";
-}
+        </section>
 
-else if(pontos==3){
-resultado.innerHTML="Força: 🟡 Forte";
-}
+        <hr>
 
-else{
-resultado.innerHTML="Força: 🟢 Muito forte";
-}
+        <!-- ========================= -->
+        <!-- DETETIVE IA -->
+        <!-- ========================= -->
 
-}
+        <section id="ia">
 
+            <h2>🤖 Detetive IA</h2>
 
+            <p>
+                João ligou seu computador e iniciou um programa experimental
+                chamado <strong>Detetive IA</strong>.
+            </p>
 
-function copiarSenha(){
+            <p>
+                A tela acendeu e uma voz começou a falar.
+            </p>
 
-let campo=document.getElementById("senha");
+            <p>
+                <strong>Detetive IA:</strong>
+                "Olá, João. Recebi um alerta de um possível roubo de pão."
+            </p>
 
-navigator.clipboard.writeText(campo.value);
+            <p>
+                "Existem oito pessoas na residência. Todas são consideradas
+                suspeitas até que as evidências provem o contrário."
+            </p>
 
-alert("Senha copiada!");
+            <p>
+                "Sua missão é conversar com todos, analisar os álibis,
+                observar as pistas e identificar o verdadeiro culpado."
+            </p>
 
-}
+            <p>
+                "Atenção: nem toda pista é verdadeira. Algumas pessoas podem
+                parecer culpadas sem serem. Pense como um verdadeiro detetive."
+            </p>
 
+            <p>
+                João respirou fundo e iniciou sua investigação.
+            </p>
 
-window.onload=gerarSenha;
+        </section>
 
-</script>
+        <hr>
 
+        <section id="personagens">
+
+            <h2>👥 Suspeitos</h2>
+
+            <p>
+                Clique no nome de cada pessoa para analisar sua ficha e descobrir
+                quem está escondendo a verdade.
+            </p>
+
+            <ul>
+                <li><a href="#joao">João</a></li>
+                <li><a href="#pai">Pai</a></li>
+                <li><a href="#mae">Mãe</a></li>
+                <li><a href="#pedro">Pedro</a></li>
+                <li><a href="#lucas">Lucas</a></li>
+                <li><a href="#diego">Diego</a></li>
+                <li><a href="#rafael">Rafael</a></li>
+                <li><a href="#bruno">Bruno</a></li>
+            </ul>
+
+        </section>
+
+        <hr>
+                <!-- ========================= -->
+        <!-- JOÃO -->
+        <!-- ========================= -->
+
+        <section id="joao">
+
+            <article>
+
+                <h2>👦 João (Você)</h2>
+
+                <p><strong>Idade:</strong> 17 anos</p>
+
+                <p><strong>Personalidade:</strong> Curioso, inteligente e gosta de resolver mistérios.</p>
+
+                <p><strong>Álibi:</strong> Estava na sala jogando videogame quando o pão desapareceu.</p>
+
+                <p><strong>O que estava fazendo:</strong> Jogando uma partida contra Pedro.</p>
+
+                <p><strong>Pistas contra:</strong></p>
+
+                <ul>
+                    <li>Foi o primeiro a notar o desaparecimento.</li>
+                    <li>Conhecia todos os lugares da casa.</li>
+                </ul>
+
+                <p><strong>Pistas a favor:</strong></p>
+
+                <ul>
+                    <li>Várias pessoas confirmam que ele permaneceu na sala.</li>
+                    <li>Foi quem decidiu iniciar a investigação.</li>
+                </ul>
+
+                <p><strong>Curiosidade:</strong> Sempre quis ser detetive desde criança.</p>
+
+                <p><a href="#personagens">⬅ Voltar aos suspeitos</a></p>
+
+            </article>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================= -->
+        <!-- PAI -->
+        <!-- ========================= -->
+
+        <section id="pai">
+
+            <article>
+
+                <h2>👨 Pai</h2>
+
+                <p><strong>Idade:</strong> 46 anos</p>
+
+                <p><strong>Personalidade:</strong> Calmo, observador e organizado.</p>
+
+                <p><strong>Álibi:</strong> Estava lavando o carro na garagem.</p>
+
+                <p><strong>O que estava fazendo:</strong> Limpando o carro enquanto conversava com Pedro.</p>
+
+                <p><strong>Pistas contra:</strong></p>
+
+                <ul>
+                    <li>Entrou rapidamente na cozinha para pegar um copo d'água.</li>
+                    <li>Sabia onde o pão estava guardado.</li>
+                </ul>
+
+                <p><strong>Pistas a favor:</strong></p>
+
+                <ul>
+                    <li>Pedro confirma que ele voltou para a garagem logo depois.</li>
+                    <li>Suas mãos estavam molhadas durante quase todo o tempo.</li>
+                </ul>
+
+                <p><strong>Curiosidade:</strong> Nunca deixa comida estragar e odeia desperdício.</p>
+
+                <p><a href="#personagens">⬅ Voltar aos suspeitos</a></p>
+
+            </article>
+
+        </section>
+
+        <hr>
+                <!-- ========================= -->
+        <!-- MÃE -->
+        <!-- ========================= -->
+
+        <section id="mae">
+
+            <article>
+
+                <h2>👩 Mãe</h2>
+
+                <p><strong>Idade:</strong> 44 anos</p>
+
+                <p><strong>Personalidade:</strong> Carinhosa, organizada e muito atenta.</p>
+
+                <p><strong>Álibi:</strong> Estava preparando o café da tarde.</p>
+
+                <p><strong>O que estava fazendo:</strong> Colocando água para ferver e organizando a mesa.</p>
+
+                <p><strong>Pistas contra:</strong></p>
+
+                <ul>
+                    <li>Foi a última pessoa a ver o pão.</li>
+                    <li>Ficou sozinha na cozinha por alguns minutos.</li>
+                </ul>
+
+                <p><strong>Pistas a favor:</strong></p>
+
+                <ul>
+                    <li>Foi quem percebeu o desaparecimento.</li>
+                    <li>Chamou todos imediatamente para investigar.</li>
+                </ul>
+
+                <p><strong>Curiosidade:</strong> Sempre compra pão fresco aos domingos.</p>
+
+                <p><a href="#personagens">⬅ Voltar aos suspeitos</a></p>
+
+            </article>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================= -->
+        <!-- PEDRO -->
+        <!-- ========================= -->
+
+        <section id="pedro">
+
+            <article>
+
+                <h2>👦 Pedro</h2>
+
+                <p><strong>Idade:</strong> 17 anos</p>
+
+                <p><strong>Personalidade:</strong> Inteligente, curioso e competitivo.</p>
+
+                <p><strong>Álibi:</strong> Conversava com o pai de João na garagem.</p>
+
+                <p><strong>O que estava fazendo:</strong> Observando o carro enquanto fazia perguntas sobre motores.</p>
+
+                <p><strong>Pistas contra:</strong></p>
+
+                <ul>
+                    <li>Foi visto passando perto da cozinha.</li>
+                    <li>Seu tênis tinha um pouco de farinha.</li>
+                </ul>
+
+                <p><strong>Pistas a favor:</strong></p>
+
+                <ul>
+                    <li>O pai de João confirma que Pedro passou quase todo o tempo com ele.</li>
+                    <li>A farinha veio porque ele esbarrou em um saco de trigo na lavanderia.</li>
+                </ul>
+
+                <p><strong>Curiosidade:</strong> Adora jogos de mistério e filmes de investigação.</p>
+
+                <p><a href="#personagens">⬅ Voltar aos suspeitos</a></p>
+
+            </article>
+
+        </section>
+
+        <hr>
+                <!-- ========================= -->
+        <!-- LUCAS -->
+        <!-- ========================= -->
+
+        <section id="lucas">
+
+            <article>
+
+                <h2>👦 Lucas</h2>
+
+                <p><strong>Idade:</strong> 18 anos</p>
+
+                <p><strong>Personalidade:</strong> Extrovertido, engraçado e gosta de cozinhar.</p>
+
+                <p><strong>Álibi:</strong> Disse que estava preparando os copos para o café.</p>
+
+                <p><strong>O que estava fazendo:</strong> Organizava a mesa e conversava com a mãe de João.</p>
+
+                <p><strong>Pistas contra:</strong></p>
+
+                <ul>
+                    <li>Sabia exatamente onde o pão estava guardado.</li>
+                    <li>Foi uma das últimas pessoas perto da cozinha.</li>
+                    <li>Gosta muito de preparar comidas diferentes.</li>
+                </ul>
+
+                <p><strong>Pistas a favor:</strong></p>
+
+                <ul>
+                    <li>A mãe de João confirma que ele estava ajudando.</li>
+                    <li>Ele não tinha nenhum pedaço de pão com ele.</li>
+                </ul>
+
+                <p><strong>Curiosidade:</strong> Lucas sempre tenta criar receitas novas quando visita alguém.</p>
+
+                <p><a href="#personagens">⬅ Voltar aos suspeitos</a></p>
+
+            </article>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================= -->
+        <!-- DIEGO -->
+        <!-- ========================= -->
+
+        <section id="diego">
+
+            <article>
+
+                <h2>👦 Diego</h2>
+
+                <p><strong>Idade:</strong> 19 anos</p>
+
+                <p><strong>Personalidade:</strong> Amigável, tranquilo e observador.</p>
+
+                <p><strong>História:</strong> Diego veio da Venezuela e mora no Brasil há alguns anos.</p>
+
+                <p><strong>Álibi:</strong> Estava fazendo uma ligação para sua família.</p>
+
+                <p><strong>O que estava fazendo:</strong> Conversava pelo celular perto da janela da sala.</p>
+
+                <p><strong>Pistas contra:</strong></p>
+
+                <ul>
+                    <li>Foi encontrado com uma sacola perto dele.</li>
+                    <li>Ninguém viu exatamente quando ele começou a ligação.</li>
+                </ul>
+
+                <p><strong>Pistas a favor:</strong></p>
+
+                <ul>
+                    <li>A ligação ficou registrada no celular.</li>
+                    <li>A sacola tinha apenas refrigerantes para o café.</li>
+                </ul>
+
+                <p><strong>Curiosidade:</strong> Diego gosta de compartilhar comidas do seu país com os amigos.</p>
+
+                <p><a href="#personagens">⬅ Voltar aos suspeitos</a></p>
+
+            </article>
+
+        </section>
+
+        <hr>
+                <!-- ========================= -->
+        <!-- RAFAEL -->
+        <!-- ========================= -->
+
+        <section id="rafael">
+
+            <article>
+
+                <h2>👦 Rafael</h2>
+
+                <p><strong>Idade:</strong> 18 anos</p>
+
+                <p><strong>Personalidade:</strong> Criativo, sincero e muito observador.</p>
+
+                <p><strong>Informação:</strong> Rafael possui síndrome de Tourette, uma condição que faz com que ele tenha alguns tiques involuntários.</p>
+
+                <p><strong>Álibi:</strong> Estava assistindo televisão na sala.</p>
+
+                <p><strong>O que estava fazendo:</strong> Assistia a um filme junto com o pai de João.</p>
+
+                <p><strong>Pistas contra:</strong></p>
+
+                <ul>
+                    <li>Estava sentado perto da mesa onde o pão estava antes de desaparecer.</li>
+                    <li>Seus movimentos chamaram a atenção dos outros convidados.</li>
+                </ul>
+
+                <p><strong>Pistas a favor:</strong></p>
+
+                <ul>
+                    <li>O pai de João confirma que Rafael ficou assistindo ao filme.</li>
+                    <li>Ele não saiu da sala durante o desaparecimento.</li>
+                </ul>
+
+                <p><strong>Curiosidade:</strong> Rafael gosta de desenhar e criar histórias de investigação.</p>
+
+                <p><a href="#personagens">⬅ Voltar aos suspeitos</a></p>
+
+            </article>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================= -->
+        <!-- BRUNO -->
+        <!-- ========================= -->
+
+        <section id="bruno">
+
+            <article>
+
+                <h2>👦 Bruno</h2>
+
+                <p><strong>Idade:</strong> 20 anos</p>
+
+                <p><strong>Personalidade:</strong> Divertido, brincalhão e gosta muito de comida.</p>
+
+                <p><strong>Álibi:</strong> Disse que estava procurando um copo de água na cozinha.</p>
+
+                <p><strong>O que estava fazendo:</strong> Caminhava pela casa enquanto conversava com os amigos.</p>
+
+                <p><strong>Pistas contra:</strong></p>
+
+                <ul>
+                    <li>Foi uma das últimas pessoas vistas perto da cozinha.</li>
+                    <li>Havia migalhas de pão perto da cadeira onde ele estava sentado.</li>
+                    <li>Um guardanapo usado foi encontrado dentro da sua mochila.</li>
+                </ul>
+
+                <p><strong>Pistas a favor:</strong></p>
+
+                <ul>
+                    <li>Ele afirma que apenas pegou água.</li>
+                    <li>Ninguém viu ele pegando o pão diretamente.</li>
+                </ul>
+
+                <p><strong>Curiosidade:</strong> Bruno sempre brinca dizendo que poderia comer um lanche a qualquer hora do dia.</p>
+
+                <p><strong>Observação da Detetive IA:</strong></p>
+
+                <p>
+                    "Analisando o comportamento de Bruno...
+                    Existem algumas informações suspeitas, mas ainda são necessárias mais provas."
+                </p>
+
+                <p><a href="#personagens">⬅ Voltar aos suspeitos</a></p>
+
+            </article>
+
+        </section>
+
+        <hr>
+                <!-- ========================= -->
+        <!-- MURAL DE INVESTIGAÇÃO -->
+        <!-- ========================= -->
+
+        <section id="investigacao">
+
+            <h2>🔎 Mural de Investigação</h2>
+
+            <p>
+                A Detetive IA analisou todos os depoimentos.
+                Agora é hora de organizar as pistas e descobrir quem está escondendo a verdade.
+            </p>
+
+            <article>
+
+                <h3>🧩 Pistas encontradas</h3>
+
+                <ul>
+
+                    <li>
+                        <strong>🥖 Migalhas de pão:</strong>
+                        Foram encontradas perto do lugar onde Bruno estava sentado.
+                    </li>
+
+                    <li>
+                        <strong>🎒 Mochila suspeita:</strong>
+                        Um guardanapo usado foi encontrado dentro da mochila de Bruno.
+                    </li>
+
+                    <li>
+                        <strong>👟 Farinha no tênis:</strong>
+                        Pedro tinha farinha no tênis, mas a explicação dele foi confirmada.
+                    </li>
+
+                    <li>
+                        <strong>📱 Ligação confirmada:</strong>
+                        Diego realmente estava conversando com sua família.
+                    </li>
+
+                    <li>
+                        <strong>📺 Filme na sala:</strong>
+                        Rafael estava assistindo televisão com o pai de João.
+                    </li>
+
+                    <li>
+                        <strong>☕ Cozinha organizada:</strong>
+                        Lucas ajudou a preparar a mesa.
+                    </li>
+
+                </ul>
+
+            </article>
+
+            <hr>
+
+            <article>
+
+                <h3>🤖 Análise da Detetive IA</h3>
+
+                <p>
+                    "Processando informações..."
+                </p>
+
+                <p>
+                    "Comparando depoimentos..."
+                </p>
+
+                <p>
+                    "Analisando comportamentos suspeitos..."
+                </p>
+
+                <p>
+                    "A maioria dos suspeitos possui explicações para as pistas encontradas."
+                </p>
+
+                <p>
+                    "Porém, existe uma combinação de evidências que aponta para uma pessoa específica."
+                </p>
+
+                <p>
+                    "Continue investigando antes de tomar uma decisão."
+                </p>
+
+            </article>
+
+        </section>
+
+        <hr>
+
+        <!-- ========================= -->
+        <!-- ESCOLHA DO CULPADO -->
+        <!-- ========================= -->
+
+        <section id="escolha">
+
+            <h2>⚖️ Escolha o Culpado</h2>
+
+            <p>
+                Depois de analisar todas as fichas e pistas, quem você acredita que roubou o pão?
+            </p>
+
+            <ul>
+
+                <li>
+                    <a href="#finalruim">
+                        Acusar Pedro
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#finalruim">
+                        Acusar Lucas
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#finalruim">
+                        Acusar Diego
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#finalruim">
+                        Acusar Rafael
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#finalbom">
+                        Acusar Bruno
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#finalsecreto">
+                        Esperar antes de decidir
+                    </a>
+                </li>
+
+            </ul>
+
+        </section>
+
+        <hr>
+                <!-- ========================= -->
+        <!-- FINAL BOM -->
+        <!-- ========================= -->
+
+        <section id="finalbom">
+
+            <article>
+
+                <h2>🏆 FINAL BOM - Caso Resolvido</h2>
+
+                <p>
+                    Você observa todas as pistas novamente e percebe que algo
+                    não fazia sentido nos depoimentos.
+                </p>
+
+                <p>
+                    As migalhas de pão, o guardanapo usado e a mochila de Bruno
+                    formavam uma sequência de evidências impossível de ignorar.
+                </p>
+
+                <p>
+                    João olha para Bruno e diz:
+                </p>
+
+                <p>
+                    <strong>João:</strong>
+                    "Bruno, acho que descobri quem pegou o pão."
+                </p>
+
+                <p>
+                    Bruno fica em silêncio por alguns segundos.
+                </p>
+
+                <p>
+                    <strong>Bruno:</strong>
+                    "Tá bom... fui eu."
+                </p>
+
+                <p>
+                    "Eu estava com muita fome e achei que ninguém iria perceber."
+                </p>
+
+                <p>
+                    Todos começam a rir da situação.
+                </p>
+
+                <p>
+                    <strong>Mãe:</strong>
+                    "Bruno, era só pedir. Eu teria separado um pedaço para você."
+                </p>
+
+                <p>
+                    A Detetive IA começa a processar o resultado.
+                </p>
+
+                <p>
+                    <strong>Detetive IA:</strong>
+                    "Investigação concluída."
+                </p>
+
+                <p>
+                    "Análise das pistas finalizada."
+                </p>
+
+                <p>
+                    "Probabilidade de acerto: 100%."
+                </p>
+
+                <h3>🥖 O pão foi recuperado!</h3>
+
+                <p>
+                    João conseguiu resolver o mistério e descobriu a verdade.
+                    A investigação foi um sucesso.
+                </p>
+
+                <p>
+                    ⭐ PARABÉNS, VOCÊ É UM GRANDE DETETIVE! ⭐
+                </p>
+
+                <p>
+                    <a href="#introducao">
+                        🔄 Jogar novamente
+                    </a>
+                </p>
+
+            </article>
+
+        </section>
+
+        <hr>
+                <!-- ========================= -->
+        <!-- FINAL RUIM -->
+        <!-- ========================= -->
+
+        <section id="finalruim">
+
+            <article>
+
+                <h2>❌ FINAL RUIM - Investigação Falhou</h2>
+
+                <p>
+                    João toma sua decisão, mas escolhe a pessoa errada.
+                </p>
+
+                <p>
+                    O suspeito acusado tenta explicar:
+                </p>
+
+                <p>
+                    <strong>Suspeito:</strong>
+                    "Eu não roubei o pão. As pistas mostravam outra coisa."
+                </p>
+
+                <p>
+                    A sala fica em silêncio.
+                </p>
+
+                <p>
+                    A Detetive IA começa a analisar novamente todos os dados.
+                </p>
+
+                <p>
+                    <strong>Detetive IA:</strong>
+                    "Atenção."
+                </p>
+
+                <p>
+                    "O resultado da investigação apresenta inconsistências."
+                </p>
+
+                <p>
+                    "A acusação realizada não possui provas suficientes."
+                </p>
+
+                <p>
+                    Enquanto todos discutem sobre o erro da investigação,
+                    Bruno aproveita a confusão.
+                </p>
+
+                <p>
+                    Ele pega discretamente o restante do pão e sai da sala.
+                </p>
+
+                <p>
+                    Alguns minutos depois, João percebe a verdade.
+                </p>
+
+                <p>
+                    <strong>João:</strong>
+                    "Espere... as pistas sempre apontavam para o Bruno!"
+                </p>
+
+                <p>
+                    A Detetive IA responde:
+                </p>
+
+                <p>
+                    <strong>Detetive IA:</strong>
+                    "Investigação encerrada."
+                </p>
+
+                <p>
+                    "Erro detectado: o verdadeiro ladrão escapou."
+                </p>
+
+                <h3>🥖 O mistério continua...</h3>
+
+                <p>
+                    Você terá que tentar novamente e analisar melhor as pistas.
+                </p>
+
+                <p>
+                    <a href="#introducao">
+                        🔄 Tentar novamente
+                    </a>
+                </p>
+
+            </article>
+
+        </section>
+
+        <hr>
+                <!-- ========================= -->
+        <!-- FINAL SECRETO -->
+        <!-- ========================= -->
+
+        <section id="finalsecreto">
+
+            <article>
+
+                <h2>⭐ FINAL SECRETO - A Visita Inesperada</h2>
+
+                <p>
+                    João decide não acusar ninguém ainda.
+                </p>
+
+                <p>
+                    A Detetive IA sugere:
+                </p>
+
+                <p>
+                    <strong>Detetive IA:</strong>
+                    "Uma investigação inteligente exige paciência."
+                </p>
+
+                <p>
+                    "Aguarde e observe novas possibilidades."
+                </p>
+
+                <p>
+                    Alguns segundos depois...
+                </p>
+
+                <p>
+                    🔔 <strong>DIN DON!</strong>
+                </p>
+
+                <p>
+                    A campainha da casa toca.
+                </p>
+
+                <p>
+                    João abre a porta e fica surpreso.
+                </p>
+
+                <p>
+                    Era uma visita inesperada.
+                </p>
+
+                <p>
+                    <strong>Messi:</strong>
+                    "¡Hola! ¿Quién robó el pan?"
+                </p>
+
+                <p>
+                    Todos ficam olhando sem entender o que está acontecendo.
+                </p>
+
+                <p>
+                    A Detetive IA rapidamente analisa a situação.
+                </p>
+
+                <p>
+                    <strong>Detetive IA:</strong>
+                    "Novo elemento identificado."
+                </p>
+
+                <p>
+                    "A presença de uma testemunha famosa aumentou a pressão sobre os suspeitos."
+                </p>
+
+                <p>
+                    Bruno começa a rir nervosamente.
+                </p>
+
+                <p>
+                    De repente, sua mochila cai no chão.
+                </p>
+
+                <p>
+                    Dentro dela estava o pacote de pão desaparecido.
+                </p>
+
+                <p>
+                    Todos olham para Bruno.
+                </p>
+
+                <p>
+                    <strong>Bruno:</strong>
+                    "Tá bom... fui eu."
+                </p>
+
+                <p>
+                    <strong>Bruno:</strong>
+                    "Eu estava com fome e achei que ninguém perceberia."
+                </p>
+
+                <p>
+                    A Detetive IA finaliza:
+                </p>
+
+                <p>
+                    <strong>Detetive IA:</strong>
+                    "Final secreto desbloqueado."
+                </p>
+
+                <h3>
+                    ⭐🏆 FINAL SECRETO DESBLOQUEADO 🏆⭐
+                </h3>
+
+                <p>
+                    João resolveu o mistério de uma maneira inesperada.
+                </p>
+
+                <p>
+                    <a href="#introducao">
+                        🔄 Jogar novamente
+                    </a>
+                </p>
+
+            </article>
+
+        </section>
+
+        <hr>
+                <!-- ========================= -->
+        <!-- ENCERRAMENTO -->
+        <!-- ========================= -->
+
+    </main>
+
+    <!-- ========================= -->
+    <!-- RODAPÉ -->
+    <!-- ========================= -->
+
+    <footer>
+
+        <hr>
+
+        <h2>📌 Sobre o Projeto</h2>
+
+        <p>
+            O Mistério do Pão Desaparecido é um jogo de investigação criado
+            utilizando apenas HTML.
+        </p>
+
+        <p>
+            O objetivo é analisar pistas, investigar suspeitos e descobrir
+            quem está escondendo a verdade.
+        </p>
+
+        <p>
+            Projeto preparado para futuramente receber estilos utilizando CSS.
+        </p>
+
+        <p>
+            Desenvolvido por João.
+        </p>
+
+        <hr>
+
+        <p>
+            🕵️ Fim da investigação.
+        </p>
+
+    </footer>
 
 </body>
 
 </html>
-
-
