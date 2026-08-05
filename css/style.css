@@ -1,132 +1,207 @@
-/* Base stylesheet: css/style.css
-   - Colors and variables
-   - Reset and sensible defaults
-   - Layout helpers and utilities
-   - Responsive typography
-   - Example component styles (buttons, cards, forms)
-*/
-:root{
-  --bg:#ffffff;
-  --surface:#f8fafc;
-  --text:#0f172a;
-  --muted:#6b7280;
-  --accent:#2563eb; /* blue-600 */
-  --accent-600:#1e40af;
-  --success:#16a34a;
-  --danger:#dc2626;
-  --border:rgba(15,23,42,0.08);
-  --radius:8px;
-  --max-width:1100px;
+/* ========================= */
+/* CONFIGURAÇÃO GERAL */
+/* ========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-/* Reset-ish */
-*{box-sizing:border-box}
-html,body{height:100%}
 body{
-  margin:0;
-  font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background:var(--bg);
-  color:var(--text);
-  line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-img{max-width:100%;height:auto;display:block}
-
-/* Container */
-.container{
-  width:90%;
-  max-width:var(--max-width);
-  margin-left:auto;
-  margin-right:auto;
-  padding:24px 0;
+    background:#101820;
+    color:white;
+    font-family:Arial, Helvetica, sans-serif;
+    line-height:1.6;
+    padding:20px;
 }
 
-/* Typography */
-h1{font-size:1.875rem;margin:0 0 0.5rem}
-h2{font-size:1.25rem;margin:0 0 0.5rem}
-p{margin:0 0 1rem}
-small{font-size:0.875rem;color:var(--muted)}
+/* ========================= */
+/* CABEÇALHO */
+/* ========================= */
 
-/* Utility classes */
-.flex{display:flex}
-.items-center{align-items:center}
-.justify-between{justify-content:space-between}
-.gap-1{gap:0.5rem}
-.gap-2{gap:1rem}
-.mt-1{margin-top:0.5rem}
-.mt-2{margin-top:1rem}
-.mb-1{margin-bottom:0.5rem}
-.text-center{text-align:center}
-.text-muted{color:var(--muted)}
-
-/* Card */
-.card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:1rem;
-  box-shadow:0 1px 2px rgba(16,24,40,0.03);
+header{
+    background:#182635;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    margin-bottom:25px;
 }
 
-/* Buttons */
-.btn{
-  display:inline-flex;
-  align-items:center;
-  gap:0.5rem;
-  padding:0.5rem 0.75rem;
-  border-radius:6px;
-  border:1px solid transparent;
-  background:var(--accent);
-  color:#fff;
-  text-decoration:none;
-  font-weight:600;
-  cursor:pointer;
-}
-.btn:hover{background:var(--accent-600)}
-.btn.secondary{background:transparent;color:var(--accent);border-color:var(--accent);}
-
-/* Forms */
-.input, textarea, select{
-  width:100%;
-  padding:0.5rem 0.75rem;
-  border:1px solid var(--border);
-  border-radius:6px;
-  background:#fff;
-  color:var(--text);
-}
-.label{display:block;margin-bottom:0.25rem;font-weight:600}
-.form-row{display:flex;gap:0.75rem}
-
-/* Responsive grid */
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem}
-.col-6{grid-column:span 6}
-.col-4{grid-column:span 4}
-.col-3{grid-column:span 3}
-
-@media (max-width:768px){
-  .grid{grid-template-columns:repeat(6,1fr)}
-  .col-6{grid-column:span 6}
-  .col-4{grid-column:span 6}
-  .col-3{grid-column:span 6}
-  h1{font-size:1.5rem}
+h1{
+    color:#FFD54F;
+    margin-bottom:10px;
 }
 
-/* Accessibility helpers */
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-
-/* Small example component: navbar */
-.navbar{
-  display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;
-  border-bottom:1px solid var(--border);
-  background:linear-gradient(180deg, transparent, rgba(16,24,40,0.01));
+h2{
+    color:#4FC3F7;
+    margin-bottom:15px;
 }
-.navbar .brand{font-weight:700;color:var(--accent)}
-.navbar .nav{display:flex;gap:1rem}
 
-/* Footer */
-.footer{padding:2rem 0;font-size:0.9rem;color:var(--muted);border-top:1px solid var(--border);margin-top:2rem}
+h3{
+    color:#81C784;
+    margin-bottom:10px;
+}
 
-/* Helpers for forms validation */
-.text-danger{color:var(--danger)}
-.text-success{color:var(--success)}
+p{
+    margin-bottom:12px;
+}
+
+/* ========================= */
+/* MENU */
+/* ========================= */
+
+nav ul{
+    list-style:none;
+}
+
+nav li{
+    margin:10px 0;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    background:#2196F3;
+    display:inline-block;
+    padding:10px 15px;
+    border-radius:8px;
+    transition:.3s;
+}
+
+nav a:hover{
+    background:#1565C0;
+}
+
+/* ========================= */
+/* SEÇÕES */
+/* ========================= */
+
+section{
+    background:#1E2D3D;
+    padding:20px;
+    margin-bottom:25px;
+    border-radius:12px;
+    border-left:6px solid #4FC3F7;
+}
+
+/* ========================= */
+/* PERSONAGENS */
+/* ========================= */
+
+article{
+    background:#263646;
+    padding:20px;
+    border-radius:10px;
+    margin-top:15px;
+}
+
+article ul{
+    margin-left:25px;
+}
+
+article li{
+    margin:8px 0;
+}
+
+/* ========================= */
+/* LINKS */
+/* ========================= */
+
+a{
+    color:#FFD54F;
+    text-decoration:none;
+    transition:.3s;
+}
+
+a:hover{
+    color:#ffffff;
+}
+
+/* ========================= */
+/* BOTÕES DOS FINAIS */
+/* ========================= */
+
+#escolha ul{
+    list-style:none;
+}
+
+#escolha li{
+    margin:12px 0;
+}
+
+#escolha a{
+    display:inline-block;
+    background:#43A047;
+    color:white;
+    padding:12px 18px;
+    border-radius:8px;
+}
+
+#escolha a:hover{
+    background:#2E7D32;
+}
+
+/* ========================= */
+/* FINAIS */
+/* ========================= */
+
+#finalbom{
+    border-left:8px solid #4CAF50;
+}
+
+#finalruim{
+    border-left:8px solid #E53935;
+}
+
+#finalsecreto{
+    border-left:8px solid #9C27B0;
+}
+
+/* ========================= */
+/* RODAPÉ */
+/* ========================= */
+
+footer{
+    background:#182635;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    margin-top:30px;
+}
+
+/* ========================= */
+/* LINHAS */
+/* ========================= */
+
+hr{
+    border:none;
+    border-top:1px solid #555;
+    margin:25px 0;
+}
+
+/* ========================= */
+/* RESPONSIVO */
+/* ========================= */
+
+@media(max-width:768px){
+
+    body{
+        padding:10px;
+    }
+
+    header,
+    section,
+    article,
+    footer{
+        padding:15px;
+    }
+
+    nav a,
+    #escolha a{
+        display:block;
+        width:100%;
+        text-align:center;
+    }
+
+}
