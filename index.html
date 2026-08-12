@@ -4,422 +4,643 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CyberDetective — O Mistério do Pão</title>
+<title>CyberDetective 2.0 — O Mistério do Pão</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:"Segoe UI",Arial,sans-serif;
 }
 
-body {
+body{
+    min-height:100vh;
+    color:#e5e7eb;
     background:
-        radial-gradient(circle at top, #12345c 0%, #05080d 45%, #020306 100%);
-    color: #e5e7eb;
-    min-height: 100vh;
-    overflow-x: hidden;
+    radial-gradient(circle at 50% 0%,#12345c 0%,#05080d 45%,#020306 100%);
+    overflow-x:hidden;
 }
 
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
+body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
     background:
-        linear-gradient(rgba(56,189,248,.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(56,189,248,.025) 1px, transparent 1px);
-    background-size: 40px 40px;
+    linear-gradient(rgba(56,189,248,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(56,189,248,.025) 1px,transparent 1px);
+    background-size:40px 40px;
 }
 
-.container {
-    width: min(1150px, 94%);
-    margin: auto;
-    padding: 25px 0 70px;
+.container{
+    width:min(1200px,94%);
+    margin:auto;
+    padding:20px 0 80px;
 }
 
-/* HUD */
+/* =========================
+HUD
+========================= */
 
-.hud {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    background: rgba(15,23,42,.9);
-    border: 1px solid #1e3a5f;
-    padding: 14px 20px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow: 0 0 25px rgba(0,0,0,.5);
+.hud{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    background:rgba(15,23,42,.92);
+    border:1px solid #1e3a5f;
+    padding:14px 20px;
+    border-radius:16px;
+    margin-bottom:20px;
+    box-shadow:0 10px 40px rgba(0,0,0,.4);
+    position:sticky;
+    top:10px;
+    z-index:20;
 }
 
-.hud-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.hud-item{
+    display:flex;
+    align-items:center;
+    gap:9px;
 }
 
-.battery {
-    width: 150px;
-    height: 12px;
-    background: #172033;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid #334155;
+.battery{
+    width:150px;
+    height:11px;
+    background:#172033;
+    border-radius:20px;
+    overflow:hidden;
 }
 
-#batteryFill {
-    height: 100%;
-    width: 100%;
-    background: #22c55e;
-    transition: .4s;
+#batteryFill{
+    width:100%;
+    height:100%;
+    background:#22c55e;
+    transition:.4s;
 }
 
-/* TELAS */
-
-.screen {
-    display: none;
-    animation: appear .35s ease;
+.score{
+    color:#ffd84d;
+    font-weight:bold;
 }
 
-.screen.active {
-    display: block;
+/* =========================
+TELAS
+========================= */
+
+.screen{
+    display:none;
+    animation:appear .35s ease;
 }
 
-@keyframes appear {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
+.screen.active{
+    display:block;
+}
+
+@keyframes appear{
+    from{
+        opacity:0;
+        transform:translateY(15px);
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    to{
+        opacity:1;
+        transform:translateY(0);
     }
 }
 
-/* PAINEIS */
+/* =========================
+PAINÉIS
+========================= */
 
-.panel {
-    background: rgba(15,23,42,.82);
-    border: 1px solid #24344d;
-    border-radius: 20px;
-    padding: 30px;
-    margin-bottom: 20px;
-    box-shadow: 0 20px 50px rgba(0,0,0,.45);
+.panel{
+    background:rgba(15,23,42,.86);
+    border:1px solid #24344d;
+    border-radius:20px;
+    padding:28px;
+    margin-bottom:20px;
+    box-shadow:0 20px 50px rgba(0,0,0,.45);
 }
 
-h1 {
-    font-size: clamp(40px, 7vw, 70px);
-    margin-bottom: 10px;
-    color: #ffd84d;
-    text-shadow: 0 0 25px rgba(255,216,77,.25);
+h1{
+    font-size:clamp(40px,7vw,70px);
+    color:#ffd84d;
+    margin-bottom:10px;
 }
 
-h2 {
-    color: #38bdf8;
-    font-size: 30px;
-    margin-bottom: 10px;
+h2{
+    color:#38bdf8;
+    font-size:30px;
+    margin-bottom:12px;
 }
 
-h3 {
-    color: #ffd84d;
-    margin-bottom: 12px;
+h3{
+    color:#ffd84d;
+    margin-bottom:10px;
 }
 
-p {
-    color: #94a3b8;
-    line-height: 1.6;
-    margin-bottom: 15px;
+p{
+    color:#94a3b8;
+    line-height:1.6;
+    margin-bottom:13px;
 }
 
-.subtitle {
-    color: #cbd5e1;
-    font-size: 19px;
+.subtitle{
+    color:#cbd5e1;
+    font-size:19px;
 }
 
-/* BOTÕES */
+/* =========================
+BOTÕES
+========================= */
 
-button {
-    border: none;
-    border-radius: 12px;
-    padding: 14px 20px;
-    margin: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    background: #ffd84d;
-    color: #101827;
-    transition: .2s;
+button{
+    border:0;
+    border-radius:12px;
+    padding:13px 19px;
+    margin:5px;
+    cursor:pointer;
+    font-weight:bold;
+    background:#ffd84d;
+    color:#101827;
+    transition:.2s;
 }
 
-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255,216,77,.25);
+button:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 25px rgba(255,216,77,.25);
 }
 
-button:disabled {
-    opacity: .4;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+.secondary{
+    background:#172033;
+    color:white;
+    border:1px solid #334155;
 }
 
-.secondary {
-    background: #172033;
-    color: white;
-    border: 1px solid #334155;
+.success{
+    background:#10b981;
+    color:white;
 }
 
-.success {
-    background: #10b981;
-    color: white;
+.danger{
+    background:#ef4444;
+    color:white;
 }
 
-.danger {
-    background: #ef4444;
-    color: white;
+.blue{
+    background:#0284c7;
+    color:white;
 }
 
-/* IA */
+/* =========================
+IA
+========================= */
 
-.ai {
-    border: 1px solid rgba(56,189,248,.4);
-    background: rgba(8,47,73,.45);
-    border-radius: 16px;
-    padding: 20px;
-    margin: 20px 0;
+.ai{
+    border:1px solid rgba(56,189,248,.4);
+    background:rgba(8,47,73,.45);
+    border-radius:16px;
+    padding:20px;
+    margin:20px 0;
 }
 
-.ai-title {
-    color: #38bdf8;
-    font-weight: bold;
-    letter-spacing: 2px;
-    font-size: 13px;
-    margin-bottom: 10px;
+.ai-title{
+    color:#38bdf8;
+    font-weight:bold;
+    letter-spacing:2px;
+    font-size:13px;
+    margin-bottom:10px;
 }
 
-.ai-message {
-    color: #67e8f9;
-    font-family: monospace;
-    font-size: 15px;
+.ai-message{
+    color:#67e8f9;
+    font-family:monospace;
+    line-height:1.7;
+    white-space:pre-line;
 }
 
-/* PISTAS */
+/* =========================
+MAPA
+========================= */
 
-.clue-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
-    gap: 15px;
-    margin-top: 20px;
+.house-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-top:20px;
 }
 
-.clue {
-    background: rgba(30,41,59,.65);
-    border: 1px solid #334155;
-    padding: 20px;
-    border-radius: 16px;
-    cursor: pointer;
-    transition: .25s;
-}
-
-.clue:hover {
-    border-color: #38bdf8;
-    transform: translateY(-5px);
-}
-
-.clue.used {
-    border-color: #10b981;
-    opacity: .65;
-}
-
-.clue-icon {
-    font-size: 35px;
-    margin-bottom: 10px;
-}
-
-/* EVIDÊNCIAS */
-
-.evidence {
-    background: #09111e;
-    border: 1px dashed #334155;
-    padding: 15px;
-    border-radius: 12px;
-    min-height: 80px;
-}
-
-.evidence-item {
-    display: inline-block;
-    padding: 7px 10px;
-    margin: 4px;
-    border-radius: 7px;
-    background: #172033;
-    color: #ffd84d;
-    border: 1px solid #ffd84d;
-    font-size: 13px;
-}
-
-/* SUSPEITOS */
-
-.suspect-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
-    gap: 18px;
-    margin-top: 20px;
-}
-
-.suspect {
-    position: relative;
+.room{
+    min-height:150px;
+    padding:25px;
+    border-radius:18px;
+    border:2px solid #26364d;
     background:
-        linear-gradient(145deg, rgba(30,41,59,.9), rgba(9,15,26,.95));
-    border: 2px solid #26364d;
-    padding: 24px;
-    border-radius: 18px;
-    cursor: pointer;
-    transition: .3s;
+    linear-gradient(145deg,rgba(30,41,59,.9),rgba(9,15,26,.95));
+    cursor:pointer;
+    transition:.3s;
 }
 
-.suspect:hover {
-    transform: translateY(-7px);
-    border-color: #38bdf8;
-    box-shadow: 0 15px 35px rgba(0,0,0,.4);
+.room:hover{
+    transform:translateY(-5px);
+    border-color:#38bdf8;
 }
 
-.suspect.selected {
-    border-color: #ffd84d;
-    box-shadow: 0 0 25px rgba(255,216,77,.2);
+.room-icon{
+    font-size:45px;
+    margin-bottom:10px;
 }
 
-.avatar {
-    font-size: 55px;
-    text-align: center;
-    margin-bottom: 10px;
+.room small{
+    color:#64748b;
 }
 
-.role {
-    color: #38bdf8;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+/* =========================
+OBJETOS
+========================= */
+
+.object-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:15px;
+    margin-top:20px;
 }
 
-.chance {
-    margin-top: 15px;
+.object{
+    background:#111b2d;
+    border:1px solid #334155;
+    padding:20px;
+    border-radius:16px;
+    cursor:pointer;
+    transition:.25s;
 }
 
-.chance-bar {
-    height: 10px;
-    background: #111827;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-top: 7px;
+.object:hover{
+    border-color:#ffd84d;
+    transform:translateY(-4px);
 }
 
-.chance-fill {
-    height: 100%;
-    width: 0%;
-    transition: .7s;
-    background: #ef4444;
+.object.found{
+    border-color:#10b981;
 }
 
-/* IA */
-
-.analysis-box {
-    background: #020617;
-    border: 1px solid #164e63;
-    border-radius: 16px;
-    padding: 20px;
-    margin-top: 25px;
+.object-icon{
+    font-size:40px;
+    margin-bottom:10px;
 }
 
-.ai-percentage {
-    font-size: 30px;
-    color: #22d3ee;
-    font-weight: bold;
+/* =========================
+INVENTÁRIO
+========================= */
+
+.inventory{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    min-height:100px;
+    padding:15px;
+    background:#07101d;
+    border:1px dashed #334155;
+    border-radius:15px;
 }
 
-.ranking {
-    margin-top: 15px;
+.item{
+    background:#172033;
+    border:1px solid #ffd84d;
+    color:#ffd84d;
+    padding:10px 13px;
+    border-radius:10px;
+    cursor:grab;
+    user-select:none;
 }
 
-.rank-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #1e293b;
+.item:active{
+    cursor:grabbing;
 }
 
-/* FINAL */
+/* =========================
+DRAG AREA
+========================= */
 
-.final {
-    text-align: center;
+.drop-zone{
+    min-height:150px;
+    border:2px dashed #2563eb;
+    border-radius:18px;
+    padding:25px;
+    text-align:center;
+    background:rgba(30,64,175,.08);
+    transition:.25s;
 }
 
-.final-icon {
-    font-size: 80px;
-    margin: 20px;
+.drop-zone.dragover{
+    border-color:#22c55e;
+    background:rgba(34,197,94,.12);
+    transform:scale(1.01);
 }
 
-.hidden {
-    display: none;
+/* =========================
+SUSPEITOS
+========================= */
+
+.suspect-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:18px;
+    margin-top:20px;
 }
 
-@media(max-width:700px) {
+.suspect{
+    background:
+    linear-gradient(145deg,rgba(30,41,59,.9),rgba(9,15,26,.95));
+    border:2px solid #26364d;
+    padding:22px;
+    border-radius:18px;
+    cursor:pointer;
+    transition:.3s;
+}
 
-    .hud {
-        flex-direction: column;
-        align-items: flex-start;
+.suspect:hover{
+    transform:translateY(-6px);
+    border-color:#38bdf8;
+}
+
+.suspect.selected{
+    border-color:#ffd84d;
+    box-shadow:0 0 25px rgba(255,216,77,.2);
+}
+
+.avatar{
+    font-size:55px;
+    text-align:center;
+    margin-bottom:8px;
+}
+
+.role{
+    color:#38bdf8;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.chance{
+    margin-top:15px;
+}
+
+.chance-bar{
+    height:10px;
+    background:#111827;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:7px;
+}
+
+.chance-fill{
+    width:0%;
+    height:100%;
+    background:#ef4444;
+    transition:.6s;
+}
+
+/* =========================
+INTERROGATÓRIO
+========================= */
+
+.question-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:12px;
+}
+
+.question{
+    padding:17px;
+    background:#111b2d;
+    border:1px solid #334155;
+    border-radius:14px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.question:hover{
+    border-color:#38bdf8;
+    transform:translateY(-3px);
+}
+
+.answer{
+    margin-top:20px;
+    background:#020617;
+    border-left:4px solid #38bdf8;
+    padding:20px;
+    border-radius:10px;
+    color:#cbd5e1;
+}
+
+/* =========================
+TIMELINE
+========================= */
+
+.timeline{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding:15px 5px;
+}
+
+.time-slot{
+    min-width:150px;
+    padding:20px;
+    border:2px dashed #334155;
+    border-radius:14px;
+    text-align:center;
+    background:#09111e;
+}
+
+.time-slot.dragover{
+    border-color:#22c55e;
+}
+
+.time{
+    color:#38bdf8;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+/* =========================
+CONEXÕES
+========================= */
+
+.connection-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.connection-box{
+    padding:20px;
+    border:2px dashed #334155;
+    border-radius:16px;
+    min-height:160px;
+    background:#09111e;
+}
+
+.connection-box.dragover{
+    border-color:#22c55e;
+}
+
+/* =========================
+ANÁLISE
+========================= */
+
+.analysis-box{
+    background:#020617;
+    border:1px solid #164e63;
+    border-radius:16px;
+    padding:20px;
+    margin-top:20px;
+}
+
+.ai-percentage{
+    font-size:38px;
+    color:#22d3ee;
+    font-weight:bold;
+}
+
+.confidence{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:8px;
+    background:#172033;
+    color:#22c55e;
+    margin-top:10px;
+}
+
+.rank-row{
+    display:flex;
+    justify-content:space-between;
+    padding:12px;
+    border-bottom:1px solid #1e293b;
+}
+
+/* =========================
+TOAST
+========================= */
+
+#toast{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    background:#0f172a;
+    border:1px solid #38bdf8;
+    color:#e0f2fe;
+    padding:15px 20px;
+    border-radius:12px;
+    transform:translateY(120px);
+    opacity:0;
+    transition:.3s;
+    z-index:100;
+    max-width:320px;
+}
+
+#toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+/* =========================
+FINAL
+========================= */
+
+.final{
+    text-align:center;
+}
+
+.final-icon{
+    font-size:80px;
+    margin:20px;
+}
+
+.final-score{
+    font-size:45px;
+    color:#ffd84d;
+    font-weight:bold;
+}
+
+/* =========================
+RESPONSIVO
+========================= */
+
+@media(max-width:750px){
+
+    .hud{
+        flex-direction:column;
+        align-items:flex-start;
+        position:static;
     }
 
-    .battery {
-        width: 120px;
+    .house-grid{
+        grid-template-columns:1fr;
     }
 
-    .panel {
-        padding: 20px;
+    .connection-grid{
+        grid-template-columns:1fr;
     }
 
-    button {
-        width: 100%;
-        margin: 5px 0;
+    button{
+        width:100%;
+        margin:5px 0;
     }
+
 }
+
 </style>
 </head>
 
 <body>
 
+<div id="toast"></div>
+
 <div class="container">
 
-<!-- HUD -->
+<!-- ==================================================
+HUD
+================================================== -->
 
 <div class="hud">
 
     <div class="hud-item">
         🧠
         <span>
-            C.H.I.P. v4.2
-            <b style="color:#22c55e">ONLINE</b>
+            C.H.I.P. v5.0
+            <b style="color:#22c55e"> ONLINE</b>
         </span>
     </div>
 
     <div class="hud-item">
+        ⭐
+        <span class="score">
+            Pontos: <span id="score">0</span>
+        </span>
+    </div>
+
+    <div class="hud-item">
+
         ⚡
-        <span>Bateria</span>
 
         <div class="battery">
             <div id="batteryFill"></div>
         </div>
 
         <span id="batteryText">100%</span>
+
     </div>
 
 </div>
 
 
-<!-- ========================= -->
-<!-- INÍCIO -->
-<!-- ========================= -->
+<!-- ==================================================
+INÍCIO
+================================================== -->
 
 <section id="inicio" class="screen active">
 
@@ -433,36 +654,36 @@ Caso #404 — O Mistério do Pão Desaparecido
 
 <br>
 
-<h3>🚨 ALERTA DE SEGURANÇA</h3>
+<h3>🚨 MISSÃO</h3>
 
 <p>
-Um pão artesanal de centeio desapareceu misteriosamente
-da cozinha às 08:00 da manhã.
+Um pão artesanal desapareceu misteriosamente da cozinha.
+O crime ocorreu entre <b>07:45 e 08:00</b>.
 </p>
 
 <p>
-Quatro indivíduos estavam dentro ou próximos da residência.
-O C.H.I.P. detectou atividade suspeita.
+Sua missão é descobrir <b>quem pegou o pão</b>,
+como fez isso e onde o pão foi parar.
 </p>
 
 <div class="ai">
 
 <div class="ai-title">
-C.H.I.P. — INTELIGÊNCIA ARTIFICIAL
+C.H.I.P. — BRIEFING
 </div>
 
 <div class="ai-message">
-> Caso carregado.<br>
-> 4 suspeitos detectados.<br>
-> Evidências disponíveis: 3.<br>
-> Probabilidade inicial inconclusiva.<br>
-> Investigador necessário.
+> Quatro suspeitos identificados.
+> A cena possui múltiplas evidências.
+> Algumas pistas podem ser conectadas.
+> Não confie apenas na probabilidade.
+> INVESTIGUE.
 </div>
 
 </div>
 
-<button onclick="mudarTela('investigacao')">
-🔍 COMEÇAR INVESTIGAÇÃO
+<button onclick="mudarTela('mapa')">
+🏠 ENTRAR NA CASA
 </button>
 
 </div>
@@ -470,75 +691,118 @@ C.H.I.P. — INTELIGÊNCIA ARTIFICIAL
 </section>
 
 
-<!-- ========================= -->
-<!-- INVESTIGAÇÃO -->
-<!-- ========================= -->
+<!-- ==================================================
+MAPA
+================================================== -->
 
-<section id="investigacao" class="screen">
+<section id="mapa" class="screen">
 
 <div class="panel">
 
-<h2>🔍 Cena do Crime</h2>
+<h2>🏠 Mapa da Residência</h2>
 
 <p>
-Clique nos blocos abaixo para investigar as evidências.
-Cada análise consome <b>20%</b> da bateria.
+Clique em um cômodo para investigar.
+Alguns objetos podem ser <b>arrastados</b> depois de encontrados.
+</p>
+
+<div class="house-grid">
+
+<div class="room" onclick="abrirComodo('cozinha')">
+<div class="room-icon">🍳</div>
+<h3>Cozinha</h3>
+<small>Local principal do crime</small>
+</div>
+
+<div class="room" onclick="abrirComodo('sala')">
+<div class="room-icon">🛋️</div>
+<h3>Sala</h3>
+<small>Há algo estranho no sofá</small>
+</div>
+
+<div class="room" onclick="abrirComodo('quarto')">
+<div class="room-icon">🛏️</div>
+<h3>Quarto</h3>
+<small>Possível álibi de Lucas</small>
+</div>
+
+<div class="room" onclick="abrirComodo('jardim')">
+<div class="room-icon">🌳</div>
+<h3>Jardim</h3>
+<small>Terra vermelha detectada</small>
+</div>
+
+<div class="room" onclick="abrirComodo('garagem')">
+<div class="room-icon">🚗</div>
+<h3>Garagem</h3>
+<small>Objetos esquecidos</small>
+</div>
+
+<div class="room" onclick="mudarTela('interrogatorio')">
+<div class="room-icon">🗣️</div>
+<h3>Sala de Interrogatório</h3>
+<small>Fale com os suspeitos</small>
+</div>
+
+</div>
+
+<br>
+
+<button class="secondary" onclick="mudarTela('inventarioTela')">
+🎒 Abrir inventário
+</button>
+
+<button class="secondary" onclick="mudarTela('conexoes')">
+🔗 Quadro de evidências
+</button>
+
+<button class="secondary" onclick="mudarTela('timeline')">
+⏱️ Linha do tempo
+</button>
+
+<button class="success" onclick="mudarTela('suspeitos')">
+🕵️ Ver suspeitos
+</button>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+CÔMODO
+================================================== -->
+
+<section id="comodo" class="screen">
+
+<div class="panel">
+
+<h2 id="roomTitle">
+Local
+</h2>
+
+<p id="roomDescription">
+Investigando...
 </p>
 
 <div class="ai">
 
 <div class="ai-title">
-C.H.I.P. — STATUS
+C.H.I.P. — SENSOR AMBIENTAL
 </div>
 
-<div id="aiMessage" class="ai-message">
-> Aguardando comando do investigador...
-</div>
-
-</div>
-
-<div class="clue-grid">
-
-<div class="clue" id="clue1" onclick="investigar(1)">
-<div class="clue-icon">🐾</div>
-<h3>Pelos Cinzentos</h3>
-<p>
-Pelos encontrados perto da bancada.
-</p>
-</div>
-
-
-<div class="clue" id="clue2" onclick="investigar(2)">
-<div class="clue-icon">👟</div>
-<h3>Pegada de Terra</h3>
-<p>
-Uma pegada foi encontrada próxima à porta.
-</p>
-</div>
-
-
-<div class="clue" id="clue3" onclick="investigar(3)">
-<div class="clue-icon">📄</div>
-<h3>Bilhete Rasgado</h3>
-<p>
-Um papel foi encontrado dentro da lixeira.
-</p>
+<div id="roomAI" class="ai-message">
+> Escaneando ambiente...
 </div>
 
 </div>
+
+<div id="objectGrid" class="object-grid"></div>
 
 <br>
 
-<h3>📁 Evidências coletadas</h3>
-
-<div class="evidence" id="evidence">
-Nenhuma evidência analisada.
-</div>
-
-<br>
-
-<button class="success" onclick="mudarTela('suspeitos')">
-⚖️ ANALISAR SUSPEITOS
+<button class="secondary" onclick="mudarTela('mapa')">
+↩ Voltar ao mapa
 </button>
 
 </div>
@@ -546,27 +810,80 @@ Nenhuma evidência analisada.
 </section>
 
 
-<!-- ========================= -->
-<!-- SUSPEITOS -->
-<!-- ========================= -->
+<!-- ==================================================
+INVENTÁRIO
+================================================== -->
+
+<section id="inventarioTela" class="screen">
+
+<div class="panel">
+
+<h2>🎒 Inventário</h2>
+
+<p>
+Arraste os itens para diferentes áreas de investigação.
+</p>
+
+<div class="inventory" id="inventory">
+
+<span style="color:#64748b">
+Nenhuma evidência coletada.
+</span>
+
+</div>
+
+<br>
+
+<h3>🧪 Laboratório C.H.I.P.</h3>
+
+<div class="drop-zone"
+id="laboratorio">
+
+🧪
+<br><br>
+Arraste uma evidência aqui para analisar
+</div>
+
+<div class="analysis-box">
+
+<h3>Resultado</h3>
+
+<div id="labResult">
+Aguardando uma amostra.
+</div>
+
+</div>
+
+<br>
+
+<button class="secondary" onclick="mudarTela('mapa')">
+↩ Voltar
+</button>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+SUSPEITOS
+================================================== -->
 
 <section id="suspeitos" class="screen">
 
 <div class="panel">
 
-<h2>🕵️ Banco de Suspeitos</h2>
+<h2>🕵️ Suspeitos</h2>
 
 <p>
-<b>Clique em um bloco</b> para selecionar o suspeito.
-A IA recalculará a probabilidade de envolvimento.
+Clique em um suspeito para analisar o perfil.
 </p>
 
 <div class="suspect-grid">
 
 
-<!-- LUCAS -->
-
-<div class="suspect" id="suspect-lucas"
+<div class="suspect"
+id="suspect-lucas"
 onclick="selecionarSuspeito('lucas')">
 
 <div class="avatar">🎮</div>
@@ -578,21 +895,18 @@ O Gamer
 <h3>Lucas</h3>
 
 <p>
-Irmão da vítima.
-Afirma que estava jogando no quarto.
+Diz que estava jogando no quarto.
 </p>
 
 <p>
-👟 Calçado: tamanho 40
+👟 Calçado tamanho 40
 </p>
 
 <div class="chance">
-
-Chance atual:
 <b id="chance-lucas">25%</b>
 
 <div class="chance-bar">
-<div class="chance-fill" id="bar-lucas"></div>
+<div id="bar-lucas" class="chance-fill"></div>
 </div>
 
 </div>
@@ -600,9 +914,8 @@ Chance atual:
 </div>
 
 
-<!-- REGINA -->
-
-<div class="suspect" id="suspect-regina"
+<div class="suspect"
+id="suspect-regina"
 onclick="selecionarSuspeito('regina')">
 
 <div class="avatar">🥗</div>
@@ -614,21 +927,18 @@ Influencer Fit
 <h3>Regina</h3>
 
 <p>
-Mãe da casa.
-Diz estar fazendo jejum.
+Afirma estar fazendo jejum.
 </p>
 
 <p>
-📸 Foto registrada às 07:45.
+📸 Foto às 07:45
 </p>
 
 <div class="chance">
-
-Chance atual:
 <b id="chance-regina">25%</b>
 
 <div class="chance-bar">
-<div class="chance-fill" id="bar-regina"></div>
+<div id="bar-regina" class="chance-fill"></div>
 </div>
 
 </div>
@@ -636,9 +946,8 @@ Chance atual:
 </div>
 
 
-<!-- MINGAU -->
-
-<div class="suspect" id="suspect-mingau"
+<div class="suspect"
+id="suspect-mingau"
 onclick="selecionarSuspeito('mingau')">
 
 <div class="avatar">🐱</div>
@@ -655,16 +964,14 @@ Pelagem cinza.
 </p>
 
 <p>
-🐾 Foi encontrado limpando os bigodes.
+🐾 Foi visto perto da cozinha.
 </p>
 
 <div class="chance">
-
-Chance atual:
 <b id="chance-mingau">25%</b>
 
 <div class="chance-bar">
-<div class="chance-fill" id="bar-mingau"></div>
+<div id="bar-mingau" class="chance-fill"></div>
 </div>
 
 </div>
@@ -672,9 +979,8 @@ Chance atual:
 </div>
 
 
-<!-- JORGE -->
-
-<div class="suspect" id="suspect-jorge"
+<div class="suspect"
+id="suspect-jorge"
 onclick="selecionarSuspeito('jorge')">
 
 <div class="avatar">🧓</div>
@@ -686,21 +992,19 @@ Hacker Antigo
 <h3>Seu Jorge</h3>
 
 <p>
-Vizinho da casa.
-Diz que estava cuidando do jardim.
+Vizinho.
+Diz que estava no jardim.
 </p>
 
 <p>
-🌱 Possui terra vermelha nas botas.
+🌱 Botas com terra vermelha.
 </p>
 
 <div class="chance">
-
-Chance atual:
 <b id="chance-jorge">25%</b>
 
 <div class="chance-bar">
-<div class="chance-fill" id="bar-jorge"></div>
+<div id="bar-jorge" class="chance-fill"></div>
 </div>
 
 </div>
@@ -708,45 +1012,43 @@ Chance atual:
 </div>
 
 </div>
-
-
-<!-- IA -->
 
 <div class="analysis-box">
 
-<h3>🧠 C.H.I.P. — ANÁLISE DE PROBABILIDADE</h3>
+<h3>🧠 Análise do C.H.I.P.</h3>
 
 <div id="selectedText">
-Selecione um suspeito acima.
+Selecione alguém.
 </div>
 
-<br>
-
-<div class="ai-percentage" id="selectedChance">
+<div class="ai-percentage"
+id="selectedChance">
 --%
 </div>
 
+<div class="confidence"
+id="confidence">
+Confiança: desconhecida
+</div>
+
 <p id="aiReason">
-Aguardando seleção...
+Aguardando análise.
 </p>
 
 </div>
 
-
-<!-- RANKING -->
-
-<div class="analysis-box">
-
-<h3>📊 Ranking da IA</h3>
-
-<div class="ranking" id="ranking"></div>
-
-</div>
-
 <br>
 
+<button class="blue" onclick="mudarTela('interrogatorio')">
+🗣️ Interrogar
+</button>
+
+<button class="secondary" onclick="mudarTela('timeline')">
+⏱️ Ver linha do tempo
+</button>
+
 <button class="danger" onclick="irParaAcusacao()">
-⚖️ ACUSAR SUSPEITO
+⚖️ Acusar
 </button>
 
 </div>
@@ -754,43 +1056,335 @@ Aguardando seleção...
 </section>
 
 
-<!-- ========================= -->
-<!-- ACUSAÇÃO -->
-<!-- ========================= -->
+<!-- ==================================================
+INTERROGATÓRIO
+================================================== -->
+
+<section id="interrogatorio" class="screen">
+
+<div class="panel">
+
+<h2>🗣️ Sala de Interrogatório</h2>
+
+<p>
+Escolha um suspeito e faça perguntas.
+Algumas respostas podem revelar contradições.
+</p>
+
+<div class="suspect-grid">
+
+<div class="suspect" onclick="interrogar('lucas')">
+<div class="avatar">🎮</div>
+<h3>Lucas</h3>
+<p>Interrogar</p>
+</div>
+
+<div class="suspect" onclick="interrogar('regina')">
+<div class="avatar">🥗</div>
+<h3>Regina</h3>
+<p>Interrogar</p>
+</div>
+
+<div class="suspect" onclick="interrogar('mingau')">
+<div class="avatar">🐱</div>
+<h3>Mingau</h3>
+<p>Interrogar</p>
+</div>
+
+<div class="suspect" onclick="interrogar('jorge')">
+<div class="avatar">🧓</div>
+<h3>Seu Jorge</h3>
+<p>Interrogar</p>
+</div>
+
+</div>
+
+<div id="questions" class="question-grid" style="margin-top:25px"></div>
+
+<div class="answer" id="answer">
+Escolha alguém para começar.
+</div>
+
+<br>
+
+<button class="secondary" onclick="mudarTela('mapa')">
+↩ Voltar
+</button>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+TIMELINE
+================================================== -->
+
+<section id="timeline" class="screen">
+
+<div class="panel">
+
+<h2>⏱️ Reconstrução da Linha do Tempo</h2>
+
+<p>
+Arraste os suspeitos para o horário em que você acredita
+que estavam presentes.
+</p>
+
+<div class="inventory">
+
+<div class="item"
+draggable="true"
+ondragstart="dragSuspeito(event,'Lucas')">
+🎮 Lucas
+</div>
+
+<div class="item"
+draggable="true"
+ondragstart="dragSuspeito(event,'Regina')">
+🥗 Regina
+</div>
+
+<div class="item"
+draggable="true"
+ondragstart="dragSuspeito(event,'Mingau')">
+🐱 Mingau
+</div>
+
+<div class="item"
+draggable="true"
+ondragstart="dragSuspeito(event,'Seu Jorge')">
+🧓 Jorge
+</div>
+
+</div>
+
+<div class="timeline">
+
+<div class="time-slot"
+ondragover="permitirDrop(event)"
+ondrop="soltarTempo(event,'07:30')">
+
+<div class="time">07:30</div>
+
+<span id="time-0730">
+Arraste aqui
+</span>
+
+</div>
+
+
+<div class="time-slot"
+ondragover="permitirDrop(event)"
+ondrop="soltarTempo(event,'07:45')">
+
+<div class="time">07:45</div>
+
+<span id="time-0745">
+Arraste aqui
+</span>
+
+</div>
+
+
+<div class="time-slot"
+ondragover="permitirDrop(event)"
+ondrop="soltarTempo(event,'08:00')">
+
+<div class="time">08:00</div>
+
+<span id="time-0800">
+Arraste aqui
+</span>
+
+</div>
+
+
+<div class="time-slot"
+ondragover="permitirDrop(event)"
+ondrop="soltarTempo(event,'08:15')">
+
+<div class="time">08:15</div>
+
+<span id="time-0815">
+Arraste aqui
+</span>
+
+</div>
+
+</div>
+
+<div class="ai">
+
+<div class="ai-title">
+C.H.I.P. — ANÁLISE TEMPORAL
+</div>
+
+<div id="timelineAI" class="ai-message">
+> Aguardando reconstrução...
+</div>
+
+</div>
+
+<button class="secondary" onclick="mudarTela('mapa')">
+↩ Voltar
+</button>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+CONEXÕES
+================================================== -->
+
+<section id="conexoes" class="screen">
+
+<div class="panel">
+
+<h2>🔗 Quadro de Investigação</h2>
+
+<p>
+Arraste uma evidência para o suspeito que você acredita
+estar relacionado a ela.
+</p>
+
+<div class="inventory" id="connectionItems"></div>
+
+<br>
+
+<div class="connection-grid">
+
+<div class="connection-box"
+ondragover="permitirDrop(event)"
+ondrop="conectar(event,'lucas')">
+
+<h3>🎮 Lucas</h3>
+
+<div id="connect-lucas">
+Solte evidências aqui
+</div>
+
+</div>
+
+
+<div class="connection-box"
+ondragover="permitirDrop(event)"
+ondrop="conectar(event,'regina')">
+
+<h3>🥗 Regina</h3>
+
+<div id="connect-regina">
+Solte evidências aqui
+</div>
+
+</div>
+
+
+<div class="connection-box"
+ondragover="permitirDrop(event)"
+ondrop="conectar(event,'mingau')">
+
+<h3>🐱 Mingau</h3>
+
+<div id="connect-mingau">
+Solte evidências aqui
+</div>
+
+</div>
+
+
+<div class="connection-box"
+ondragover="permitirDrop(event)"
+ondrop="conectar(event,'jorge')">
+
+<h3>🧓 Jorge</h3>
+
+<div id="connect-jorge">
+Solte evidências aqui
+</div>
+
+</div>
+
+</div>
+
+<div class="ai">
+
+<div class="ai-title">
+C.H.I.P. — CONEXÕES
+</div>
+
+<div id="connectionAI" class="ai-message">
+> Nenhuma conexão analisada.
+</div>
+
+</div>
+
+<button class="secondary" onclick="mudarTela('mapa')">
+↩ Voltar
+</button>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+ACUSAÇÃO
+================================================== -->
 
 <section id="acusacao" class="screen">
 
-<div class="panel final">
+<div class="panel">
 
-<div class="final-icon">⚖️</div>
+<div class="final">
 
-<h2>Julgamento Final</h2>
+<div class="final-icon">
+⚖️
+</div>
+
+<h2>Acusação Final</h2>
 
 <p>
-Você está prestes a acusar:
+Você escolheu:
 </p>
 
-<h1 id="accusedName">---</h1>
+<h1 id="accusedName">
+---
+</h1>
 
-<p id="accusedChance">
----</p>
+<div class="analysis-box">
+
+<div class="ai-percentage"
+id="accusedChance">
+--%
+</div>
+
+<p>
+probabilidade calculada pelo C.H.I.P.
+</p>
+
+</div>
 
 <button class="danger" onclick="finalizarCaso()">
 🚨 CONFIRMAR ACUSAÇÃO
 </button>
 
 <button class="secondary" onclick="mudarTela('suspeitos')">
-↩ VOLTAR
+↩ Voltar
 </button>
+
+</div>
 
 </div>
 
 </section>
 
 
-<!-- ========================= -->
-<!-- FINAL -->
-<!-- ========================= -->
+<!-- ==================================================
+FINAL
+================================================== -->
 
 <section id="final" class="screen">
 
@@ -806,6 +1400,10 @@ Caso encerrado
 
 <p id="finalText"></p>
 
+<div class="final-score">
+<span id="finalScore">0</span> XP
+</div>
+
 <div class="ai">
 
 <div class="ai-title">
@@ -817,7 +1415,7 @@ RELATÓRIO FINAL DO C.H.I.P.
 </div>
 
 <button onclick="location.reload()">
-🔄 JOGAR NOVAMENTE
+🔄 NOVA INVESTIGAÇÃO
 </button>
 
 </div>
@@ -830,540 +1428,1205 @@ RELATÓRIO FINAL DO C.H.I.P.
 
 <script>
 
-/* ==========================
-   VARIÁVEIS
-========================== */
+/* =====================================================
+ESTADO DO JOGO
+===================================================== */
 
 let bateria = 100;
+
+let pontos = 0;
 
 let evidencias = [];
 
 let suspeitoSelecionado = null;
 
+let ultimoDrag = null;
+
+let conexoes = {};
+
+let interrogados = {};
+
 let chances = {
 
-    lucas: 25,
-    regina: 25,
-    mingau: 25,
-    jorge: 25
+    lucas:25,
+    regina:25,
+    mingau:25,
+    jorge:25
 
 };
 
 const nomes = {
 
-    lucas: "Lucas",
-    regina: "Regina",
-    mingau: "Mingau",
-    jorge: "Seu Jorge"
+    lucas:"Lucas",
+    regina:"Regina",
+    mingau:"Mingau",
+    jorge:"Seu Jorge"
 
 };
 
 
-/* ==========================
-   TROCAR TELAS
-========================== */
+/* =====================================================
+OBJETOS DOS CÔMODOS
+===================================================== */
 
-function mudarTela(id) {
+const objetos = {
 
-    document.querySelectorAll(".screen")
-    .forEach(screen => {
-        screen.classList.remove("active");
-    });
+cozinha:[
 
-    document.getElementById(id)
-    .classList.add("active");
+{
+id:"pelo",
+icon:"🐾",
+nome:"Pelo cinzento",
+desc:"Um pequeno pelo encontrado perto da bancada.",
+evidencia:"Pelo cinzento",
+efeito:"mingau"
+},
 
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+{
+id:"migalha",
+icon:"🍞",
+nome:"Migalhas",
+desc:"Pequenas migalhas estão espalhadas pelo chão.",
+evidencia:"Migalhas de pão",
+efeito:"mingau"
+},
 
-    atualizarIA();
+{
+id:"bilhete",
+icon:"📄",
+nome:"Bilhete rasgado",
+desc:"Um bilhete fala sobre uma dieta que começaria hoje.",
+evidencia:"Bilhete da dieta",
+efeito:"regina"
 }
 
+],
 
-/* ==========================
-   BATERIA
-========================== */
+sala:[
 
-function gastarBateria() {
+{
+id:"sofa",
+icon:"🛋️",
+nome:"Sofá",
+desc:"Há algo escondido entre as almofadas.",
+evidencia:"Marca de patas no sofá",
+efeito:"mingau"
+},
 
-    if (bateria < 20) {
-
-        alert(
-            "⚠️ Bateria insuficiente!\n\n" +
-            "O C.H.I.P. precisa de pelo menos 20%."
-        );
-
-        return false;
-    }
-
-    bateria -= 20;
-
-    atualizarBateria();
-
-    return true;
+{
+id:"controle",
+icon:"🎮",
+nome:"Controle de videogame",
+desc:"O controle está ligado, mas ninguém parece estar jogando.",
+evidencia:"Controle ligado",
+efeito:"lucas"
 }
 
+],
 
-function atualizarBateria() {
+quarto:[
 
-    const fill =
-        document.getElementById("batteryFill");
+{
+id:"tenis",
+icon:"👟",
+nome:"Tênis tamanho 40",
+desc:"Um tênis está próximo da cama.",
+evidencia:"Tênis tamanho 40",
+efeito:"lucas"
+},
 
-    const text =
-        document.getElementById("batteryText");
-
-    fill.style.width = bateria + "%";
-
-    text.textContent = bateria + "%";
-
-
-    if (bateria <= 20) {
-
-        fill.style.background = "#ef4444";
-
-    } else if (bateria <= 50) {
-
-        fill.style.background = "#f59e0b";
-
-    } else {
-
-        fill.style.background = "#22c55e";
-
-    }
+{
+id:"computador",
+icon:"💻",
+nome:"Computador",
+desc:"O computador mostra uma partida iniciada às 07:32.",
+evidencia:"Registro do computador",
+efeito:"lucas"
 }
 
+],
 
-/* ==========================
-   INVESTIGAR
-========================== */
+jardim:[
 
-function investigar(numero) {
+{
+id:"terra",
+icon:"🌱",
+nome:"Terra vermelha",
+desc:"O solo está úmido e vermelho.",
+evidencia:"Terra vermelha",
+efeito:"jorge"
+},
 
-    const elemento =
-        document.getElementById("clue" + numero);
+{
+id:"botas",
+icon:"🥾",
+nome:"Botas",
+desc:"Botas com pequenas marcas de farinha.",
+evidencia:"Botas com farinha",
+efeito:"jorge"
+}
 
-    if (elemento.classList.contains("used")) {
+],
 
-        return;
+garagem:[
 
-    }
+{
+id:"sacola",
+icon:"🛍️",
+nome:"Sacola vazia",
+desc:"Uma sacola de papel com cheiro de pão.",
+evidencia:"Sacola com cheiro de pão",
+efeito:"jorge"
+},
 
-    if (!gastarBateria()) {
+{
+id:"camera",
+icon:"📹",
+nome:"Câmera de segurança",
+desc:"A câmera possui uma gravação importante.",
+evidencia:"Gravação de segurança",
+efeito:"mingau"
+}
 
-        return;
+]
 
-    }
-
-    elemento.classList.add("used");
-
-    let evidencia = "";
-    let mensagem = "";
-
-    if (numero === 1) {
-
-        evidencia =
-            "🐾 Pelos cinzentos com amido";
-
-        mensagem =
-            "> DNA encontrado: FELINO.\n" +
-            "> Resíduos de pão encontrados nas patas.\n" +
-            "> Suspeito relacionado: MINGAU.";
-
-        chances.mingau += 35;
-
-        chances.lucas -= 10;
-        chances.regina -= 10;
-        chances.jorge -= 15;
-
-    }
-
-
-    if (numero === 2) {
-
-        evidencia =
-            "👟 Pegada tamanho 40 + terra vermelha";
-
-        mensagem =
-            "> Pegada humana detectada.\n" +
-            "> Tamanho: 40.\n" +
-            "> Terra vermelha compatível com jardim.\n" +
-            "> Lucas e Jorge entram no radar.";
-
-        chances.lucas += 20;
-        chances.jorge += 25;
-
-        chances.mingau -= 25;
-        chances.regina -= 20;
-
-    }
+};
 
 
-    if (numero === 3) {
+/* =====================================================
+MUDAR TELA
+===================================================== */
 
-        evidencia =
-            "📄 Bilhete: 'Minha dieta começa HOJE!'";
+function mudarTela(id){
 
-        mensagem =
-            "> Caligrafia humana identificada.\n" +
-            "> Frase relacionada a dieta.\n" +
-            "> Regina possui forte motivação.";
+document.querySelectorAll(".screen")
+.forEach(s=>s.classList.remove("active"));
 
-        chances.regina += 35;
+document.getElementById(id)
+.classList.add("active");
 
-        chances.lucas -= 10;
-        chances.mingau -= 10;
-        chances.jorge -= 15;
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
 
-    }
-
-
-    evidencias.push(evidencia);
-
-    adicionarEvidencia(evidencia);
-
-    normalizarChances();
-
-    document.getElementById("aiMessage")
-        .textContent = mensagem;
-
-    atualizarIA();
+atualizarIA();
 
 }
 
 
-/* ==========================
-   EVIDÊNCIAS
-========================== */
+/* =====================================================
+TOAST
+===================================================== */
 
-function adicionarEvidencia(texto) {
+function toast(msg){
 
-    const caixa =
-        document.getElementById("evidence");
+const el=document.getElementById("toast");
 
-    if (evidencias.length === 1) {
+el.textContent=msg;
 
-        caixa.innerHTML = "";
+el.classList.add("show");
 
-    }
-
-    const item =
-        document.createElement("span");
-
-    item.className = "evidence-item";
-
-    item.textContent = texto;
-
-    caixa.appendChild(item);
-}
-
-
-/* ==========================
-   NORMALIZAR %
-========================== */
-
-function normalizarChances() {
-
-    Object.keys(chances).forEach(key => {
-
-        if (chances[key] < 1) {
-
-            chances[key] = 1;
-
-        }
-
-    });
-
-    let total =
-        Object.values(chances)
-        .reduce((a,b) => a+b, 0);
-
-    Object.keys(chances).forEach(key => {
-
-        chances[key] =
-            Math.round((chances[key] / total) * 100);
-
-    });
-
-    corrigirTotal();
+setTimeout(()=>{
+el.classList.remove("show");
+},2800);
 
 }
 
 
-/* Corrige arredondamento */
+/* =====================================================
+PONTOS
+===================================================== */
 
-function corrigirTotal() {
+function ganharPontos(valor){
 
-    let total =
-        Object.values(chances)
-        .reduce((a,b) => a+b, 0);
+pontos+=valor;
 
-    let diferenca =
-        100 - total;
-
-    chances.lucas += diferenca;
+document.getElementById("score")
+.textContent=pontos;
 
 }
 
 
-/* ==========================
-   SELECIONAR SUSPEITO
-========================== */
+/* =====================================================
+BATERIA
+===================================================== */
 
-function selecionarSuspeito(id) {
+function gastarBateria(valor=10){
 
-    suspeitoSelecionado = id;
+if(bateria<valor){
 
-    document.querySelectorAll(".suspect")
-    .forEach(el => {
-        el.classList.remove("selected");
-    });
+toast("⚠️ Bateria insuficiente!");
 
-    document
-        .getElementById("suspect-" + id)
-        .classList.add("selected");
+return false;
 
+}
 
-    document.getElementById("selectedText")
-        .innerHTML =
-        "Suspeito selecionado: <b>" +
-        nomes[id] +
-        "</b>";
+bateria-=valor;
 
+atualizarBateria();
 
-    document.getElementById("selectedChance")
-        .textContent =
-        chances[id] + "%";
-
-
-    let motivo = "";
-
-    if (id === "mingau") {
-
-        motivo =
-            "A IA detectou DNA felino e resíduos de pão nas patas. Forte evidência física.";
-
-    }
-
-    if (id === "lucas") {
-
-        motivo =
-            "O tamanho da pegada coincide com o calçado de Lucas. Porém, não existe prova de que ele esteve na cozinha.";
-
-    }
-
-    if (id === "regina") {
-
-        motivo =
-            "O bilhete sobre dieta combina com Regina, mas sua foto das 07:45 enfraquece a hipótese.";
-
-    }
-
-    if (id === "jorge") {
-
-        motivo =
-            "A terra vermelha das botas combina com a pegada, mas ele não apresenta ligação direta com o pão.";
-
-    }
-
-
-    document.getElementById("aiReason")
-        .textContent = motivo;
+return true;
 
 }
 
 
-/* ==========================
-   ATUALIZAR IA
-========================== */
+function atualizarBateria(){
 
-function atualizarIA() {
+const fill=
+document.getElementById("batteryFill");
 
-    Object.keys(chances).forEach(id => {
+fill.style.width=bateria+"%";
 
-        const porcentagem =
-            chances[id];
+document.getElementById("batteryText")
+.textContent=bateria+"%";
 
-        const texto =
-            document.getElementById(
-                "chance-" + id
-            );
+if(bateria<=20){
 
-        const barra =
-            document.getElementById(
-                "bar-" + id
-            );
+fill.style.background="#ef4444";
 
-        if (texto) {
+}else if(bateria<=50){
 
-            texto.textContent =
-                porcentagem + "%";
+fill.style.background="#f59e0b";
 
-        }
+}else{
 
-        if (barra) {
+fill.style.background="#22c55e";
 
-            barra.style.width =
-                porcentagem + "%";
-
-        }
-
-    });
-
-
-    let ranking =
-        Object.entries(chances)
-        .sort((a,b) => b[1] - a[1]);
-
-
-    const caixa =
-        document.getElementById("ranking");
-
-    if (!caixa) return;
-
-
-    caixa.innerHTML = "";
-
-
-    ranking.forEach((item,index) => {
-
-        const id = item[0];
-        const chance = item[1];
-
-        const linha =
-            document.createElement("div");
-
-        linha.className =
-            "rank-row";
-
-        linha.innerHTML = `
-            <span>
-                #${index + 1}
-                ${nomes[id]}
-            </span>
-
-            <b style="color:#38bdf8">
-                ${chance}%
-            </b>
-        `;
-
-        caixa.appendChild(linha);
-
-    });
+}
 
 }
 
 
-/* ==========================
-   IR PARA ACUSAÇÃO
-========================== */
+/* =====================================================
+ABRIR CÔMODO
+===================================================== */
 
-function irParaAcusacao() {
+function abrirComodo(nome){
 
-    if (!suspeitoSelecionado) {
+const dados={
+cozinha:{
+titulo:"🍳 Cozinha",
+desc:"O local onde o pão desapareceu.",
+ai:"> Sensores detectam resíduos de farinha.\n> Temperatura do ambiente normal.\n> Probabilidade de evidências: ALTA."
+},
 
-        alert(
-            "🧠 O C.H.I.P. precisa de uma seleção.\n\n" +
-            "Clique em um dos suspeitos primeiro."
-        );
+sala:{
+titulo:"🛋️ Sala",
+desc:"Uma sala aparentemente normal.",
+ai:"> Detectada atividade recente no sofá.\n> Possível passagem de animal."
+},
 
-        return;
+quarto:{
+titulo:"🛏️ Quarto",
+desc:"Quarto de Lucas.",
+ai:"> Computador ligado.\n> Atividade digital registrada."
+},
 
-    }
+jardim:{
+titulo:"🌳 Jardim",
+desc:"Área externa da residência.",
+ai:"> Terra vermelha detectada.\n> Pegadas humanas encontradas."
+},
 
-    document.getElementById("accusedName")
-        .textContent =
-        nomes[suspeitoSelecionado];
+garagem:{
+titulo:"🚗 Garagem",
+desc:"Garagem com objetos antigos.",
+ai:"> Câmera de segurança detectada.\n> Possível evidência crítica."
+}
+};
 
-    document.getElementById("accusedChance")
-        .textContent =
-        "Probabilidade calculada pela IA: " +
-        chances[suspeitoSelecionado] +
-        "%";
+document.getElementById("roomTitle")
+.textContent=dados[nome].titulo;
 
+document.getElementById("roomDescription")
+.textContent=dados[nome].desc;
 
-    mudarTela("acusacao");
+document.getElementById("roomAI")
+.textContent=dados[nome].ai;
+
+const grid=document.getElementById("objectGrid");
+
+grid.innerHTML="";
+
+objetos[nome].forEach(obj=>{
+
+const div=document.createElement("div");
+
+div.className="object";
+
+div.innerHTML=`
+
+<div class="object-icon">${obj.icon}</div>
+
+<h3>${obj.nome}</h3>
+
+<p>${obj.desc}</p>
+
+<button onclick="examinar('${obj.id}','${obj.evidencia}','${obj.efeito}')">
+🔎 Examinar
+</button>
+
+`;
+
+grid.appendChild(div);
+
+});
+
+mudarTela("comodo");
 
 }
 
 
-/* ==========================
-   FINAL DO JOGO
-========================== */
+/* =====================================================
+EXAMINAR OBJETO
+===================================================== */
 
-function finalizarCaso() {
+function examinar(id,evidencia,efeito){
 
-    mudarTela("final");
+if(evidencias.includes(evidencia)){
 
+toast("Essa evidência já foi coletada.");
 
-    const icon =
-        document.getElementById("finalIcon");
-
-    const title =
-        document.getElementById("finalTitle");
-
-    const text =
-        document.getElementById("finalText");
-
-    const ai =
-        document.getElementById("finalAI");
-
-
-    /*
-        O verdadeiro culpado é o Mingau.
-
-        Porém o jogador pode acusar qualquer um.
-    */
-
-
-    if (suspeitoSelecionado === "mingau") {
-
-        icon.textContent = "🏆";
-
-        title.textContent =
-            "CASO RESOLVIDO!";
-
-        title.style.color =
-            "#22c55e";
-
-        text.textContent =
-            "Você descobriu a verdade. Mingau roubou o pão! " +
-            "As câmeras mostram o gato subindo na bancada " +
-            "e levando o pão para debaixo do sofá.";
-
-        ai.textContent =
-            "> ACUSAÇÃO CONFIRMADA.\n" +
-            "> Evidência física encontrada.\n" +
-            "> DNA felino: CONFIRMADO.\n" +
-            "> Resíduo de pão: CONFIRMADO.\n" +
-            "> Caso #404 encerrado.";
-
-    } else {
-
-        icon.textContent = "💀";
-
-        title.textContent =
-            "ACUSAÇÃO INCORRETA";
-
-        title.style.color =
-            "#ef4444";
-
-        text.textContent =
-            "Você acusou " +
-            nomes[suspeitoSelecionado] +
-            ", mas a investigação revelou posteriormente " +
-            "que o verdadeiro culpado era Mingau.";
-
-        ai.textContent =
-            "> ERRO DE INVESTIGAÇÃO.\n" +
-            "> Evidências insuficientes.\n" +
-            "> Culpado real: MINGAU.\n" +
-            "> Investigador reprovado pelo C.H.I.P.";
-
-    }
+return;
 
 }
+
+if(!gastarBateria(10)) return;
+
+evidencias.push(evidencia);
+
+ganharPontos(25);
+
+adicionarInventario(evidencia);
+
+aplicarEfeito(efeito);
+
+toast("🔎 Evidência coletada: "+evidencia);
+
+}
+
+
+/* =====================================================
+INVENTÁRIO
+===================================================== */
+
+function adicionarInventario(nome){
+
+const inventarios=[
+document.getElementById("inventory"),
+document.getElementById("connectionItems")
+];
+
+inventarios.forEach(caixa=>{
+
+if(!caixa)return;
+
+const item=document.createElement("div");
+
+item.className="item";
+
+item.textContent="🔎 "+nome;
+
+item.draggable=true;
+
+item.dataset.item=nome;
+
+item.ondragstart=e=>{
+
+e.dataTransfer.setData("text/plain",nome);
+
+ultimoDrag=nome;
+
+};
+
+caixa.appendChild(item);
+
+});
+
+}
+
+
+/* =====================================================
+EFEITOS NAS CHANCES
+===================================================== */
+
+function aplicarEfeito(suspeito){
+
+if(suspeito==="mingau"){
+
+chances.mingau+=18;
+
+chances.lucas-=5;
+chances.regina-=5;
+chances.jorge-=8;
+
+}
+
+if(suspeito==="lucas"){
+
+chances.lucas+=14;
+
+chances.mingau-=5;
+chances.regina-=4;
+chances.jorge-=5;
+
+}
+
+if(suspeito==="regina"){
+
+chances.regina+=14;
+
+chances.lucas-=4;
+chances.mingau-=5;
+chances.jorge-=5;
+
+}
+
+if(suspeito==="jorge"){
+
+chances.jorge+=14;
+
+chances.lucas-=4;
+chances.regina-=5;
+chances.mingau-=5;
+
+}
+
+normalizarChances();
+
+}
+
+
+/* =====================================================
+NORMALIZAR
+===================================================== */
+
+function normalizarChances(){
+
+Object.keys(chances).forEach(k=>{
+
+if(chances[k]<1)
+chances[k]=1;
+
+});
+
+let total=
+Object.values(chances)
+.reduce((a,b)=>a+b,0);
+
+Object.keys(chances).forEach(k=>{
+
+chances[k]=
+Math.round(chances[k]/total*100);
+
+});
+
+let total2=
+Object.values(chances)
+.reduce((a,b)=>a+b,0);
+
+chances.mingau+=100-total2;
+
+}
+
+
+/* =====================================================
+SELECIONAR SUSPEITO
+===================================================== */
+
+function selecionarSuspeito(id){
+
+suspeitoSelecionado=id;
+
+document.querySelectorAll(".suspect")
+.forEach(s=>s.classList.remove("selected"));
+
+const el=
+document.getElementById("suspect-"+id);
+
+if(el)el.classList.add("selected");
+
+document.getElementById("selectedText")
+.innerHTML=
+"Suspeito selecionado: <b>"+nomes[id]+"</b>";
+
+document.getElementById("selectedChance")
+.textContent=chances[id]+"%";
+
+let confianca="Baixa";
+
+if(evidencias.length>=3)
+confianca="Alta";
+
+else if(evidencias.length>=1)
+confianca="Média";
+
+document.getElementById("confidence")
+.textContent=
+"Confiança da IA: "+confianca;
+
+let motivo={
+
+lucas:"O tamanho do calçado combina com uma das pegadas. O computador, porém, pode confirmar ou enfraquecer seu álibi.",
+
+regina:"O bilhete da dieta fornece uma possível motivação, mas ainda falta provar que ela esteve perto do pão.",
+
+mingau:"Pelos, migalhas e marcas de patas podem formar uma cadeia de evidências muito forte.",
+
+jorge:"A terra vermelha combina com o jardim e as botas podem explicar algumas marcas encontradas."
+};
+
+document.getElementById("aiReason")
+.textContent=motivo[id];
+
+atualizarIA();
+
+}
+
+
+/* =====================================================
+ATUALIZAR IA
+===================================================== */
+
+function atualizarIA(){
+
+Object.keys(chances).forEach(id=>{
+
+const texto=
+document.getElementById("chance-"+id);
+
+const bar=
+document.getElementById("bar-"+id);
+
+if(texto)
+texto.textContent=chances[id]+"%";
+
+if(bar)
+bar.style.width=chances[id]+"%";
+
+});
+
+}
+
+
+/* =====================================================
+DRAG AND DROP LABORATÓRIO
+===================================================== */
+
+function permitirDrop(event){
+
+event.preventDefault();
+
+event.currentTarget.classList.add("dragover");
+
+}
+
+
+document.addEventListener("dragend",()=>{
+
+document.querySelectorAll(".drop-zone,.connection-box,.time-slot")
+.forEach(el=>el.classList.remove("dragover"));
+
+});
+
+
+document.getElementById("laboratorio")
+.addEventListener("dragover",event=>{
+
+event.preventDefault();
+
+event.currentTarget.classList.add("dragover");
+
+});
+
+
+document.getElementById("laboratorio")
+.addEventListener("drop",event=>{
+
+event.preventDefault();
+
+const item=
+event.dataTransfer.getData("text/plain");
+
+analisarNoLaboratorio(item);
+
+});
+
+
+/* =====================================================
+LABORATÓRIO
+===================================================== */
+
+function analisarNoLaboratorio(item){
+
+if(!item)return;
+
+if(!gastarBateria(5))return;
+
+let resultado="";
+
+if(item.includes("Pelo")){
+
+resultado=
+"🧬 DNA compatível com FELINO.\n\n"+
+"🟢 Evidência forte contra Mingau.";
+
+chances.mingau+=15;
+
+}
+
+else if(item.includes("Migalha")){
+
+resultado=
+"🍞 Resíduos de centeio detectados.\n\n"+
+"🟢 O material corresponde ao pão desaparecido.";
+
+chances.mingau+=8;
+
+}
+
+else if(item.includes("Bilhete")){
+
+resultado=
+"✍️ Caligrafia humana detectada.\n\n"+
+"🟡 Possível relação com Regina.";
+
+chances.regina+=12;
+
+}
+
+else if(item.includes("Terra")){
+
+resultado=
+"🌱 Composição idêntica à terra do jardim.\n\n"+
+"🟡 Relação possível com Jorge.";
+
+chances.jorge+=12;
+
+}
+
+else if(item.includes("Tênis")){
+
+resultado=
+"👟 Tamanho 40.\n\n"+
+"🟡 Compatível com Lucas.";
+
+chances.lucas+=12;
+
+}
+
+else if(item.includes("Câmera")){
+
+resultado=
+"📹 GRAVAÇÃO RECUPERADA.\n\n"+
+"Às 07:57, um pequeno vulto passa pela cozinha.\n"+
+"Forma corporal compatível com um animal.";
+
+chances.mingau+=30;
+
+ganharPontos(100);
+
+}
+
+else{
+
+resultado=
+"Análise inconclusiva.\n\n"+
+"Não há evidência suficiente para relacionar o item a um suspeito.";
+
+}
+
+normalizarChances();
+
+document.getElementById("labResult")
+.textContent=resultado;
+
+atualizarIA();
+
+ganharPontos(20);
+
+}
+
+
+/* =====================================================
+INTERROGATÓRIO
+===================================================== */
+
+function interrogar(id){
+
+const perguntas={
+
+lucas:[
+
+"Você estava realmente no quarto?",
+
+"Você conhece o pão desaparecido?",
+
+"Por que seu tênis estava perto da cozinha?"
+
+],
+
+regina:[
+
+"Você realmente estava em jejum?",
+
+"Você escreveu o bilhete?",
+
+"Por que estava na cozinha às 07:45?"
+
+],
+
+mingau:[
+
+"Onde você estava às 08:00?",
+
+"Você conhece o pão?",
+
+"Por que está limpando os bigodes?"
+
+],
+
+jorge:[
+
+"O que você fazia no jardim?",
+
+"Por que suas botas têm farinha?",
+
+"Você entrou na casa?"
+
+]
+
+};
+
+document.getElementById("questions")
+.innerHTML="";
+
+perguntas[id].forEach((q,index)=>{
+
+const div=document.createElement("div");
+
+div.className="question";
+
+div.textContent="❓ "+q;
+
+div.onclick=()=>responder(id,index);
+
+document.getElementById("questions")
+.appendChild(div);
+
+});
+
+}
+
+
+/* =====================================================
+RESPOSTAS
+===================================================== */
+
+function responder(id,index){
+
+let resposta="";
+
+if(id==="lucas"){
+
+const r=[
+
+"Eu estava jogando. O computador pode provar.",
+
+"Eu nem gosto daquele pão.",
+
+"Meu tênis? Eu provavelmente deixei ali ontem."
+
+];
+
+resposta=r[index];
+
+}
+
+if(id==="regina"){
+
+const r=[
+
+"Sim. Eu estava em jejum.",
+
+"Sim, fui eu que escrevi.",
+
+"Eu só passei pela cozinha rapidamente."
+
+];
+
+resposta=r[index];
+
+}
+
+if(id==="mingau"){
+
+const r=[
+
+"Miau.",
+
+"Miaaaau.",
+
+"*Mingau lambe os bigodes e olha para o investigador.*"
+
+];
+
+resposta=r[index];
+
+if(index===2){
+
+chances.mingau+=12;
+
+normalizarChances();
+
+ganharPontos(40);
+
+}
+
+}
+
+if(id==="jorge"){
+
+const r=[
+
+"Eu estava mexendo nas plantas.",
+
+"Farinha? Não sei de onde veio isso.",
+
+"Não entrei na casa."
+
+];
+
+resposta=r[index];
+
+}
+
+document.getElementById("answer")
+.innerHTML=
+"<b>"+nomes[id]+" respondeu:</b><br><br>"+resposta;
+
+interrogados[id]=true;
+
+ganharPontos(15);
+
+atualizarIA();
+
+}
+
+
+/* =====================================================
+TIMELINE
+===================================================== */
+
+function dragSuspeito(event,nome){
+
+event.dataTransfer.setData("suspeito",nome);
+
+}
+
+
+function soltarTempo(event,horario){
+
+event.preventDefault();
+
+const nome=
+event.dataTransfer.getData("suspeito");
+
+if(!nome)return;
+
+document.getElementById("time-"+horario.replace(":",""))
+.textContent="👤 "+nome;
+
+ganharPontos(10);
+
+analisarTimeline(nome,horario);
+
+}
+
+
+function analisarTimeline(nome,horario){
+
+let mensagem="";
+
+if(nome==="Mingau" && horario==="08:00"){
+
+mensagem=
+"🟢 Excelente. Câmeras indicam movimento do animal próximo às 08:00.";
+
+ganharPontos(80);
+
+}
+
+else if(nome==="Lucas" && horario==="07:30"){
+
+mensagem=
+"🟢 Possível. O computador registrou atividade às 07:32.";
+
+ganharPontos(40);
+
+}
+
+else if(nome==="Regina" && horario==="07:45"){
+
+mensagem=
+"🟢 Compatível com a fotografia registrada.";
+
+ganharPontos(40);
+
+}
+
+else if(nome==="Jorge" && horario==="08:00"){
+
+mensagem=
+"🟡 Possível, mas não há confirmação de entrada na residência.";
+
+}
+
+else{
+
+mensagem=
+"⚪ A IA não encontrou evidência suficiente para confirmar esse horário.";
+
+}
+
+document.getElementById("timelineAI")
+.textContent=mensagem;
+
+}
+
+
+/* =====================================================
+CONEXÕES
+===================================================== */
+
+function conectar(event,suspeito){
+
+event.preventDefault();
+
+const item=
+event.dataTransfer.getData("text/plain");
+
+if(!item)return;
+
+const caixa=
+document.getElementById("connect-"+suspeito);
+
+const tag=
+document.createElement("div");
+
+tag.className="evidence-item";
+
+tag.textContent=item;
+
+caixa.appendChild(tag);
+
+if(!conexoes[suspeito])
+conexoes[suspeito]=[];
+
+conexoes[suspeito].push(item);
+
+avaliarConexao(item,suspeito);
+
+}
+
+
+function avaliarConexao(item,suspeito){
+
+let correta=false;
+
+if(
+item.includes("Pelo") &&
+suspeito==="mingau"
+) correta=true;
+
+if(
+item.includes("Migalha") &&
+suspeito==="mingau"
+) correta=true;
+
+if(
+item.includes("Bilhete") &&
+suspeito==="regina"
+) correta=true;
+
+if(
+item.includes("Tênis") &&
+suspeito==="lucas"
+) correta=true;
+
+if(
+item.includes("Terra") &&
+suspeito==="jorge"
+) correta=true;
+
+if(
+item.includes("Câmera") &&
+suspeito==="mingau"
+) correta=true;
+
+if(correta){
+
+ganharPontos(50);
+
+document.getElementById("connectionAI")
+.textContent=
+"🟢 CONEXÃO CORRETA!\n\n"+
+item+
+" possui relação relevante com "+
+nomes[suspeito]+
+".\n\nA confiança da IA aumentou.";
+
+aplicarEfeito(suspeito);
+
+}else{
+
+document.getElementById("connectionAI")
+.textContent=
+"🟡 CONEXÃO FRACA.\n\n"+
+item+
+" não apresenta uma relação forte com "+
+nomes[suspeito]+
+".\n\nContinue investigando.";
+
+}
+
+atualizarIA();
+
+}
+
+
+/* =====================================================
+ACUSAÇÃO
+===================================================== */
+
+function irParaAcusacao(){
+
+if(!suspeitoSelecionado){
+
+toast("⚠️ Selecione um suspeito primeiro.");
+
+return;
+
+}
+
+document.getElementById("accusedName")
+.textContent=nomes[suspeitoSelecionado];
+
+document.getElementById("accusedChance")
+.textContent=
+chances[suspeitoSelecionado]+"%";
+
+mudarTela("acusacao");
+
+}
+
+
+/* =====================================================
+FINAL
+===================================================== */
+
+function finalizarCaso(){
+
+mudarTela("final");
+
+const icon=
+document.getElementById("finalIcon");
+
+const title=
+document.getElementById("finalTitle");
+
+const text=
+document.getElementById("finalText");
+
+const ai=
+document.getElementById("finalAI");
+
+let bonus=0;
+
+if(evidencias.length>=8)
+bonus+=200;
+
+if(Object.keys(interrogados).length===4)
+bonus+=200;
+
+if(chances.mingau>=60)
+bonus+=100;
+
+pontos+=bonus;
+
+document.getElementById("finalScore")
+.textContent=pontos;
+
+
+if(suspeitoSelecionado==="mingau"){
+
+icon.textContent="🏆";
+
+title.textContent="CASO RESOLVIDO!";
+
+title.style.color="#22c55e";
+
+text.textContent=
+"Você identificou corretamente o verdadeiro culpado: Mingau.";
+
+if(evidencias.length>=8 && Object.keys(interrogados).length===4){
+
+icon.textContent="👑";
+
+title.textContent="DETETIVE SUPREMO!";
+
+text.textContent=
+"Você encontrou praticamente todas as evidências, interrogou todos os suspeitos e resolveu o caso com precisão absurda.";
+
+ai.textContent=
+"> CLASSIFICAÇÃO: S++\n"+
+"> INVESTIGAÇÃO COMPLETA.\n"+
+"> TODAS AS PRINCIPAIS EVIDÊNCIAS ANALISADAS.\n"+
+"> TODAS AS TESTEMUNHAS INTERROGADAS.\n"+
+"> CULPADO: MINGAU.\n"+
+"> TÍTULO CONCEDIDO: DETETIVE SUPREMO.";
+
+}else{
+
+ai.textContent=
+"> ACUSAÇÃO CORRETA.\n"+
+"> DNA FELINO CONFIRMADO.\n"+
+"> RESÍDUOS DE PÃO CONFIRMADOS.\n"+
+"> CASO #404 ENCERRADO.";
+
+}
+
+}else{
+
+icon.textContent="💀";
+
+title.textContent="ACUSAÇÃO INCORRETA";
+
+title.style.color="#ef4444";
+
+text.textContent=
+"Você acusou "+
+nomes[suspeitoSelecionado]+
+", mas as evidências finais apontavam para Mingau.";
+
+ai.textContent=
+"> FALHA NA INVESTIGAÇÃO.\n"+
+"> CULPADO REAL: MINGAU.\n"+
+"> MAIS EVIDÊNCIAS DEVERIAM TER SIDO ANALISADAS.";
+
+}
+
+}
+
+
+/* =====================================================
+INICIALIZAÇÃO
+===================================================== */
+
+atualizarBateria();
+
+atualizarIA();
 
 </script>
 
