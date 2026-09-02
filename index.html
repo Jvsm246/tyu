@@ -2,2633 +2,445 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>CyberDetective 2.0 — O Mistério do Pão</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VIDA — Uma História Interativa</title>
 <style>
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:"Segoe UI",Arial,sans-serif;
-}
-
-body{
-    min-height:100vh;
-    color:#e5e7eb;
-    background:
-    radial-gradient(circle at 50% 0%,#12345c 0%,#05080d 45%,#020306 100%);
-    overflow-x:hidden;
-}
-
-body:before{
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    background:
-    linear-gradient(rgba(56,189,248,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(56,189,248,.025) 1px,transparent 1px);
-    background-size:40px 40px;
-}
-
-.container{
-    width:min(1200px,94%);
-    margin:auto;
-    padding:20px 0 80px;
-}
-
-/* =========================
-HUD
-========================= */
-
-.hud{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:20px;
-    background:rgba(15,23,42,.92);
-    border:1px solid #1e3a5f;
-    padding:14px 20px;
-    border-radius:16px;
-    margin-bottom:20px;
-    box-shadow:0 10px 40px rgba(0,0,0,.4);
-    position:sticky;
-    top:10px;
-    z-index:20;
-}
-
-.hud-item{
-    display:flex;
-    align-items:center;
-    gap:9px;
-}
-
-.battery{
-    width:150px;
-    height:11px;
-    background:#172033;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-#batteryFill{
-    width:100%;
-    height:100%;
-    background:#22c55e;
-    transition:.4s;
-}
-
-.score{
-    color:#ffd84d;
-    font-weight:bold;
-}
-
-/* =========================
-TELAS
-========================= */
-
-.screen{
-    display:none;
-    animation:appear .35s ease;
-}
-
-.screen.active{
-    display:block;
-}
-
-@keyframes appear{
-    from{
-        opacity:0;
-        transform:translateY(15px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-/* =========================
-PAINÉIS
-========================= */
-
-.panel{
-    background:rgba(15,23,42,.86);
-    border:1px solid #24344d;
-    border-radius:20px;
-    padding:28px;
-    margin-bottom:20px;
-    box-shadow:0 20px 50px rgba(0,0,0,.45);
-}
-
-h1{
-    font-size:clamp(40px,7vw,70px);
-    color:#ffd84d;
-    margin-bottom:10px;
-}
-
-h2{
-    color:#38bdf8;
-    font-size:30px;
-    margin-bottom:12px;
-}
-
-h3{
-    color:#ffd84d;
-    margin-bottom:10px;
-}
-
-p{
-    color:#94a3b8;
-    line-height:1.6;
-    margin-bottom:13px;
-}
-
-.subtitle{
-    color:#cbd5e1;
-    font-size:19px;
-}
-
-/* =========================
-BOTÕES
-========================= */
-
-button{
-    border:0;
-    border-radius:12px;
-    padding:13px 19px;
-    margin:5px;
-    cursor:pointer;
-    font-weight:bold;
-    background:#ffd84d;
-    color:#101827;
-    transition:.2s;
-}
-
-button:hover{
-    transform:translateY(-3px);
-    box-shadow:0 8px 25px rgba(255,216,77,.25);
-}
-
-.secondary{
-    background:#172033;
-    color:white;
-    border:1px solid #334155;
-}
-
-.success{
-    background:#10b981;
-    color:white;
-}
-
-.danger{
-    background:#ef4444;
-    color:white;
-}
-
-.blue{
-    background:#0284c7;
-    color:white;
-}
-
-/* =========================
-IA
-========================= */
-
-.ai{
-    border:1px solid rgba(56,189,248,.4);
-    background:rgba(8,47,73,.45);
-    border-radius:16px;
-    padding:20px;
-    margin:20px 0;
-}
-
-.ai-title{
-    color:#38bdf8;
-    font-weight:bold;
-    letter-spacing:2px;
-    font-size:13px;
-    margin-bottom:10px;
-}
-
-.ai-message{
-    color:#67e8f9;
-    font-family:monospace;
-    line-height:1.7;
-    white-space:pre-line;
-}
-
-/* =========================
-MAPA
-========================= */
-
-.house-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
-    margin-top:20px;
-}
-
-.room{
-    min-height:150px;
-    padding:25px;
-    border-radius:18px;
-    border:2px solid #26364d;
-    background:
-    linear-gradient(145deg,rgba(30,41,59,.9),rgba(9,15,26,.95));
-    cursor:pointer;
-    transition:.3s;
-}
-
-.room:hover{
-    transform:translateY(-5px);
-    border-color:#38bdf8;
-}
-
-.room-icon{
-    font-size:45px;
-    margin-bottom:10px;
-}
-
-.room small{
-    color:#64748b;
-}
-
-/* =========================
-OBJETOS
-========================= */
-
-.object-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-    gap:15px;
-    margin-top:20px;
-}
-
-.object{
-    background:#111b2d;
-    border:1px solid #334155;
-    padding:20px;
-    border-radius:16px;
-    cursor:pointer;
-    transition:.25s;
-}
-
-.object:hover{
-    border-color:#ffd84d;
-    transform:translateY(-4px);
-}
-
-.object.found{
-    border-color:#10b981;
-}
-
-.object-icon{
-    font-size:40px;
-    margin-bottom:10px;
-}
-
-/* =========================
-INVENTÁRIO
-========================= */
-
-.inventory{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    min-height:100px;
-    padding:15px;
-    background:#07101d;
-    border:1px dashed #334155;
-    border-radius:15px;
-}
-
-.item{
-    background:#172033;
-    border:1px solid #ffd84d;
-    color:#ffd84d;
-    padding:10px 13px;
-    border-radius:10px;
-    cursor:grab;
-    user-select:none;
-}
-
-.item:active{
-    cursor:grabbing;
-}
-
-/* =========================
-DRAG AREA
-========================= */
-
-.drop-zone{
-    min-height:150px;
-    border:2px dashed #2563eb;
-    border-radius:18px;
-    padding:25px;
-    text-align:center;
-    background:rgba(30,64,175,.08);
-    transition:.25s;
-}
-
-.drop-zone.dragover{
-    border-color:#22c55e;
-    background:rgba(34,197,94,.12);
-    transform:scale(1.01);
-}
-
-/* =========================
-SUSPEITOS
-========================= */
-
-.suspect-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-    gap:18px;
-    margin-top:20px;
-}
-
-.suspect{
-    background:
-    linear-gradient(145deg,rgba(30,41,59,.9),rgba(9,15,26,.95));
-    border:2px solid #26364d;
-    padding:22px;
-    border-radius:18px;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.suspect:hover{
-    transform:translateY(-6px);
-    border-color:#38bdf8;
-}
-
-.suspect.selected{
-    border-color:#ffd84d;
-    box-shadow:0 0 25px rgba(255,216,77,.2);
-}
-
-.avatar{
-    font-size:55px;
-    text-align:center;
-    margin-bottom:8px;
-}
-
-.role{
-    color:#38bdf8;
-    font-size:12px;
-    text-transform:uppercase;
-    letter-spacing:1px;
-}
-
-.chance{
-    margin-top:15px;
-}
-
-.chance-bar{
-    height:10px;
-    background:#111827;
-    border-radius:20px;
-    overflow:hidden;
-    margin-top:7px;
-}
-
-.chance-fill{
-    width:0%;
-    height:100%;
-    background:#ef4444;
-    transition:.6s;
-}
-
-/* =========================
-INTERROGATÓRIO
-========================= */
-
-.question-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-    gap:12px;
-}
-
-.question{
-    padding:17px;
-    background:#111b2d;
-    border:1px solid #334155;
-    border-radius:14px;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.question:hover{
-    border-color:#38bdf8;
-    transform:translateY(-3px);
-}
-
-.answer{
-    margin-top:20px;
-    background:#020617;
-    border-left:4px solid #38bdf8;
-    padding:20px;
-    border-radius:10px;
-    color:#cbd5e1;
-}
-
-/* =========================
-TIMELINE
-========================= */
-
-.timeline{
-    display:flex;
-    gap:10px;
-    overflow-x:auto;
-    padding:15px 5px;
-}
-
-.time-slot{
-    min-width:150px;
-    padding:20px;
-    border:2px dashed #334155;
-    border-radius:14px;
-    text-align:center;
-    background:#09111e;
-}
-
-.time-slot.dragover{
-    border-color:#22c55e;
-}
-
-.time{
-    color:#38bdf8;
-    font-weight:bold;
-    margin-bottom:10px;
-}
-
-/* =========================
-CONEXÕES
-========================= */
-
-.connection-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
-}
-
-.connection-box{
-    padding:20px;
-    border:2px dashed #334155;
-    border-radius:16px;
-    min-height:160px;
-    background:#09111e;
-}
-
-.connection-box.dragover{
-    border-color:#22c55e;
-}
-
-/* =========================
-ANÁLISE
-========================= */
-
-.analysis-box{
-    background:#020617;
-    border:1px solid #164e63;
-    border-radius:16px;
-    padding:20px;
-    margin-top:20px;
-}
-
-.ai-percentage{
-    font-size:38px;
-    color:#22d3ee;
-    font-weight:bold;
-}
-
-.confidence{
-    display:inline-block;
-    padding:6px 10px;
-    border-radius:8px;
-    background:#172033;
-    color:#22c55e;
-    margin-top:10px;
-}
-
-.rank-row{
-    display:flex;
-    justify-content:space-between;
-    padding:12px;
-    border-bottom:1px solid #1e293b;
-}
-
-/* =========================
-TOAST
-========================= */
-
-#toast{
-    position:fixed;
-    bottom:25px;
-    right:25px;
-    background:#0f172a;
-    border:1px solid #38bdf8;
-    color:#e0f2fe;
-    padding:15px 20px;
-    border-radius:12px;
-    transform:translateY(120px);
-    opacity:0;
-    transition:.3s;
-    z-index:100;
-    max-width:320px;
-}
-
-#toast.show{
-    transform:translateY(0);
-    opacity:1;
-}
-
-/* =========================
-FINAL
-========================= */
-
-.final{
-    text-align:center;
-}
-
-.final-icon{
-    font-size:80px;
-    margin:20px;
-}
-
-.final-score{
-    font-size:45px;
-    color:#ffd84d;
-    font-weight:bold;
-}
-
-/* =========================
-RESPONSIVO
-========================= */
-
-@media(max-width:750px){
-
-    .hud{
-        flex-direction:column;
-        align-items:flex-start;
-        position:static;
-    }
-
-    .house-grid{
-        grid-template-columns:1fr;
-    }
-
-    .connection-grid{
-        grid-template-columns:1fr;
-    }
-
-    button{
-        width:100%;
-        margin:5px 0;
-    }
-
-}
-
+*{box-sizing:border-box}body{margin:0;background:#08090d;color:#eee;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button{font:inherit}.app{max-width:1100px;margin:auto;min-height:100vh;padding:18px}
+header{display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid #252832;padding:8px 0 16px}
+.logo{font-weight:900;letter-spacing:5px;font-size:25px}.sub{color:#777;font-size:12px;letter-spacing:1px}
+.hud{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#11131a;border:1px solid #292d38;border-radius:999px;padding:8px 12px;font-size:12px;color:#bbb}
+main{margin-top:22px}.scene{min-height:570px;background:linear-gradient(145deg,#11131a,#0c0e13);border:1px solid #252832;border-radius:22px;overflow:hidden;box-shadow:0 25px 80px #0008}
+.sceneTop{padding:28px 30px 10px;display:flex;justify-content:space-between;color:#777;font-size:12px}.sceneBody{padding:10px 30px 30px;max-width:850px}
+.time{font-size:13px;color:#999;margin:10px 0 25px}.title{font-size:clamp(28px,5vw,52px);line-height:1.05;margin:0 0 22px;letter-spacing:-2px}
+.text{font-size:18px;line-height:1.75;color:#d8d8dc;white-space:pre-line}.dialogue{margin:24px 0;padding:18px 20px;border-left:3px solid #aaa;background:#ffffff08;border-radius:0 12px 12px 0}
+.speaker{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#888;margin-bottom:6px}.quote{font-size:17px;line-height:1.55}
+.choices{display:grid;gap:10px;margin-top:30px}.choice{background:#151821;border:1px solid #303441;color:#eee;padding:17px 18px;border-radius:13px;text-align:left;cursor:pointer;transition:.18s;display:flex;gap:15px;align-items:center}
+.choice:hover{transform:translateY(-2px);border-color:#777;background:#1b1f29}.num{width:30px;height:30px;border:1px solid #555;border-radius:50%;display:grid;place-items:center;color:#aaa;flex:none}
+.small{font-size:12px;color:#777;margin-top:20px}.phone{background:#050608;border:1px solid #333;border-radius:25px;padding:18px;max-width:430px;margin:20px auto}.msg{background:#20232c;border-radius:14px;padding:12px;margin:8px 0;max-width:80%}.me{margin-left:auto;background:#333741}.ending{padding:35px}.ending h1{font-size:48px;margin:5px 0 15px}.tag{display:inline-block;border:1px solid #555;border-radius:999px;padding:6px 10px;color:#aaa;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}.action{border:1px solid #383c48;background:#141720;color:#eee;border-radius:10px;padding:11px 15px;cursor:pointer}.action:hover{background:#1c202a}
+.gallery{margin-top:18px;border:1px solid #252832;border-radius:16px;padding:20px;background:#0d0f14}.gallery h3{margin-top:0}.ends{display:flex;flex-wrap:wrap;gap:8px}.end{font-size:12px;padding:8px 10px;border-radius:9px;background:#171a22;color:#aaa}.unlocked{color:#eee;border:1px solid #444}
+@media(max-width:650px){.app{padding:10px}.sceneTop,.sceneBody{padding-left:18px;padding-right:18px}.scene{min-height:650px}.text{font-size:16px}}
 </style>
 </head>
-
 <body>
-
-<div id="toast"></div>
-
-<div class="container">
-
-<!-- ==================================================
-HUD
-================================================== -->
-
-<div class="hud">
-
-    <div class="hud-item">
-        🧠
-        <span>
-            C.H.I.P. v5.0
-            <b style="color:#22c55e"> ONLINE</b>
-        </span>
-    </div>
-
-    <div class="hud-item">
-        ⭐
-        <span class="score">
-            Pontos: <span id="score">0</span>
-        </span>
-    </div>
-
-    <div class="hud-item">
-
-        ⚡
-
-        <div class="battery">
-            <div id="batteryFill"></div>
-        </div>
-
-        <span id="batteryText">100%</span>
-
-    </div>
-
-</div>
-
-
-<!-- ==================================================
-INÍCIO
-================================================== -->
-
-<section id="inicio" class="screen active">
-
-<div class="panel">
-
-<h1>CyberDetective</h1>
-
-<p class="subtitle">
-Caso #404 — O Mistério do Pão Desaparecido
-</p>
-
-<br>
-
-<h3>🚨 MISSÃO</h3>
-
-<p>
-Um pão artesanal desapareceu misteriosamente da cozinha.
-O crime ocorreu entre <b>07:45 e 08:00</b>.
-</p>
-
-<p>
-Sua missão é descobrir <b>quem pegou o pão</b>,
-como fez isso e onde o pão foi parar.
-</p>
-
-<div class="ai">
-
-<div class="ai-title">
-C.H.I.P. — BRIEFING
-</div>
-
-<div class="ai-message">
-> Quatro suspeitos identificados.
-> A cena possui múltiplas evidências.
-> Algumas pistas podem ser conectadas.
-> Não confie apenas na probabilidade.
-> INVESTIGUE.
-</div>
-
-</div>
-
-<button onclick="mudarTela('mapa')">
-🏠 ENTRAR NA CASA
-</button>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-MAPA
-================================================== -->
-
-<section id="mapa" class="screen">
-
-<div class="panel">
-
-<h2>🏠 Mapa da Residência</h2>
-
-<p>
-Clique em um cômodo para investigar.
-Alguns objetos podem ser <b>arrastados</b> depois de encontrados.
-</p>
-
-<div class="house-grid">
-
-<div class="room" onclick="abrirComodo('cozinha')">
-<div class="room-icon">🍳</div>
-<h3>Cozinha</h3>
-<small>Local principal do crime</small>
-</div>
-
-<div class="room" onclick="abrirComodo('sala')">
-<div class="room-icon">🛋️</div>
-<h3>Sala</h3>
-<small>Há algo estranho no sofá</small>
-</div>
-
-<div class="room" onclick="abrirComodo('quarto')">
-<div class="room-icon">🛏️</div>
-<h3>Quarto</h3>
-<small>Possível álibi de Lucas</small>
-</div>
-
-<div class="room" onclick="abrirComodo('jardim')">
-<div class="room-icon">🌳</div>
-<h3>Jardim</h3>
-<small>Terra vermelha detectada</small>
-</div>
-
-<div class="room" onclick="abrirComodo('garagem')">
-<div class="room-icon">🚗</div>
-<h3>Garagem</h3>
-<small>Objetos esquecidos</small>
-</div>
-
-<div class="room" onclick="mudarTela('interrogatorio')">
-<div class="room-icon">🗣️</div>
-<h3>Sala de Interrogatório</h3>
-<small>Fale com os suspeitos</small>
-</div>
-
-</div>
-
-<br>
-
-<button class="secondary" onclick="mudarTela('inventarioTela')">
-🎒 Abrir inventário
-</button>
-
-<button class="secondary" onclick="mudarTela('conexoes')">
-🔗 Quadro de evidências
-</button>
-
-<button class="secondary" onclick="mudarTela('timeline')">
-⏱️ Linha do tempo
-</button>
-
-<button class="success" onclick="mudarTela('suspeitos')">
-🕵️ Ver suspeitos
-</button>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-CÔMODO
-================================================== -->
-
-<section id="comodo" class="screen">
-
-<div class="panel">
-
-<h2 id="roomTitle">
-Local
-</h2>
-
-<p id="roomDescription">
-Investigando...
-</p>
-
-<div class="ai">
-
-<div class="ai-title">
-C.H.I.P. — SENSOR AMBIENTAL
-</div>
-
-<div id="roomAI" class="ai-message">
-> Escaneando ambiente...
-</div>
-
-</div>
-
-<div id="objectGrid" class="object-grid"></div>
-
-<br>
-
-<button class="secondary" onclick="mudarTela('mapa')">
-↩ Voltar ao mapa
-</button>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-INVENTÁRIO
-================================================== -->
-
-<section id="inventarioTela" class="screen">
-
-<div class="panel">
-
-<h2>🎒 Inventário</h2>
-
-<p>
-Arraste os itens para diferentes áreas de investigação.
-</p>
-
-<div class="inventory" id="inventory">
-
-<span style="color:#64748b">
-Nenhuma evidência coletada.
-</span>
-
-</div>
-
-<br>
-
-<h3>🧪 Laboratório C.H.I.P.</h3>
-
-<div class="drop-zone"
-id="laboratorio">
-
-🧪
-<br><br>
-Arraste uma evidência aqui para analisar
-</div>
-
-<div class="analysis-box">
-
-<h3>Resultado</h3>
-
-<div id="labResult">
-Aguardando uma amostra.
-</div>
-
-</div>
-
-<br>
-
-<button class="secondary" onclick="mudarTela('mapa')">
-↩ Voltar
-</button>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-SUSPEITOS
-================================================== -->
-
-<section id="suspeitos" class="screen">
-
-<div class="panel">
-
-<h2>🕵️ Suspeitos</h2>
-
-<p>
-Clique em um suspeito para analisar o perfil.
-</p>
-
-<div class="suspect-grid">
-
-
-<div class="suspect"
-id="suspect-lucas"
-onclick="selecionarSuspeito('lucas')">
-
-<div class="avatar">🎮</div>
-
-<div class="role">
-O Gamer
-</div>
-
-<h3>Lucas</h3>
-
-<p>
-Diz que estava jogando no quarto.
-</p>
-
-<p>
-👟 Calçado tamanho 40
-</p>
-
-<div class="chance">
-<b id="chance-lucas">25%</b>
-
-<div class="chance-bar">
-<div id="bar-lucas" class="chance-fill"></div>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="suspect"
-id="suspect-regina"
-onclick="selecionarSuspeito('regina')">
-
-<div class="avatar">🥗</div>
-
-<div class="role">
-Influencer Fit
-</div>
-
-<h3>Regina</h3>
-
-<p>
-Afirma estar fazendo jejum.
-</p>
-
-<p>
-📸 Foto às 07:45
-</p>
-
-<div class="chance">
-<b id="chance-regina">25%</b>
-
-<div class="chance-bar">
-<div id="bar-regina" class="chance-fill"></div>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="suspect"
-id="suspect-mingau"
-onclick="selecionarSuspeito('mingau')">
-
-<div class="avatar">🐱</div>
-
-<div class="role">
-Ciborgue Doméstico
-</div>
-
-<h3>Mingau</h3>
-
-<p>
-Gato da família.
-Pelagem cinza.
-</p>
-
-<p>
-🐾 Foi visto perto da cozinha.
-</p>
-
-<div class="chance">
-<b id="chance-mingau">25%</b>
-
-<div class="chance-bar">
-<div id="bar-mingau" class="chance-fill"></div>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="suspect"
-id="suspect-jorge"
-onclick="selecionarSuspeito('jorge')">
-
-<div class="avatar">🧓</div>
-
-<div class="role">
-Hacker Antigo
-</div>
-
-<h3>Seu Jorge</h3>
-
-<p>
-Vizinho.
-Diz que estava no jardim.
-</p>
-
-<p>
-🌱 Botas com terra vermelha.
-</p>
-
-<div class="chance">
-<b id="chance-jorge">25%</b>
-
-<div class="chance-bar">
-<div id="bar-jorge" class="chance-fill"></div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="analysis-box">
-
-<h3>🧠 Análise do C.H.I.P.</h3>
-
-<div id="selectedText">
-Selecione alguém.
-</div>
-
-<div class="ai-percentage"
-id="selectedChance">
---%
-</div>
-
-<div class="confidence"
-id="confidence">
-Confiança: desconhecida
+<div class="app">
+<header>
+  <div><div class="logo">VIDA</div><div class="sub">UMA HISTÓRIA INTERATIVA</div></div>
+  <div class="hud"><span class="pill" id="date">SEXTA • 23:47</span><span class="pill" id="status">Você está aqui.</span></div>
+</header>
+
+<main><div class="scene" id="game"></div></main>
+<div class="gallery"><h3>Memórias descobertas</h3><div class="ends" id="gallery"></div></div>
 </div>
-
-<p id="aiReason">
-Aguardando análise.
-</p>
-
-</div>
-
-<br>
-
-<button class="blue" onclick="mudarTela('interrogatorio')">
-🗣️ Interrogar
-</button>
-
-<button class="secondary" onclick="mudarTela('timeline')">
-⏱️ Ver linha do tempo
-</button>
-
-<button class="danger" onclick="irParaAcusacao()">
-⚖️ Acusar
-</button>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-INTERROGATÓRIO
-================================================== -->
-
-<section id="interrogatorio" class="screen">
-
-<div class="panel">
-
-<h2>🗣️ Sala de Interrogatório</h2>
-
-<p>
-Escolha um suspeito e faça perguntas.
-Algumas respostas podem revelar contradições.
-</p>
-
-<div class="suspect-grid">
-
-<div class="suspect" onclick="interrogar('lucas')">
-<div class="avatar">🎮</div>
-<h3>Lucas</h3>
-<p>Interrogar</p>
-</div>
-
-<div class="suspect" onclick="interrogar('regina')">
-<div class="avatar">🥗</div>
-<h3>Regina</h3>
-<p>Interrogar</p>
-</div>
-
-<div class="suspect" onclick="interrogar('mingau')">
-<div class="avatar">🐱</div>
-<h3>Mingau</h3>
-<p>Interrogar</p>
-</div>
-
-<div class="suspect" onclick="interrogar('jorge')">
-<div class="avatar">🧓</div>
-<h3>Seu Jorge</h3>
-<p>Interrogar</p>
-</div>
-
-</div>
-
-<div id="questions" class="question-grid" style="margin-top:25px"></div>
-
-<div class="answer" id="answer">
-Escolha alguém para começar.
-</div>
-
-<br>
-
-<button class="secondary" onclick="mudarTela('mapa')">
-↩ Voltar
-</button>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-TIMELINE
-================================================== -->
-
-<section id="timeline" class="screen">
-
-<div class="panel">
-
-<h2>⏱️ Reconstrução da Linha do Tempo</h2>
-
-<p>
-Arraste os suspeitos para o horário em que você acredita
-que estavam presentes.
-</p>
-
-<div class="inventory">
-
-<div class="item"
-draggable="true"
-ondragstart="dragSuspeito(event,'Lucas')">
-🎮 Lucas
-</div>
-
-<div class="item"
-draggable="true"
-ondragstart="dragSuspeito(event,'Regina')">
-🥗 Regina
-</div>
-
-<div class="item"
-draggable="true"
-ondragstart="dragSuspeito(event,'Mingau')">
-🐱 Mingau
-</div>
-
-<div class="item"
-draggable="true"
-ondragstart="dragSuspeito(event,'Seu Jorge')">
-🧓 Jorge
-</div>
-
-</div>
-
-<div class="timeline">
-
-<div class="time-slot"
-ondragover="permitirDrop(event)"
-ondrop="soltarTempo(event,'07:30')">
-
-<div class="time">07:30</div>
-
-<span id="time-0730">
-Arraste aqui
-</span>
-
-</div>
-
-
-<div class="time-slot"
-ondragover="permitirDrop(event)"
-ondrop="soltarTempo(event,'07:45')">
-
-<div class="time">07:45</div>
-
-<span id="time-0745">
-Arraste aqui
-</span>
-
-</div>
-
-
-<div class="time-slot"
-ondragover="permitirDrop(event)"
-ondrop="soltarTempo(event,'08:00')">
-
-<div class="time">08:00</div>
-
-<span id="time-0800">
-Arraste aqui
-</span>
-
-</div>
-
-
-<div class="time-slot"
-ondragover="permitirDrop(event)"
-ondrop="soltarTempo(event,'08:15')">
-
-<div class="time">08:15</div>
-
-<span id="time-0815">
-Arraste aqui
-</span>
-
-</div>
-
-</div>
-
-<div class="ai">
-
-<div class="ai-title">
-C.H.I.P. — ANÁLISE TEMPORAL
-</div>
-
-<div id="timelineAI" class="ai-message">
-> Aguardando reconstrução...
-</div>
-
-</div>
-
-<button class="secondary" onclick="mudarTela('mapa')">
-↩ Voltar
-</button>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-CONEXÕES
-================================================== -->
-
-<section id="conexoes" class="screen">
-
-<div class="panel">
-
-<h2>🔗 Quadro de Investigação</h2>
-
-<p>
-Arraste uma evidência para o suspeito que você acredita
-estar relacionado a ela.
-</p>
-
-<div class="inventory" id="connectionItems"></div>
-
-<br>
-
-<div class="connection-grid">
-
-<div class="connection-box"
-ondragover="permitirDrop(event)"
-ondrop="conectar(event,'lucas')">
-
-<h3>🎮 Lucas</h3>
-
-<div id="connect-lucas">
-Solte evidências aqui
-</div>
-
-</div>
-
-
-<div class="connection-box"
-ondragover="permitirDrop(event)"
-ondrop="conectar(event,'regina')">
-
-<h3>🥗 Regina</h3>
-
-<div id="connect-regina">
-Solte evidências aqui
-</div>
-
-</div>
-
-
-<div class="connection-box"
-ondragover="permitirDrop(event)"
-ondrop="conectar(event,'mingau')">
-
-<h3>🐱 Mingau</h3>
-
-<div id="connect-mingau">
-Solte evidências aqui
-</div>
-
-</div>
-
-
-<div class="connection-box"
-ondragover="permitirDrop(event)"
-ondrop="conectar(event,'jorge')">
-
-<h3>🧓 Jorge</h3>
-
-<div id="connect-jorge">
-Solte evidências aqui
-</div>
-
-</div>
-
-</div>
-
-<div class="ai">
-
-<div class="ai-title">
-C.H.I.P. — CONEXÕES
-</div>
-
-<div id="connectionAI" class="ai-message">
-> Nenhuma conexão analisada.
-</div>
-
-</div>
-
-<button class="secondary" onclick="mudarTela('mapa')">
-↩ Voltar
-</button>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-ACUSAÇÃO
-================================================== -->
-
-<section id="acusacao" class="screen">
-
-<div class="panel">
-
-<div class="final">
-
-<div class="final-icon">
-⚖️
-</div>
-
-<h2>Acusação Final</h2>
-
-<p>
-Você escolheu:
-</p>
-
-<h1 id="accusedName">
----
-</h1>
-
-<div class="analysis-box">
-
-<div class="ai-percentage"
-id="accusedChance">
---%
-</div>
-
-<p>
-probabilidade calculada pelo C.H.I.P.
-</p>
-
-</div>
-
-<button class="danger" onclick="finalizarCaso()">
-🚨 CONFIRMAR ACUSAÇÃO
-</button>
-
-<button class="secondary" onclick="mudarTela('suspeitos')">
-↩ Voltar
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
-FINAL
-================================================== -->
-
-<section id="final" class="screen">
-
-<div class="panel final">
-
-<div id="finalIcon" class="final-icon">
-🏆
-</div>
-
-<h2 id="finalTitle">
-Caso encerrado
-</h2>
-
-<p id="finalText"></p>
-
-<div class="final-score">
-<span id="finalScore">0</span> XP
-</div>
-
-<div class="ai">
-
-<div class="ai-title">
-RELATÓRIO FINAL DO C.H.I.P.
-</div>
-
-<div id="finalAI" class="ai-message"></div>
-
-</div>
-
-<button onclick="location.reload()">
-🔄 NOVA INVESTIGAÇÃO
-</button>
-
-</div>
-
-</section>
-
-
-</div>
-
 
 <script>
+const scenes = {
+start:{
+ time:"SEXTA-FEIRA • 23:47", title:"A mensagem", text:`O quarto está escuro. Só a luz do celular ilumina seu rosto.
 
-/* =====================================================
-ESTADO DO JOGO
-===================================================== */
+Você deveria estar dormindo há pelo menos uma hora.
 
-let bateria = 100;
+O celular vibra novamente.`,
+ dialogue:["MÃE","Você ainda está acordado?"],
+ choices:[
+  ["Responder agora","reply"],
+  ["Deixar para amanhã","ignore"],
+  ["Perguntar o que aconteceu","ask"]
+ ]},
+reply:{
+ time:"23:48 • QUARTO",title:"“Sim.”",text:`Você responde quase no automático.
 
-let pontos = 0;
+Três pontinhos aparecem. Somem. Aparecem de novo.
 
-let evidencias = [];
+Dessa vez, a mensagem demora.`,
+ dialogue:["MÃE","A gente precisa conversar amanhã. Sobre seu pai."],
+ choices:[["Perguntar se aconteceu alguma coisa","family"],["Dizer que está cansado e dormir","sleep"],["Ligar para ela","call"]]
+},
+ignore:{
+ time:"23:49 • QUARTO",title:"Amanhã eu vejo isso.",text:`Você vira o celular para baixo.
 
-let suspeitoSelecionado = null;
+Cinco minutos.
 
-let ultimoDrag = null;
+Dez.
 
-let conexoes = {};
+O sono não vem.
 
-let interrogados = {};
+Quando finalmente fecha os olhos, o celular vibra mais uma vez — mas você decide não olhar.`,
+ choices:[["Dormir","morning"],["Pegar o celular","late"]]
+},
+ask:{
+ time:"23:48 • QUARTO",title:"“Sobre o quê?”",text:`A resposta chega rápido demais.
 
-let chances = {
+“Não é por mensagem.”
 
-    lucas:25,
-    regina:25,
-    mingau:25,
-    jorge:25
+Você encara a tela. De repente, aquela conversa parece muito maior do que deveria ser.`,
+ choices:[["Insistir","family"],["Tudo bem. Amanhã.","sleep"],["Ligar agora","call"]]
+},
+family:{
+ time:"23:51 • CELULAR",title:"Uma conversa que você não queria ter",text:`Sua mãe conta que seu pai saiu de casa depois de uma discussão.
 
+Ela não sabe quando ele volta.
+
+Você fica alguns segundos sem saber o que dizer.`,
+ dialogue:["MÃE","Eu só queria que você não se preocupasse com isso."],
+ choices:[["“Eu estou preocupado.”","honest"],["“Vai ficar tudo bem.”","comfort"],["Mudar de assunto","deflect"]]
+},
+sleep:{
+ time:"00:02 • QUARTO",title:"Você escolhe dormir.",text:`Talvez amanhã seja mais fácil.
+
+Você coloca o celular no carregador e fecha os olhos.
+
+Só que algumas coisas não desaparecem quando a gente dorme.`,
+ choices:[["Continuar","morning"]]
+},
+call:{
+ time:"23:53 • LIGAÇÃO",title:"A voz do outro lado",text:`Sua mãe atende.
+
+Por alguns segundos, nenhum dos dois fala.
+
+Então você percebe que ela está chorando.`,
+ dialogue:["MÃE","Desculpa você ter que ouvir isso."],
+ choices:[["Ficar na ligação","honest"],["Dizer que está tudo bem","comfort"]]
+},
+honest:{
+ time:"00:18 • SALA",title:"Pela primeira vez",text:`Você para de tentar consertar tudo.
+
+“Eu não sei o que fazer.”
+
+Sua mãe respira fundo.
+
+Às vezes, admitir que não sabe é a única coisa honesta que existe.`,
+ choices:[["Ficar conversando","morning"],["Ir dormir","morning"]]
+},
+comfort:{
+ time:"00:15 • SALA",title:"“Vai ficar tudo bem.”",text:`Você diz isso porque é o que as pessoas dizem.
+
+Sua mãe agradece.
+
+Mas você sabe que não tem como prometer uma coisa dessas.`,
+ choices:[["Continuar a conversa","morning"],["Encerrar e dormir","morning"]]
+},
+deflect:{
+ time:"00:01 • QUARTO",title:"Você muda de assunto.",text:`Vocês conversam sobre coisas pequenas.
+
+Escola. Trabalho. O jantar.
+
+É confortável por alguns minutos.
+
+Talvez confortável demais.`,
+ choices:[["Dormir","morning"]]
+},
+late:{
+ time:"00:14 • QUARTO",title:"Você olha.",text:`É uma mensagem do seu melhor amigo, Lucas.
+
+“Mano, tá acordado?”
+
+Antes que você responda, chega outra:
+
+“Preciso falar com você amanhã.”`,
+ choices:[["“Fala agora.”","lucas"],["“Amanhã a gente fala.”","morning"]]
+},
+morning:{
+ time:"SÁBADO • 08:12",title:"O dia seguinte",text:`Você acorda antes do despertador.
+
+Por alguns segundos, esquece tudo.
+
+Então lembra.
+
+O celular tem quatro notificações.
+
+Uma da sua mãe.
+
+Uma do Lucas.
+
+Uma de alguém que você não esperava.`,
+ choices:[["Ver as mensagens","phone"],["Levantar e sair do quarto","outside"],["Voltar a dormir","alone"]]
+},
+lucas:{
+ time:"00:19 • CHAT",title:"Lucas",text:`Lucas demora para escrever.
+
+“Eu fiz uma merda.”
+
+Você conhece aquele jeito de escrever. Não é uma brincadeira.`,
+ choices:[["“Que merda?”","secret"],["“Amanhã você me conta.”","morning"]]
+},
+phone:{
+ time:"08:14 • CELULAR",title:"Quatro notificações",text:`Sua mãe: “Bom dia. Quando acordar, fala comigo.”
+
+Lucas: “Você pode me encontrar hoje?”
+
+E a terceira mensagem é de Marina.
+
+“Sonhei com você ontem kkkkk.”`,
+ choices:[["Responder sua mãe","outside"],["Responder Lucas","secret"],["Responder Marina","love"]]
+},
+outside:{
+ time:"09:03 • COZINHA",title:"A casa está diferente",text:`Seu pai não está na mesa.
+
+Sua mãe está fazendo café como se fosse um sábado normal.
+
+Ela olha para você.
+
+Você percebe que ela quer perguntar alguma coisa.`,
+ choices:[["Sentar com ela","familyday"],["Pegar café e sair","street"],["Perguntar pelo seu pai","truth"]]
+},
+alone:{
+ time:"11:41 • QUARTO",title:"Mais cinco minutos",text:`Você dorme de novo.
+
+Quando acorda, já passou do meio-dia.
+
+Lucas mandou mais uma mensagem.
+
+“Esquece. Resolvi.”`,
+ choices:[["Perguntar o que aconteceu","secret"],["Deixar quieto","street"]]
+},
+familyday:{
+ time:"09:15 • COZINHA",title:"Café frio",text:`Vocês ficam em silêncio por um tempo.
+
+Sua mãe finalmente fala.
+
+“Você está bem?”
+
+A pergunta parece simples. A resposta não.`,
+ choices:[["“Não muito.”","truth"],["“Tô.”","street"]]
+},
+truth:{
+ time:"09:18 • COZINHA",title:"Você pergunta",text:`Sua mãe olha para a xícara.
+
+“Ele precisa de um tempo.”
+
+Você sente vontade de perguntar mil coisas.
+
+Mas escolhe uma.`,
+ choices:[["“Ele vai voltar?”","future"],["“Foi por minha causa?”","guilt"],["Não perguntar mais nada","street"]]
+},
+guilt:{
+ time:"09:20 • COZINHA",title:"A culpa",text:`Sua mãe imediatamente diz que não.
+
+Mas você percebe que já tinha pensado nisso antes mesmo de perguntar.
+
+Ela segura sua mão.`,
+ dialogue:["MÃE","Você não precisa carregar tudo sozinho."],
+ choices:[["Acreditar nela","future"],["Não responder","street"]]
+},
+street:{
+ time:"10:02 • RUA",title:"Lá fora",text:`Você sai sem um plano.
+
+A cidade está seguindo normalmente.
+
+É estranho como o mundo continua funcionando quando a sua cabeça parece ter parado.`,
+ choices:[["Ir encontrar Lucas","secret"],["Encontrar Marina","love"],["Andar sozinho","future"]]
+},
+secret:{
+ time:"11:20 • PRAÇA",title:"A merda",text:`Lucas finalmente conta.
+
+Ele pegou dinheiro escondido em casa para pagar uma dívida.
+
+Não foi muito.
+
+Mas foi o suficiente para transformar uma coisa pequena em um problema enorme.`,
+ choices:[["Ajudar a esconder","bad"],["Mandar ele contar a verdade","good"],["Oferecer seu próprio dinheiro","sacrifice"]]
+},
+love:{
+ time:"11:37 • CAFÉ",title:"Marina",text:`Marina sorri quando te vê.
+
+Vocês conversam sobre coisas bobas durante alguns minutos.
+
+Então ela pergunta:
+
+“Você está diferente. Aconteceu alguma coisa?”`,
+ choices:[["Contar tudo","open"],["Dizer que está tudo normal","mask"],["Fazer uma piada","funny"]]
+},
+sacrifice:{
+ time:"11:42 • PRAÇA",title:"“Eu resolvo.”",text:`Você sabe que talvez não devesse.
+
+Mesmo assim, oferece ajudar.
+
+Lucas olha para você como se não esperasse aquilo.
+
+“Por que você faria isso?”`,
+ choices:[["“Porque você é meu amigo.”","friend"],["“Só paga depois.”","deal"]]
+},
+open:{
+ time:"12:03 • CAFÉ",title:"Sem fingir",text:`Você conta.
+
+Não tudo. Mas o suficiente.
+
+Marina não tenta resolver sua vida.
+
+Só escuta.
+
+E, estranhamente, isso já ajuda.`,
+ choices:[["Continuar ali","future"],["Perguntar sobre ela","relationship"]]
+},
+mask:{
+ time:"12:05 • CAFÉ",title:"“Nada.”",text:`Marina percebe a mentira.
+
+Ela não insiste.
+
+Mas o jeito como ela olha para você muda um pouco.`,
+ choices:[["Mudar de assunto","future"],["Contar a verdade depois","relationship"]]
+},
+funny:{
+ time:"12:08 • CAFÉ",title:"Você faz uma piada",text:`Ela ri.
+
+Você também.
+
+Por alguns minutos, tudo fica leve.
+
+Talvez seja disso que você precisava.`,
+ choices:[["Ficar mais um pouco","relationship"],["Ir embora","future"]]
+},
+relationship:{
+ time:"13:02 • RUA",title:"Uma pergunta simples",text:`Marina pergunta:
+
+“Você gosta de mim ou gosta da ideia de alguém gostar de você?”
+
+Você não esperava por essa.`,
+ choices:[["“Eu gosto de você.”","romance"],["“Não sei.”","honestlove"],["Brincar para escapar","funny2"]]
+},
+romance:{
+ time:"13:04 • RUA",title:"Sem certeza",text:`Você diz que gosta dela.
+
+E, dessa vez, não sabe se está dizendo isso para ela ou para você mesmo.
+
+Ela sorri.
+
+“Então vamos descobrir.”`,
+ choices:[["Aceitar","future"],["Pedir tempo","future"]]
+},
+honestlove:{
+ time:"13:05 • RUA",title:"“Não sei.”",text:`Marina fica em silêncio.
+
+Depois sorri de leve.
+
+“Pelo menos você foi sincero.”`,
+ choices:[["Agradecer","future"],["Perguntar se ela ficou chateada","future"]]
+},
+funny2:{
+ time:"13:06 • RUA",title:"Você foge pela piada",text:`Ela ri, mas dessa vez não acompanha.
+
+“Você sempre faz isso.”
+
+Você entende exatamente o que ela quis dizer.`,
+ choices:[["Pedir desculpas","future"],["Fingir que não entendeu","future"]]
+},
+future:{
+ time:"DOMINGO • 21:16",title:"Domingo à noite",text:`O fim de semana acabou.
+
+Seu pai ainda não voltou.
+
+Lucas resolveu contar a verdade.
+
+Marina mandou “boa noite”.
+
+Você está sentado na cama, pensando em tudo que aconteceu.
+
+Não existe uma música épica.
+
+Não existe uma resposta perfeita.
+
+Só existe amanhã.`,
+ choices:[["Deixar o celular de lado","end_good"],["Mandar uma última mensagem","end_open"],["Sair para caminhar","end_gray"]]
+},
+friend:{
+ time:"DOMINGO • 18:20",title:"Amigos",text:`Lucas pagou o que devia.
+
+A situação em casa dele ficou difícil, mas a verdade veio antes que fosse tarde demais.
+
+Ele nunca esqueceu que você ficou do lado dele.`,
+ choices:[["Continuar","end_friend"]]
+},
+deal:{
+ time:"DOMINGO • 18:20",title:"Um acordo",text:`Lucas aceita.
+
+Mas a dívida agora também é sua.
+
+Talvez amizade seja isso.
+
+Ou talvez você só tenha dificuldade de dizer não.`,
+ choices:[["Continuar","end_gray"]]
+},
+bad:{
+ time:"DOMINGO • 23:58",title:"A escolha que volta",text:`Você ajudou Lucas a esconder.
+
+Durante dois dias, parece que funcionou.
+
+No terceiro, alguém descobre.
+
+E seu nome aparece junto.
+
+Você percebe tarde demais que proteger alguém também pode significar impedir essa pessoa de aprender.`,
+ choices:[["Aceitar as consequências","end_bad"]]
+},
+end_good:{time:"FIM",title:"Você não resolveu tudo.",text:`Mas resolveu uma coisa importante:
+
+parou de fingir que precisava resolver tudo.
+
+Talvez seja um começo.
+
+E, pela primeira vez em muito tempo, amanhã não parece tão assustador.`},
+end_open:{time:"FIM",title:"Amanhã.",text:`Você manda uma mensagem simples:
+
+“Obrigado por hoje.”
+
+Não sabe exatamente para quem está falando.
+
+Talvez para Marina.
+
+Talvez para sua mãe.
+
+Talvez para você mesmo.
+
+A mensagem é visualizada.
+
+E a história continua.`},
+end_gray:{time:"FIM",title:"Sem resposta.",text:`Você caminha até a rua ficar silenciosa.
+
+Algumas decisões não são boas ou ruins.
+
+São apenas decisões.
+
+E você ainda vai descobrir o que elas significam.`},
+end_friend:{time:"FIM",title:"Rico em gente.",text:`Você não ficou rico.
+
+Não virou famoso.
+
+Não resolveu a vida de ninguém.
+
+Mas quando você precisou de alguém, alguém apareceu.
+
+Talvez isso seja uma forma de riqueza.`},
+end_bad:{time:"FIM",title:"A conta chega.",text:`Você queria proteger seu amigo.
+
+Terminou precisando aprender que intenção e consequência são coisas diferentes.
+
+Você perdeu algumas coisas.
+
+Mas ainda pode escolher o que fazer depois disso.`}
 };
 
-const nomes = {
+let state={scene:"start",history:[],seen:JSON.parse(localStorage.getItem("vidaEnds")||"[]")};
 
-    lucas:"Lucas",
-    regina:"Regina",
-    mingau:"Mingau",
-    jorge:"Seu Jorge"
-
-};
-
-
-/* =====================================================
-OBJETOS DOS CÔMODOS
-===================================================== */
-
-const objetos = {
-
-cozinha:[
-
-{
-id:"pelo",
-icon:"🐾",
-nome:"Pelo cinzento",
-desc:"Um pequeno pelo encontrado perto da bancada.",
-evidencia:"Pelo cinzento",
-efeito:"mingau"
-},
-
-{
-id:"migalha",
-icon:"🍞",
-nome:"Migalhas",
-desc:"Pequenas migalhas estão espalhadas pelo chão.",
-evidencia:"Migalhas de pão",
-efeito:"mingau"
-},
-
-{
-id:"bilhete",
-icon:"📄",
-nome:"Bilhete rasgado",
-desc:"Um bilhete fala sobre uma dieta que começaria hoje.",
-evidencia:"Bilhete da dieta",
-efeito:"regina"
+function render(){
+ const s=scenes[state.scene]; document.getElementById("date").textContent=s.time;
+ const g=document.getElementById("game");
+ if(s.time==="FIM"){
+   g.innerHTML=`<div class="ending"><span class="tag">FINAL DESCOBERTO</span><h1>${s.title}</h1><div class="text">${s.text}</div><div class="actions"><button class="action" onclick="restart()">↻ Viver de novo</button><button class="action" onclick="back()">← Voltar</button></div></div>`;
+   if(!state.seen.includes(state.scene)){state.seen.push(state.scene);localStorage.setItem("vidaEnds",JSON.stringify(state.seen))}
+ }else{
+   let d=s.dialogue?`<div class="dialogue"><div class="speaker">${s.dialogue[0]}</div><div class="quote">“${s.dialogue[1]}”</div></div>`:"";
+   let c=(s.choices||[]).map((x,i)=>`<button class="choice" onclick="choose('${x[1]}')"><span class="num">${i+1}</span><span>${x[0]}</span></button>`).join("");
+   g.innerHTML=`<div class="sceneTop"><span>MEMÓRIA • ${state.history.length+1}</span><span>${state.history.length} decisões</span></div><div class="sceneBody"><div class="time">${s.time}</div><h1 class="title">${s.title}</h1><div class="text">${s.text}</div>${d}<div class="choices">${c}</div><div class="small">Suas escolhas não mostram o que vão causar. Algumas coisas só fazem sentido depois.</div></div>`;
+ }
+ renderGallery();
 }
-
-],
-
-sala:[
-
-{
-id:"sofa",
-icon:"🛋️",
-nome:"Sofá",
-desc:"Há algo escondido entre as almofadas.",
-evidencia:"Marca de patas no sofá",
-efeito:"mingau"
-},
-
-{
-id:"controle",
-icon:"🎮",
-nome:"Controle de videogame",
-desc:"O controle está ligado, mas ninguém parece estar jogando.",
-evidencia:"Controle ligado",
-efeito:"lucas"
-}
-
-],
-
-quarto:[
-
-{
-id:"tenis",
-icon:"👟",
-nome:"Tênis tamanho 40",
-desc:"Um tênis está próximo da cama.",
-evidencia:"Tênis tamanho 40",
-efeito:"lucas"
-},
-
-{
-id:"computador",
-icon:"💻",
-nome:"Computador",
-desc:"O computador mostra uma partida iniciada às 07:32.",
-evidencia:"Registro do computador",
-efeito:"lucas"
-}
-
-],
-
-jardim:[
-
-{
-id:"terra",
-icon:"🌱",
-nome:"Terra vermelha",
-desc:"O solo está úmido e vermelho.",
-evidencia:"Terra vermelha",
-efeito:"jorge"
-},
-
-{
-id:"botas",
-icon:"🥾",
-nome:"Botas",
-desc:"Botas com pequenas marcas de farinha.",
-evidencia:"Botas com farinha",
-efeito:"jorge"
-}
-
-],
-
-garagem:[
-
-{
-id:"sacola",
-icon:"🛍️",
-nome:"Sacola vazia",
-desc:"Uma sacola de papel com cheiro de pão.",
-evidencia:"Sacola com cheiro de pão",
-efeito:"jorge"
-},
-
-{
-id:"camera",
-icon:"📹",
-nome:"Câmera de segurança",
-desc:"A câmera possui uma gravação importante.",
-evidencia:"Gravação de segurança",
-efeito:"mingau"
-}
-
-]
-
-};
-
-
-/* =====================================================
-MUDAR TELA
-===================================================== */
-
-function mudarTela(id){
-
-document.querySelectorAll(".screen")
-.forEach(s=>s.classList.remove("active"));
-
-document.getElementById(id)
-.classList.add("active");
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-atualizarIA();
-
-}
-
-
-/* =====================================================
-TOAST
-===================================================== */
-
-function toast(msg){
-
-const el=document.getElementById("toast");
-
-el.textContent=msg;
-
-el.classList.add("show");
-
-setTimeout(()=>{
-el.classList.remove("show");
-},2800);
-
-}
-
-
-/* =====================================================
-PONTOS
-===================================================== */
-
-function ganharPontos(valor){
-
-pontos+=valor;
-
-document.getElementById("score")
-.textContent=pontos;
-
-}
-
-
-/* =====================================================
-BATERIA
-===================================================== */
-
-function gastarBateria(valor=10){
-
-if(bateria<valor){
-
-toast("⚠️ Bateria insuficiente!");
-
-return false;
-
-}
-
-bateria-=valor;
-
-atualizarBateria();
-
-return true;
-
-}
-
-
-function atualizarBateria(){
-
-const fill=
-document.getElementById("batteryFill");
-
-fill.style.width=bateria+"%";
-
-document.getElementById("batteryText")
-.textContent=bateria+"%";
-
-if(bateria<=20){
-
-fill.style.background="#ef4444";
-
-}else if(bateria<=50){
-
-fill.style.background="#f59e0b";
-
-}else{
-
-fill.style.background="#22c55e";
-
-}
-
-}
-
-
-/* =====================================================
-ABRIR CÔMODO
-===================================================== */
-
-function abrirComodo(nome){
-
-const dados={
-cozinha:{
-titulo:"🍳 Cozinha",
-desc:"O local onde o pão desapareceu.",
-ai:"> Sensores detectam resíduos de farinha.\n> Temperatura do ambiente normal.\n> Probabilidade de evidências: ALTA."
-},
-
-sala:{
-titulo:"🛋️ Sala",
-desc:"Uma sala aparentemente normal.",
-ai:"> Detectada atividade recente no sofá.\n> Possível passagem de animal."
-},
-
-quarto:{
-titulo:"🛏️ Quarto",
-desc:"Quarto de Lucas.",
-ai:"> Computador ligado.\n> Atividade digital registrada."
-},
-
-jardim:{
-titulo:"🌳 Jardim",
-desc:"Área externa da residência.",
-ai:"> Terra vermelha detectada.\n> Pegadas humanas encontradas."
-},
-
-garagem:{
-titulo:"🚗 Garagem",
-desc:"Garagem com objetos antigos.",
-ai:"> Câmera de segurança detectada.\n> Possível evidência crítica."
-}
-};
-
-document.getElementById("roomTitle")
-.textContent=dados[nome].titulo;
-
-document.getElementById("roomDescription")
-.textContent=dados[nome].desc;
-
-document.getElementById("roomAI")
-.textContent=dados[nome].ai;
-
-const grid=document.getElementById("objectGrid");
-
-grid.innerHTML="";
-
-objetos[nome].forEach(obj=>{
-
-const div=document.createElement("div");
-
-div.className="object";
-
-div.innerHTML=`
-
-<div class="object-icon">${obj.icon}</div>
-
-<h3>${obj.nome}</h3>
-
-<p>${obj.desc}</p>
-
-<button onclick="examinar('${obj.id}','${obj.evidencia}','${obj.efeito}')">
-🔎 Examinar
-</button>
-
-`;
-
-grid.appendChild(div);
-
-});
-
-mudarTela("comodo");
-
-}
-
-
-/* =====================================================
-EXAMINAR OBJETO
-===================================================== */
-
-function examinar(id,evidencia,efeito){
-
-if(evidencias.includes(evidencia)){
-
-toast("Essa evidência já foi coletada.");
-
-return;
-
-}
-
-if(!gastarBateria(10)) return;
-
-evidencias.push(evidencia);
-
-ganharPontos(25);
-
-adicionarInventario(evidencia);
-
-aplicarEfeito(efeito);
-
-toast("🔎 Evidência coletada: "+evidencia);
-
-}
-
-
-/* =====================================================
-INVENTÁRIO
-===================================================== */
-
-function adicionarInventario(nome){
-
-const inventarios=[
-document.getElementById("inventory"),
-document.getElementById("connectionItems")
-];
-
-inventarios.forEach(caixa=>{
-
-if(!caixa)return;
-
-const item=document.createElement("div");
-
-item.className="item";
-
-item.textContent="🔎 "+nome;
-
-item.draggable=true;
-
-item.dataset.item=nome;
-
-item.ondragstart=e=>{
-
-e.dataTransfer.setData("text/plain",nome);
-
-ultimoDrag=nome;
-
-};
-
-caixa.appendChild(item);
-
-});
-
-}
-
-
-/* =====================================================
-EFEITOS NAS CHANCES
-===================================================== */
-
-function aplicarEfeito(suspeito){
-
-if(suspeito==="mingau"){
-
-chances.mingau+=18;
-
-chances.lucas-=5;
-chances.regina-=5;
-chances.jorge-=8;
-
-}
-
-if(suspeito==="lucas"){
-
-chances.lucas+=14;
-
-chances.mingau-=5;
-chances.regina-=4;
-chances.jorge-=5;
-
-}
-
-if(suspeito==="regina"){
-
-chances.regina+=14;
-
-chances.lucas-=4;
-chances.mingau-=5;
-chances.jorge-=5;
-
-}
-
-if(suspeito==="jorge"){
-
-chances.jorge+=14;
-
-chances.lucas-=4;
-chances.regina-=5;
-chances.mingau-=5;
-
-}
-
-normalizarChances();
-
-}
-
-
-/* =====================================================
-NORMALIZAR
-===================================================== */
-
-function normalizarChances(){
-
-Object.keys(chances).forEach(k=>{
-
-if(chances[k]<1)
-chances[k]=1;
-
-});
-
-let total=
-Object.values(chances)
-.reduce((a,b)=>a+b,0);
-
-Object.keys(chances).forEach(k=>{
-
-chances[k]=
-Math.round(chances[k]/total*100);
-
-});
-
-let total2=
-Object.values(chances)
-.reduce((a,b)=>a+b,0);
-
-chances.mingau+=100-total2;
-
-}
-
-
-/* =====================================================
-SELECIONAR SUSPEITO
-===================================================== */
-
-function selecionarSuspeito(id){
-
-suspeitoSelecionado=id;
-
-document.querySelectorAll(".suspect")
-.forEach(s=>s.classList.remove("selected"));
-
-const el=
-document.getElementById("suspect-"+id);
-
-if(el)el.classList.add("selected");
-
-document.getElementById("selectedText")
-.innerHTML=
-"Suspeito selecionado: <b>"+nomes[id]+"</b>";
-
-document.getElementById("selectedChance")
-.textContent=chances[id]+"%";
-
-let confianca="Baixa";
-
-if(evidencias.length>=3)
-confianca="Alta";
-
-else if(evidencias.length>=1)
-confianca="Média";
-
-document.getElementById("confidence")
-.textContent=
-"Confiança da IA: "+confianca;
-
-let motivo={
-
-lucas:"O tamanho do calçado combina com uma das pegadas. O computador, porém, pode confirmar ou enfraquecer seu álibi.",
-
-regina:"O bilhete da dieta fornece uma possível motivação, mas ainda falta provar que ela esteve perto do pão.",
-
-mingau:"Pelos, migalhas e marcas de patas podem formar uma cadeia de evidências muito forte.",
-
-jorge:"A terra vermelha combina com o jardim e as botas podem explicar algumas marcas encontradas."
-};
-
-document.getElementById("aiReason")
-.textContent=motivo[id];
-
-atualizarIA();
-
-}
-
-
-/* =====================================================
-ATUALIZAR IA
-===================================================== */
-
-function atualizarIA(){
-
-Object.keys(chances).forEach(id=>{
-
-const texto=
-document.getElementById("chance-"+id);
-
-const bar=
-document.getElementById("bar-"+id);
-
-if(texto)
-texto.textContent=chances[id]+"%";
-
-if(bar)
-bar.style.width=chances[id]+"%";
-
-});
-
-}
-
-
-/* =====================================================
-DRAG AND DROP LABORATÓRIO
-===================================================== */
-
-function permitirDrop(event){
-
-event.preventDefault();
-
-event.currentTarget.classList.add("dragover");
-
-}
-
-
-document.addEventListener("dragend",()=>{
-
-document.querySelectorAll(".drop-zone,.connection-box,.time-slot")
-.forEach(el=>el.classList.remove("dragover"));
-
-});
-
-
-document.getElementById("laboratorio")
-.addEventListener("dragover",event=>{
-
-event.preventDefault();
-
-event.currentTarget.classList.add("dragover");
-
-});
-
-
-document.getElementById("laboratorio")
-.addEventListener("drop",event=>{
-
-event.preventDefault();
-
-const item=
-event.dataTransfer.getData("text/plain");
-
-analisarNoLaboratorio(item);
-
-});
-
-
-/* =====================================================
-LABORATÓRIO
-===================================================== */
-
-function analisarNoLaboratorio(item){
-
-if(!item)return;
-
-if(!gastarBateria(5))return;
-
-let resultado="";
-
-if(item.includes("Pelo")){
-
-resultado=
-"🧬 DNA compatível com FELINO.\n\n"+
-"🟢 Evidência forte contra Mingau.";
-
-chances.mingau+=15;
-
-}
-
-else if(item.includes("Migalha")){
-
-resultado=
-"🍞 Resíduos de centeio detectados.\n\n"+
-"🟢 O material corresponde ao pão desaparecido.";
-
-chances.mingau+=8;
-
-}
-
-else if(item.includes("Bilhete")){
-
-resultado=
-"✍️ Caligrafia humana detectada.\n\n"+
-"🟡 Possível relação com Regina.";
-
-chances.regina+=12;
-
-}
-
-else if(item.includes("Terra")){
-
-resultado=
-"🌱 Composição idêntica à terra do jardim.\n\n"+
-"🟡 Relação possível com Jorge.";
-
-chances.jorge+=12;
-
-}
-
-else if(item.includes("Tênis")){
-
-resultado=
-"👟 Tamanho 40.\n\n"+
-"🟡 Compatível com Lucas.";
-
-chances.lucas+=12;
-
-}
-
-else if(item.includes("Câmera")){
-
-resultado=
-"📹 GRAVAÇÃO RECUPERADA.\n\n"+
-"Às 07:57, um pequeno vulto passa pela cozinha.\n"+
-"Forma corporal compatível com um animal.";
-
-chances.mingau+=30;
-
-ganharPontos(100);
-
-}
-
-else{
-
-resultado=
-"Análise inconclusiva.\n\n"+
-"Não há evidência suficiente para relacionar o item a um suspeito.";
-
-}
-
-normalizarChances();
-
-document.getElementById("labResult")
-.textContent=resultado;
-
-atualizarIA();
-
-ganharPontos(20);
-
-}
-
-
-/* =====================================================
-INTERROGATÓRIO
-===================================================== */
-
-function interrogar(id){
-
-const perguntas={
-
-lucas:[
-
-"Você estava realmente no quarto?",
-
-"Você conhece o pão desaparecido?",
-
-"Por que seu tênis estava perto da cozinha?"
-
-],
-
-regina:[
-
-"Você realmente estava em jejum?",
-
-"Você escreveu o bilhete?",
-
-"Por que estava na cozinha às 07:45?"
-
-],
-
-mingau:[
-
-"Onde você estava às 08:00?",
-
-"Você conhece o pão?",
-
-"Por que está limpando os bigodes?"
-
-],
-
-jorge:[
-
-"O que você fazia no jardim?",
-
-"Por que suas botas têm farinha?",
-
-"Você entrou na casa?"
-
-]
-
-};
-
-document.getElementById("questions")
-.innerHTML="";
-
-perguntas[id].forEach((q,index)=>{
-
-const div=document.createElement("div");
-
-div.className="question";
-
-div.textContent="❓ "+q;
-
-div.onclick=()=>responder(id,index);
-
-document.getElementById("questions")
-.appendChild(div);
-
-});
-
-}
-
-
-/* =====================================================
-RESPOSTAS
-===================================================== */
-
-function responder(id,index){
-
-let resposta="";
-
-if(id==="lucas"){
-
-const r=[
-
-"Eu estava jogando. O computador pode provar.",
-
-"Eu nem gosto daquele pão.",
-
-"Meu tênis? Eu provavelmente deixei ali ontem."
-
-];
-
-resposta=r[index];
-
-}
-
-if(id==="regina"){
-
-const r=[
-
-"Sim. Eu estava em jejum.",
-
-"Sim, fui eu que escrevi.",
-
-"Eu só passei pela cozinha rapidamente."
-
-];
-
-resposta=r[index];
-
-}
-
-if(id==="mingau"){
-
-const r=[
-
-"Miau.",
-
-"Miaaaau.",
-
-"*Mingau lambe os bigodes e olha para o investigador.*"
-
-];
-
-resposta=r[index];
-
-if(index===2){
-
-chances.mingau+=12;
-
-normalizarChances();
-
-ganharPontos(40);
-
-}
-
-}
-
-if(id==="jorge"){
-
-const r=[
-
-"Eu estava mexendo nas plantas.",
-
-"Farinha? Não sei de onde veio isso.",
-
-"Não entrei na casa."
-
-];
-
-resposta=r[index];
-
-}
-
-document.getElementById("answer")
-.innerHTML=
-"<b>"+nomes[id]+" respondeu:</b><br><br>"+resposta;
-
-interrogados[id]=true;
-
-ganharPontos(15);
-
-atualizarIA();
-
-}
-
-
-/* =====================================================
-TIMELINE
-===================================================== */
-
-function dragSuspeito(event,nome){
-
-event.dataTransfer.setData("suspeito",nome);
-
-}
-
-
-function soltarTempo(event,horario){
-
-event.preventDefault();
-
-const nome=
-event.dataTransfer.getData("suspeito");
-
-if(!nome)return;
-
-document.getElementById("time-"+horario.replace(":",""))
-.textContent="👤 "+nome;
-
-ganharPontos(10);
-
-analisarTimeline(nome,horario);
-
-}
-
-
-function analisarTimeline(nome,horario){
-
-let mensagem="";
-
-if(nome==="Mingau" && horario==="08:00"){
-
-mensagem=
-"🟢 Excelente. Câmeras indicam movimento do animal próximo às 08:00.";
-
-ganharPontos(80);
-
-}
-
-else if(nome==="Lucas" && horario==="07:30"){
-
-mensagem=
-"🟢 Possível. O computador registrou atividade às 07:32.";
-
-ganharPontos(40);
-
-}
-
-else if(nome==="Regina" && horario==="07:45"){
-
-mensagem=
-"🟢 Compatível com a fotografia registrada.";
-
-ganharPontos(40);
-
-}
-
-else if(nome==="Jorge" && horario==="08:00"){
-
-mensagem=
-"🟡 Possível, mas não há confirmação de entrada na residência.";
-
-}
-
-else{
-
-mensagem=
-"⚪ A IA não encontrou evidência suficiente para confirmar esse horário.";
-
-}
-
-document.getElementById("timelineAI")
-.textContent=mensagem;
-
-}
-
-
-/* =====================================================
-CONEXÕES
-===================================================== */
-
-function conectar(event,suspeito){
-
-event.preventDefault();
-
-const item=
-event.dataTransfer.getData("text/plain");
-
-if(!item)return;
-
-const caixa=
-document.getElementById("connect-"+suspeito);
-
-const tag=
-document.createElement("div");
-
-tag.className="evidence-item";
-
-tag.textContent=item;
-
-caixa.appendChild(tag);
-
-if(!conexoes[suspeito])
-conexoes[suspeito]=[];
-
-conexoes[suspeito].push(item);
-
-avaliarConexao(item,suspeito);
-
-}
-
-
-function avaliarConexao(item,suspeito){
-
-let correta=false;
-
-if(
-item.includes("Pelo") &&
-suspeito==="mingau"
-) correta=true;
-
-if(
-item.includes("Migalha") &&
-suspeito==="mingau"
-) correta=true;
-
-if(
-item.includes("Bilhete") &&
-suspeito==="regina"
-) correta=true;
-
-if(
-item.includes("Tênis") &&
-suspeito==="lucas"
-) correta=true;
-
-if(
-item.includes("Terra") &&
-suspeito==="jorge"
-) correta=true;
-
-if(
-item.includes("Câmera") &&
-suspeito==="mingau"
-) correta=true;
-
-if(correta){
-
-ganharPontos(50);
-
-document.getElementById("connectionAI")
-.textContent=
-"🟢 CONEXÃO CORRETA!\n\n"+
-item+
-" possui relação relevante com "+
-nomes[suspeito]+
-".\n\nA confiança da IA aumentou.";
-
-aplicarEfeito(suspeito);
-
-}else{
-
-document.getElementById("connectionAI")
-.textContent=
-"🟡 CONEXÃO FRACA.\n\n"+
-item+
-" não apresenta uma relação forte com "+
-nomes[suspeito]+
-".\n\nContinue investigando.";
-
-}
-
-atualizarIA();
-
-}
-
-
-/* =====================================================
-ACUSAÇÃO
-===================================================== */
-
-function irParaAcusacao(){
-
-if(!suspeitoSelecionado){
-
-toast("⚠️ Selecione um suspeito primeiro.");
-
-return;
-
-}
-
-document.getElementById("accusedName")
-.textContent=nomes[suspeitoSelecionado];
-
-document.getElementById("accusedChance")
-.textContent=
-chances[suspeitoSelecionado]+"%";
-
-mudarTela("acusacao");
-
-}
-
-
-/* =====================================================
-FINAL
-===================================================== */
-
-function finalizarCaso(){
-
-mudarTela("final");
-
-const icon=
-document.getElementById("finalIcon");
-
-const title=
-document.getElementById("finalTitle");
-
-const text=
-document.getElementById("finalText");
-
-const ai=
-document.getElementById("finalAI");
-
-let bonus=0;
-
-if(evidencias.length>=8)
-bonus+=200;
-
-if(Object.keys(interrogados).length===4)
-bonus+=200;
-
-if(chances.mingau>=60)
-bonus+=100;
-
-pontos+=bonus;
-
-document.getElementById("finalScore")
-.textContent=pontos;
-
-
-if(suspeitoSelecionado==="mingau"){
-
-icon.textContent="🏆";
-
-title.textContent="CASO RESOLVIDO!";
-
-title.style.color="#22c55e";
-
-text.textContent=
-"Você identificou corretamente o verdadeiro culpado: Mingau.";
-
-if(evidencias.length>=8 && Object.keys(interrogados).length===4){
-
-icon.textContent="👑";
-
-title.textContent="DETETIVE SUPREMO!";
-
-text.textContent=
-"Você encontrou praticamente todas as evidências, interrogou todos os suspeitos e resolveu o caso com precisão absurda.";
-
-ai.textContent=
-"> CLASSIFICAÇÃO: S++\n"+
-"> INVESTIGAÇÃO COMPLETA.\n"+
-"> TODAS AS PRINCIPAIS EVIDÊNCIAS ANALISADAS.\n"+
-"> TODAS AS TESTEMUNHAS INTERROGADAS.\n"+
-"> CULPADO: MINGAU.\n"+
-"> TÍTULO CONCEDIDO: DETETIVE SUPREMO.";
-
-}else{
-
-ai.textContent=
-"> ACUSAÇÃO CORRETA.\n"+
-"> DNA FELINO CONFIRMADO.\n"+
-"> RESÍDUOS DE PÃO CONFIRMADOS.\n"+
-"> CASO #404 ENCERRADO.";
-
-}
-
-}else{
-
-icon.textContent="💀";
-
-title.textContent="ACUSAÇÃO INCORRETA";
-
-title.style.color="#ef4444";
-
-text.textContent=
-"Você acusou "+
-nomes[suspeitoSelecionado]+
-", mas as evidências finais apontavam para Mingau.";
-
-ai.textContent=
-"> FALHA NA INVESTIGAÇÃO.\n"+
-"> CULPADO REAL: MINGAU.\n"+
-"> MAIS EVIDÊNCIAS DEVERIAM TER SIDO ANALISADAS.";
-
-}
-
-}
-
-
-/* =====================================================
-INICIALIZAÇÃO
-===================================================== */
-
-atualizarBateria();
-
-atualizarIA();
-
+function choose(next){state.history.push(state.scene);state.scene=next;render();window.scrollTo({top:0,behavior:"smooth"})}
+function back(){if(!state.history.length)return;state.scene=state.history.pop();render()}
+function restart(){state={scene:"start",history:[],seen:state.seen};render()}
+function renderGallery(){let names={end_good:"Um começo",end_open:"Amanhã",end_gray:"Sem resposta",end_friend:"Rico em gente",end_bad:"A conta chega"};document.getElementById("gallery").innerHTML=Object.entries(names).map(([id,n])=>`<span class="end ${state.seen.includes(id)?"unlocked":""}">${state.seen.includes(id)?"✓ ":"○ "}${n}</span>`).join("")}
+render();
 </script>
-
 </body>
 </html>
