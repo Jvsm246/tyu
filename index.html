@@ -1,64 +1,163 @@
-<!DOCTYPE html>
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>VIDA — Uma História Interativa</title>
+<title>ENTRELINHAS — Uma História Interativa</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#08090d;color:#eee;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
-button{font:inherit}.app{max-width:1100px;margin:auto;min-height:100vh;padding:18px}
-header{display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid #252832;padding:8px 0 16px}
-.logo{font-weight:900;letter-spacing:5px;font-size:25px}.sub{color:#777;font-size:12px;letter-spacing:1px}
-.hud{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#11131a;border:1px solid #292d38;border-radius:999px;padding:8px 12px;font-size:12px;color:#bbb}
-main{margin-top:22px}.scene{min-height:570px;background:linear-gradient(145deg,#11131a,#0c0e13);border:1px solid #252832;border-radius:22px;overflow:hidden;box-shadow:0 25px 80px #0008}
-.sceneTop{padding:28px 30px 10px;display:flex;justify-content:space-between;color:#777;font-size:12px}.sceneBody{padding:10px 30px 30px;max-width:850px}
-.time{font-size:13px;color:#999;margin:10px 0 25px}.title{font-size:clamp(28px,5vw,52px);line-height:1.05;margin:0 0 22px;letter-spacing:-2px}
-.text{font-size:18px;line-height:1.75;color:#d8d8dc;white-space:pre-line}.dialogue{margin:24px 0;padding:18px 20px;border-left:3px solid #aaa;background:#ffffff08;border-radius:0 12px 12px 0}
-.speaker{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#888;margin-bottom:6px}.quote{font-size:17px;line-height:1.55}
-.choices{display:grid;gap:10px;margin-top:30px}.choice{background:#151821;border:1px solid #303441;color:#eee;padding:17px 18px;border-radius:13px;text-align:left;cursor:pointer;transition:.18s;display:flex;gap:15px;align-items:center}
-.choice:hover{transform:translateY(-2px);border-color:#777;background:#1b1f29}.num{width:30px;height:30px;border:1px solid #555;border-radius:50%;display:grid;place-items:center;color:#aaa;flex:none}
-.small{font-size:12px;color:#777;margin-top:20px}.phone{background:#050608;border:1px solid #333;border-radius:25px;padding:18px;max-width:430px;margin:20px auto}.msg{background:#20232c;border-radius:14px;padding:12px;margin:8px 0;max-width:80%}.me{margin-left:auto;background:#333741}.ending{padding:35px}.ending h1{font-size:48px;margin:5px 0 15px}.tag{display:inline-block;border:1px solid #555;border-radius:999px;padding:6px 10px;color:#aaa;font-size:11px;text-transform:uppercase;letter-spacing:1px}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}.action{border:1px solid #383c48;background:#141720;color:#eee;border-radius:10px;padding:11px 15px;cursor:pointer}.action:hover{background:#1c202a}
-.gallery{margin-top:18px;border:1px solid #252832;border-radius:16px;padding:20px;background:#0d0f14}.gallery h3{margin-top:0}.ends{display:flex;flex-wrap:wrap;gap:8px}.end{font-size:12px;padding:8px 10px;border-radius:9px;background:#171a22;color:#aaa}.unlocked{color:#eee;border:1px solid #444}
-@media(max-width:650px){.app{padding:10px}.sceneTop,.sceneBody{padding-left:18px;padding-right:18px}.scene{min-height:650px}.text{font-size:16px}}
+:root{
+  --bg:#050608;--text:#f5f5f5;--muted:#a2a5ad;--line:#ffffff22;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{min-height:100vh;overflow-x:hidden}
+button{font:inherit}
+#game{min-height:100vh;position:relative;overflow:hidden;background:#050608}
+.scene{min-height:100vh;position:relative;display:flex;align-items:flex-end;isolation:isolate;background:#08090c}
+.scene::before{content:"";position:absolute;inset:-4%;z-index:-3;background-image:var(--image);background-size:cover;background-position:center;filter:brightness(.48) saturate(.82);transform:scale(1.04);animation:kenburns 14s ease-out both}
+.scene::after{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(to top,#030405 4%,rgba(3,4,5,.82) 27%,rgba(3,4,5,.12) 67%,rgba(0,0,0,.3)),radial-gradient(circle at 50% 40%,transparent 25%,rgba(0,0,0,.45) 100%)}
+@keyframes kenburns{from{transform:scale(1.06)}to{transform:scale(1)}}
+.content{width:min(1120px,100%);margin:auto;padding:30px 28px 48px;position:relative;z-index:2}
+.topbar{position:absolute;top:0;left:0;right:0;z-index:4;padding:22px 28px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;letter-spacing:7px;font-size:18px}.chapter{font-size:11px;letter-spacing:2px;color:#bbb;text-transform:uppercase}
+.progress{position:absolute;top:0;left:0;height:2px;background:#fff;width:var(--progress);transition:width .6s}
+.eyebrow{font-size:11px;letter-spacing:3px;color:#c8c8cc;text-transform:uppercase;margin-bottom:13px}
+h1{font-size:clamp(38px,7vw,78px);line-height:.96;letter-spacing:-3px;margin:0 0 22px;max-width:850px}
+.text{font-size:clamp(17px,2vw,20px);line-height:1.72;color:#e1e1e4;max-width:760px;white-space:pre-line;text-shadow:0 2px 15px #000}
+.dialogue{margin:25px 0 0;padding:16px 19px;border-left:2px solid #fff;background:#0008;backdrop-filter:blur(8px);max-width:690px}
+.speaker{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-bottom:6px}.quote{font-size:17px;line-height:1.5}
+.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:30px;max-width:920px}
+.choice{border:1px solid #ffffff2d;background:#07080bcc;color:#fff;padding:16px 18px;border-radius:12px;text-align:left;cursor:pointer;backdrop-filter:blur(12px);transition:.22s;display:flex;gap:14px;align-items:center}
+.choice:hover{background:#fff;color:#050608;transform:translateY(-3px);border-color:#fff}.num{width:27px;height:27px;border:1px solid #777;border-radius:50%;display:grid;place-items:center;flex:none;font-size:12px}.choice:hover .num{border-color:#222}
+.hint{margin-top:16px;color:#8d9098;font-size:11px;letter-spacing:.5px}
+.ending{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px;position:relative;overflow:hidden}
+.ending::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at center,#202127 0,#050608 62%)}.endinner{position:relative;z-index:2;max-width:760px}
+.tag{font-size:10px;letter-spacing:3px;border:1px solid #ffffff33;border-radius:99px;padding:8px 13px;color:#aaa;text-transform:uppercase}.endinner h1{margin:20px auto;font-size:clamp(45px,8vw,92px)}.endtext{white-space:pre-line;color:#cfd0d4;font-size:19px;line-height:1.8}
+.actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:30px}.action{border:1px solid #ffffff38;background:#111217;color:#fff;border-radius:10px;padding:12px 17px;cursor:pointer}.action:hover{background:#fff;color:#08090d}
+.memory{position:fixed;right:18px;bottom:18px;z-index:8;background:#08090dcc;border:1px solid #ffffff22;backdrop-filter:blur(12px);padding:9px 12px;border-radius:99px;font-size:11px;color:#aaa}.memory b{color:#fff}
+.flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:90}.flash.on{animation:flash .45s ease}@keyframes flash{0%{opacity:.25}100%{opacity:0}}
+.fade{animation:fade .55s ease}@keyframes fade{from{opacity:.1;transform:translateY(8px)}to{opacity:1;transform:none}}
+.intro{position:fixed;inset:0;z-index:100;background:#050608;display:flex;align-items:center;justify-content:center;text-align:center;transition:opacity .8s,visibility .8s}.intro.hide{opacity:0;visibility:hidden;pointer-events:none}.intro-inner{max-width:760px;padding:30px}.intro-kicker{font-size:10px;letter-spacing:5px;color:#777;text-transform:uppercase;margin-bottom:20px}.intro h2{font-size:clamp(48px,9vw,100px);letter-spacing:-5px;line-height:.9;margin:0 0 20px}.intro p{color:#aeb1b9;font-size:16px;line-height:1.7;max-width:560px;margin:auto}.start-btn{margin-top:32px;border:1px solid #ffffff44;background:#fff;color:#07080b;border-radius:999px;padding:14px 25px;cursor:pointer;font-weight:700;letter-spacing:.5px}
+.read-focus{display:inline;transition:background .25s,color .25s;border-radius:3px;padding:1px 2px}.read-focus.active{background:#fff;color:#08090d}.scene-text-line{opacity:0;transform:translateY(5px);animation:lineIn .5s forwards}@keyframes lineIn{to{opacity:1;transform:none}}
+
+/* ===== CELULAR NARRATIVO ===== */
+.phone-overlay{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.78);backdrop-filter:blur(9px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;pointer-events:none;transition:.35s}
+.phone-overlay.open{opacity:1;visibility:visible;pointer-events:auto}
+.phone-shell{width:min(390px,94vw);height:min(760px,88vh);background:#08090d;border:7px solid #17181d;border-radius:42px;box-shadow:0 35px 100px #000,0 0 0 1px #ffffff18;overflow:hidden;position:relative;transform:translateY(35px) scale(.94);transition:.45s cubic-bezier(.2,.8,.2,1)}
+.phone-overlay.open .phone-shell{transform:none}
+.phone-notch{position:absolute;top:7px;left:50%;transform:translateX(-50%);width:112px;height:25px;background:#050608;border-radius:0 0 18px 18px;z-index:5}
+.phone-status{height:42px;padding:12px 18px 5px;display:flex;justify-content:space-between;font-size:11px;color:#ddd;background:#0b0c10}
+.phone-status-right{display:flex;gap:7px;align-items:center}
+.phone-home{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);height:4px;width:110px;border-radius:5px;background:#fff5;z-index:5}
+.phone-screen{height:100%;overflow:hidden;background:linear-gradient(#101217,#08090d);display:flex;flex-direction:column}
+.phone-header{height:64px;padding:8px 15px;border-bottom:1px solid #ffffff12;display:flex;align-items:center;gap:12px;flex:none}
+.phone-back{border:0;background:none;color:#fff;font-size:25px;cursor:pointer;width:30px}.phone-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#20232b;font-size:18px}.phone-head-name{font-weight:700;font-size:14px}.phone-head-sub{font-size:10px;color:#777;margin-top:2px}
+.phone-body{flex:1;overflow:auto;padding:15px 13px 70px;scroll-behavior:smooth}
+.phone-body::-webkit-scrollbar{width:3px}.phone-body::-webkit-scrollbar-thumb{background:#ffffff22;border-radius:10px}
+.chat-day{text-align:center;color:#666;font-size:9px;letter-spacing:1px;text-transform:uppercase;margin:7px 0 15px}
+.chat-msg{max-width:82%;margin:7px 0;padding:10px 12px;border-radius:16px;background:#20232b;color:#f1f1f2;font-size:13px;line-height:1.42;box-shadow:0 2px 8px #0004;animation:msgIn .3s ease}
+.chat-msg.me{margin-left:auto;background:#e7e7e7;color:#111;border-bottom-right-radius:5px}.chat-msg.them{border-bottom-left-radius:5px}
+.chat-time{display:block;font-size:8px;color:#777;margin-top:5px;text-align:right}.me .chat-time{color:#777}
+.phone-list{padding:8px 0 65px;overflow:auto;flex:1}.contact{width:100%;border:0;border-bottom:1px solid #ffffff0d;background:none;color:#fff;padding:13px 15px;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer}.contact:hover{background:#ffffff08}.contact-avatar{width:48px;height:48px;border-radius:50%;background:#20232b;display:grid;place-items:center;font-size:21px;flex:none}.contact-info{min-width:0;flex:1}.contact-name{font-weight:700;font-size:14px}.contact-preview{font-size:12px;color:#7f828a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:4px}.contact-time{font-size:9px;color:#666;align-self:flex-start;margin-top:5px}.unread{background:#fff;color:#111;min-width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:800;margin-left:4px}
+.phone-input{position:absolute;bottom:28px;left:12px;right:12px;display:flex;gap:7px;background:#111318;border:1px solid #ffffff18;border-radius:24px;padding:5px}.phone-input input{min-width:0;flex:1;border:0;outline:0;background:transparent;color:#fff;padding:9px 11px;font-size:12px}.send-btn{border:0;background:#eee;color:#111;border-radius:50%;width:34px;height:34px;cursor:pointer;font-weight:900}
+.phone-homebar{position:absolute;bottom:0;left:0;right:0;height:28px;background:#08090d;z-index:4}
+.notification{position:fixed;top:20px;left:50%;transform:translate(-50%,-130%);z-index:120;width:min(370px,90vw);background:rgba(20,21,25,.94);border:1px solid #ffffff20;border-radius:17px;padding:12px 14px;box-shadow:0 20px 60px #0009;backdrop-filter:blur(20px);cursor:pointer;transition:.55s cubic-bezier(.2,.8,.2,1)}
+.notification.show{transform:translate(-50%,0)}.notif-top{display:flex;gap:10px;align-items:center}.notif-app{font-size:9px;color:#777;letter-spacing:1px;text-transform:uppercase}.notif-name{font-weight:700;font-size:12px}.notif-text{font-size:12px;color:#d5d5d8;margin:6px 0 0 34px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.phone-fab{position:fixed;right:18px;bottom:70px;z-index:65;width:54px;height:54px;border-radius:50%;border:1px solid #ffffff2d;background:#0b0c10;color:#fff;box-shadow:0 12px 35px #000b;cursor:pointer;font-size:21px;display:grid;place-items:center;transition:.2s}.phone-fab:hover{transform:scale(1.08)}
+.phone-fab .badge{position:absolute;right:-2px;top:-2px;background:#fff;color:#111;border-radius:50%;min-width:19px;height:19px;display:grid;place-items:center;font-size:9px;font-weight:900;border:2px solid #08090d}
+.phone-home-list{height:54px;border-top:1px solid #ffffff10;display:flex;align-items:center;justify-content:center;color:#777;font-size:10px;flex:none}
+@keyframes msgIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@keyframes vibrate{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+.phone-shell.vibrate{animation:vibrate .25s linear 2}
+.phone-choice{margin-top:12px;border:1px solid #ffffff18;background:#14161b;color:#fff;border-radius:12px;padding:11px;text-align:center;cursor:pointer;font-size:11px}.phone-choice:hover{background:#fff;color:#111}
+
+@media(max-width:650px){
+ .content{padding:25px 18px 35px}.topbar{padding:18px}.choices{grid-template-columns:1fr}h1{letter-spacing:-2px}.scene::before{background-position:58% center}.phone-fab{bottom:18px}
+}
 </style>
 </head>
 <body>
-<div class="app">
-<header>
-  <div><div class="logo">VIDA</div><div class="sub">UMA HISTÓRIA INTERATIVA</div></div>
-  <div class="hud"><span class="pill" id="date">SEXTA • 23:47</span><span class="pill" id="status">Você está aqui.</span></div>
-</header>
 
-<main><div class="scene" id="game"></div></main>
-<div class="gallery"><h3>Memórias descobertas</h3><div class="ends" id="gallery"></div></div>
+<div class="intro" id="intro">
+  <div class="intro-inner">
+    <div class="intro-kicker">UMA HISTÓRIA INTERATIVA</div>
+    <h2>ENTRELINHAS</h2>
+    <p>Algumas escolhas parecem pequenas.<br>Até você descobrir o que elas mudaram.</p>
+    <button class="start-btn" onclick="startStory()">COMEÇAR A HISTÓRIA →</button>
+  </div>
+</div>
+
+<div id="game"></div>
+<div class="memory" id="memory"></div>
+<div class="flash" id="flash"></div>
+
+<!-- Notificação viva -->
+<div class="notification" id="notification" onclick="openPhone(currentNotification?.contact)">
+  <div class="notif-top">
+    <div class="phone-avatar" id="notifAvatar">💬</div>
+    <div>
+      <div class="notif-app">MENSAGENS</div>
+      <div class="notif-name" id="notifName">Nova mensagem</div>
+    </div>
+  </div>
+  <div class="notif-text" id="notifText"></div>
+</div>
+
+<button class="phone-fab" id="phoneFab" onclick="openPhone()" aria-label="Abrir celular">
+  📱<span class="badge" id="phoneBadge">0</span>
+</button>
+
+<!-- Celular -->
+<div class="phone-overlay" id="phoneOverlay">
+  <div class="phone-shell" id="phoneShell">
+    <div class="phone-notch"></div>
+    <div class="phone-screen">
+      <div class="phone-status">
+        <span id="phoneClock">08:14</span>
+        <div class="phone-status-right"><span>▮▮▮</span><span>⌁</span><span>▰</span></div>
+      </div>
+      <div id="phoneContent"></div>
+      <div class="phone-home"></div>
+    </div>
+  </div>
 </div>
 
 <script>
-const scenes = {
-start:{
- time:"SEXTA-FEIRA • 23:47", title:"A mensagem", text:`O quarto está escuro. Só a luz do celular ilumina seu rosto.
+/* =========================================================
+   IMAGENS — mantidas no mesmo estilo do seu arquivo.
+   ========================================================= */
+const IMG = {
+ bedroom:`data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"%3E%3Crect width="1600" height="900" fill="%23050609"/%3E%3Crect x="1050" y="115" width="390" height="270" rx="8" fill="%23172536"/%3E%3Crect x="220" y="570" width="1160" height="260" rx="35" fill="%2311131a"/%3E%3Cellipse cx="700" cy="505" rx="100" ry="125" fill="%23b77b5d"/%3E%3Cpath d="M610 480q30-145 175-40l-15 80q-75-45-160-5z" fill="%2317141a"/%3E%3Cpath d="M610 630q90-70 190 0l85 200H520z" fill="%2329334b"/%3Crect x="682" y="535" width="70" height="125" rx="12" fill="%23d9d9dc" transform="rotate(-12 682 535)"/%3C/svg%3E`,
+ mother:`data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"%3E%3Crect width="1600" height="900" fill="%23111418"/%3E%3Ccircle cx="800" cy="300" r="270" fill="%23ffe4a3" opacity=".12"/%3E%3Cellipse cx="760" cy="430" rx="92" ry="120" fill="%23b77b5d"/%3E%3Cpath d="M670 425q25-155 175-55l-8 85q-75-50-167-5z" fill="%2331231f"/%3E%3Cpath d="M650 555q110-65 220 5l100 340H550z" fill="%23594b50"/%3E%3C/svg%3E`,
+ kitchen:`data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"%3E%3Crect width="1600" height="900" fill="%23161719"/%3E%3Crect y="590" width="1600" height="310" fill="%232b2926"/%3E%3Crect x="160" y="120" width="450" height="330" fill="%23263442"/%3E%3Crect x="650" y="545" width="720" height="85" rx="10" fill="%235a3f2e"/%3E%3Cellipse cx="880" cy="390" rx="88" ry="115" fill="%23b77b5d"/%3E%3Cpath d="M790 380q25-150 175-50l-15 80q-70-55-160-10z" fill="%232b2221"/%3E%3Cpath d="M775 505q110-70 220 0l70 170H705z" fill="%23735a52"/%3Cellipse cx="460" cy="520" rx="75" ry="100" fill="%23b77b5d"/%3E%3Cpath d="M390 505q25-125 135-55l-5 70q-65-35-130 0z" fill="%2317171b"/%3C/svg%3E`,
+ lucas:`data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"%3E%3Crect width="1600" height="900" fill="%23111827"/%3Crect y="560" width="1600" height="340" fill="%23171a1e"/%3Crect x="190" y="430" width="1220" height="170" rx="18" fill="%23302d29"/%3E%3Cellipse cx="620" cy="360" rx="90" ry="115" fill="%23b77b5d"/%3E%3Cpath d="M530 350q20-150 180-55l-10 80q-80-50-165 0z" fill="%23161719"/%3E%3Cpath d="M510 475q110-70 225 0l90 220H420z" fill="%232c3b52"/%3E%3Cellipse cx="980" cy="370" rx="88" ry="115" fill="%239e6951"/%3E%3Cpath d="M890 360q25-145 170-45l-15 85q-70-50-155-5z" fill="%23202126"/%3E%3Cpath d="M875 485q110-70 220 0l80 210H790z" fill="%234b3841"/%3C/svg%3E`,
+ cafe:`data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"%3E%3Crect width="1600" height="900" fill="%23211b18"/%3E%3Crect y="610" width="1600" height="290" fill="%23352922"/%3E%3Crect x="470" y="570" width="660" height="65" rx="18" fill="%23694633"/%3E%3Cellipse cx="650" cy="380" rx="88" ry="115" fill="%23b77b5d"/%3E%3Cpath d="M565 370q30-160 170-50l-5 90q-70-60-160-10z" fill="%233a2524"/%3E%3Cpath d="M545 495q110-70 220 0l80 205H465z" fill="%237c4350"/%3Cellipse cx="930" cy="385" rx="86" ry="112" fill="%238e604d"/%3E%3Cpath d="M845 375q30-150 170-45l-5 80q-75-50-160 0z" fill="%23241e21"/%3Cpath d="M830 500q105-70 215 0l80 200H750z" fill="%233e4d55"/%3C/svg%3E`,
+ street:`data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"%3E%3Crect width="1600" height="900" fill="%23111827"/%3E%3Crect y="680" width="1600" height="220" fill="%23090b0f"/%3E%3Ccircle cx="260" cy="260" r="140" fill="%23dbe5f2" opacity=".12"/%3E%3Cellipse cx="820" cy="450" rx="90" ry="120" fill="%23b77b5d"/%3E%3Cpath d="M730 435q30-155 175-50l-8 90q-70-50-160-5z" fill="%2317181d"/%3E%3Cpath d="M710 570q110-75 225 0l95 330H610z" fill="%23303949"/%3C/svg%3E`,
+ home:`data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"%3E%3Crect width="1600" height="900" fill="%2310141b"/%3E%3Crect y="620" width="1600" height="280" fill="%23201e1c"/%3E%3Crect x="250" y="170" width="500" height="320" fill="%231b2632"/%3E%3Crect x="310" y="230" width="380" height="200" fill="%230a1017"/%3Crect x="850" y="430" width="450" height="45" rx="10" fill="%23513c30"/%3Cellipse cx="1050" cy="360" rx="82" ry="110" fill="%23b77b5d"/%3Cpath d="M970 350q25-145 160-45l-8 75q-70-45-150-5z" fill="%23211b1b"/%3Cpath d="M950 480q100-70 200 0l80 220H870z" fill="%23484d57"/%3C/svg%3E`,
+ night:`data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"%3E%3Crect width="1600" height="900" fill="%23070a12"/%3E%3Ccircle cx="1250" cy="180" r="90" fill="%23dce6f5" opacity=".16"/%3E%3Crect y="650" width="1600" height="250" fill="%23050609"/%3E%3Cpath d="M0 690h1600" stroke="%2321262f" stroke-width="4"/%3E%3Cellipse cx="820" cy="450" rx="90" ry="120" fill="%23b77b5d"/%3E%3Cpath d="M730 435q30-155 175-50l-8 90q-70-50-160-5z" fill="%2317181d"/%3E%3Cpath d="M710 570q110-75 225 0l95 330H610z" fill="%232b3340"/%3C/svg%3E`
+};
+
+/* =========================================================
+   HISTÓRIA
+   ========================================================= */
+const scenes={
+start:{img:IMG.bedroom,time:"SEXTA • 23:47",chapter:"CAPÍTULO I — A MENSAGEM",title:"A mensagem",text:`O quarto está escuro.
+
+Só a luz do celular ilumina seu rosto.
 
 Você deveria estar dormindo há pelo menos uma hora.
 
-O celular vibra novamente.`,
- dialogue:["MÃE","Você ainda está acordado?"],
- choices:[
-  ["Responder agora","reply"],
-  ["Deixar para amanhã","ignore"],
-  ["Perguntar o que aconteceu","ask"]
- ]},
-reply:{
- time:"23:48 • QUARTO",title:"“Sim.”",text:`Você responde quase no automático.
+O celular vibra novamente.`,dialogue:["MÃE","Você ainda está acordado?"],choices:[["Responder agora","reply"],["Deixar para amanhã","ignore"],["Perguntar o que aconteceu","ask"]]},
+reply:{img:IMG.bedroom,time:"23:48 • QUARTO",chapter:"CAPÍTULO I",title:"“Sim.”",text:`Você responde quase no automático.
 
-Três pontinhos aparecem. Somem. Aparecem de novo.
+Três pontinhos aparecem.
+Somem.
+Aparecem de novo.
 
-Dessa vez, a mensagem demora.`,
- dialogue:["MÃE","A gente precisa conversar amanhã. Sobre seu pai."],
- choices:[["Perguntar se aconteceu alguma coisa","family"],["Dizer que está cansado e dormir","sleep"],["Ligar para ela","call"]]
-},
-ignore:{
- time:"23:49 • QUARTO",title:"Amanhã eu vejo isso.",text:`Você vira o celular para baixo.
+Dessa vez, a mensagem demora.`,dialogue:["MÃE","A gente precisa conversar amanhã. Sobre seu pai."],choices:[["Perguntar se aconteceu alguma coisa","family"],["Dizer que está cansado e dormir","sleep"],["Ligar para ela","call"]]},
+ignore:{img:IMG.bedroom,time:"23:49 • QUARTO",chapter:"CAPÍTULO I",title:"Amanhã eu vejo isso.",text:`Você vira o celular para baixo.
 
 Cinco minutos.
 
@@ -66,83 +165,58 @@ Dez.
 
 O sono não vem.
 
-Quando finalmente fecha os olhos, o celular vibra mais uma vez — mas você decide não olhar.`,
- choices:[["Dormir","morning"],["Pegar o celular","late"]]
-},
-ask:{
- time:"23:48 • QUARTO",title:"“Sobre o quê?”",text:`A resposta chega rápido demais.
+Quando finalmente fecha os olhos, o celular vibra mais uma vez — mas você decide não olhar.`,choices:[["Dormir","morning"],["Pegar o celular","late"]]},
+ask:{img:IMG.bedroom,time:"23:48 • QUARTO",chapter:"CAPÍTULO I",title:"“Sobre o quê?”",text:`A resposta chega rápido demais.
 
 “Não é por mensagem.”
 
-Você encara a tela. De repente, aquela conversa parece muito maior do que deveria ser.`,
- choices:[["Insistir","family"],["Tudo bem. Amanhã.","sleep"],["Ligar agora","call"]]
-},
-family:{
- time:"23:51 • CELULAR",title:"Uma conversa que você não queria ter",text:`Sua mãe conta que seu pai saiu de casa depois de uma discussão.
+Você encara a tela.
+
+De repente, aquela conversa parece muito maior do que deveria ser.`,choices:[["Insistir","family"],["Tudo bem. Amanhã.","sleep"],["Ligar agora","call"]]},
+family:{img:IMG.mother,time:"23:51 • CELULAR",chapter:"CAPÍTULO I",title:"Uma conversa que você não queria ter",text:`Sua mãe conta que seu pai saiu de casa depois de uma discussão.
 
 Ela não sabe quando ele volta.
 
-Você fica alguns segundos sem saber o que dizer.`,
- dialogue:["MÃE","Eu só queria que você não se preocupasse com isso."],
- choices:[["“Eu estou preocupado.”","honest"],["“Vai ficar tudo bem.”","comfort"],["Mudar de assunto","deflect"]]
-},
-sleep:{
- time:"00:02 • QUARTO",title:"Você escolhe dormir.",text:`Talvez amanhã seja mais fácil.
+Você fica alguns segundos sem saber o que dizer.`,dialogue:["MÃE","Eu só queria que você não se preocupasse com isso."],choices:[["“Eu estou preocupado.”","honest"],["“Vai ficar tudo bem.”","comfort"],["Mudar de assunto","deflect"]]},
+sleep:{img:IMG.bedroom,time:"00:02 • QUARTO",chapter:"CAPÍTULO I",title:"Você escolhe dormir.",text:`Talvez amanhã seja mais fácil.
 
 Você coloca o celular no carregador e fecha os olhos.
 
-Só que algumas coisas não desaparecem quando a gente dorme.`,
- choices:[["Continuar","morning"]]
-},
-call:{
- time:"23:53 • LIGAÇÃO",title:"A voz do outro lado",text:`Sua mãe atende.
+Só que algumas coisas não desaparecem quando a gente dorme.`,choices:[["Continuar","morning"]]},
+call:{img:IMG.mother,time:"23:53 • LIGAÇÃO",chapter:"CAPÍTULO I",title:"A voz do outro lado",text:`Sua mãe atende.
 
 Por alguns segundos, nenhum dos dois fala.
 
-Então você percebe que ela está chorando.`,
- dialogue:["MÃE","Desculpa você ter que ouvir isso."],
- choices:[["Ficar na ligação","honest"],["Dizer que está tudo bem","comfort"]]
-},
-honest:{
- time:"00:18 • SALA",title:"Pela primeira vez",text:`Você para de tentar consertar tudo.
+Então você percebe que ela está chorando.`,dialogue:["MÃE","Desculpa você ter que ouvir isso."],choices:[["Ficar na ligação","honest"],["Dizer que está tudo bem","comfort"]]},
+honest:{img:IMG.home,time:"00:18 • SALA",chapter:"CAPÍTULO I",title:"Pela primeira vez",text:`Você para de tentar consertar tudo.
 
 “Eu não sei o que fazer.”
 
 Sua mãe respira fundo.
 
-Às vezes, admitir que não sabe é a única coisa honesta que existe.`,
- choices:[["Ficar conversando","morning"],["Ir dormir","morning"]]
-},
-comfort:{
- time:"00:15 • SALA",title:"“Vai ficar tudo bem.”",text:`Você diz isso porque é o que as pessoas dizem.
+Às vezes, admitir que não sabe é a única coisa honesta que existe.`,choices:[["Ficar conversando","morning"],["Ir dormir","morning"]]},
+comfort:{img:IMG.home,time:"00:15 • SALA",chapter:"CAPÍTULO I",title:"“Vai ficar tudo bem.”",text:`Você diz isso porque é o que as pessoas dizem.
 
 Sua mãe agradece.
 
-Mas você sabe que não tem como prometer uma coisa dessas.`,
- choices:[["Continuar a conversa","morning"],["Encerrar e dormir","morning"]]
-},
-deflect:{
- time:"00:01 • QUARTO",title:"Você muda de assunto.",text:`Vocês conversam sobre coisas pequenas.
+Mas você sabe que não tem como prometer uma coisa dessas.`,choices:[["Continuar a conversa","morning"],["Encerrar e dormir","morning"]]},
+deflect:{img:IMG.bedroom,time:"00:01 • QUARTO",chapter:"CAPÍTULO I",title:"Você muda de assunto.",text:`Vocês conversam sobre coisas pequenas.
 
-Escola. Trabalho. O jantar.
+Escola.
+Trabalho.
+O jantar.
 
 É confortável por alguns minutos.
 
-Talvez confortável demais.`,
- choices:[["Dormir","morning"]]
-},
-late:{
- time:"00:14 • QUARTO",title:"Você olha.",text:`É uma mensagem do seu melhor amigo, Lucas.
+Talvez confortável demais.`,choices:[["Dormir","morning"]]},
+late:{img:IMG.bedroom,time:"00:14 • QUARTO",chapter:"CAPÍTULO I",title:"Você olha.",text:`É uma mensagem do seu melhor amigo, Lucas.
 
 “Mano, tá acordado?”
 
 Antes que você responda, chega outra:
 
-“Preciso falar com você amanhã.”`,
- choices:[["“Fala agora.”","lucas"],["“Amanhã a gente fala.”","morning"]]
-},
-morning:{
- time:"SÁBADO • 08:12",title:"O dia seguinte",text:`Você acorda antes do despertador.
+“Preciso falar com você amanhã.”`,choices:[["“Fala agora.”","lucas"],["“Amanhã a gente fala.”","morning"]]},
+morning:{img:IMG.home,time:"SÁBADO • 08:12",chapter:"CAPÍTULO II — O DIA SEGUINTE",title:"O dia seguinte",text:`Você acorda antes do despertador.
 
 Por alguns segundos, esquece tudo.
 
@@ -151,183 +225,128 @@ Então lembra.
 O celular tem quatro notificações.
 
 Uma da sua mãe.
-
 Uma do Lucas.
-
-Uma de alguém que você não esperava.`,
- choices:[["Ver as mensagens","phone"],["Levantar e sair do quarto","outside"],["Voltar a dormir","alone"]]
-},
-lucas:{
- time:"00:19 • CHAT",title:"Lucas",text:`Lucas demora para escrever.
+Uma de alguém que você não esperava.`,choices:[["Ver as mensagens","phone"],["Levantar e sair do quarto","outside"],["Voltar a dormir","alone"]]},
+lucas:{img:IMG.night,time:"00:19 • CHAT",chapter:"CAPÍTULO I",title:"Lucas",text:`Lucas demora para escrever.
 
 “Eu fiz uma merda.”
 
-Você conhece aquele jeito de escrever. Não é uma brincadeira.`,
- choices:[["“Que merda?”","secret"],["“Amanhã você me conta.”","morning"]]
-},
-phone:{
- time:"08:14 • CELULAR",title:"Quatro notificações",text:`Sua mãe: “Bom dia. Quando acordar, fala comigo.”
+Você conhece aquele jeito de escrever.
+
+Não é uma brincadeira.`,choices:[["“Que merda?”","secret"],["“Amanhã você me conta.”","morning"]]},
+phone:{img:IMG.bedroom,time:"08:14 • CELULAR",chapter:"CAPÍTULO II",title:"Quatro notificações",text:`Sua mãe: “Bom dia. Quando acordar, fala comigo.”
 
 Lucas: “Você pode me encontrar hoje?”
 
 E a terceira mensagem é de Marina.
 
-“Sonhei com você ontem kkkkk.”`,
- choices:[["Responder sua mãe","outside"],["Responder Lucas","secret"],["Responder Marina","love"]]
-},
-outside:{
- time:"09:03 • COZINHA",title:"A casa está diferente",text:`Seu pai não está na mesa.
+“Sonhei com você ontem kkkkk.”`,choices:[["Abrir o celular","phoneReal"],["Responder sua mãe","outside"],["Responder Lucas","secret"],["Responder Marina","love"]]},
+outside:{img:IMG.kitchen,time:"09:03 • COZINHA",chapter:"CAPÍTULO II",title:"A casa está diferente",text:`Seu pai não está na mesa.
 
 Sua mãe está fazendo café como se fosse um sábado normal.
 
 Ela olha para você.
 
-Você percebe que ela quer perguntar alguma coisa.`,
- choices:[["Sentar com ela","familyday"],["Pegar café e sair","street"],["Perguntar pelo seu pai","truth"]]
-},
-alone:{
- time:"11:41 • QUARTO",title:"Mais cinco minutos",text:`Você dorme de novo.
+Você percebe que ela quer perguntar alguma coisa.`,choices:[["Sentar com ela","familyday"],["Pegar café e sair","street"],["Perguntar pelo seu pai","truth"]]},
+alone:{img:IMG.bedroom,time:"11:41 • QUARTO",chapter:"CAPÍTULO II",title:"Mais cinco minutos",text:`Você dorme de novo.
 
 Quando acorda, já passou do meio-dia.
 
 Lucas mandou mais uma mensagem.
 
-“Esquece. Resolvi.”`,
- choices:[["Perguntar o que aconteceu","secret"],["Deixar quieto","street"]]
-},
-familyday:{
- time:"09:15 • COZINHA",title:"Café frio",text:`Vocês ficam em silêncio por um tempo.
+“Esquece. Resolvi.”`,choices:[["Perguntar o que aconteceu","secret"],["Deixar quieto","street"]]},
+familyday:{img:IMG.kitchen,time:"09:15 • COZINHA",chapter:"CAPÍTULO II",title:"Café frio",text:`Vocês ficam em silêncio por um tempo.
 
 Sua mãe finalmente fala.
 
 “Você está bem?”
 
-A pergunta parece simples. A resposta não.`,
- choices:[["“Não muito.”","truth"],["“Tô.”","street"]]
-},
-truth:{
- time:"09:18 • COZINHA",title:"Você pergunta",text:`Sua mãe olha para a xícara.
+A pergunta parece simples.
+
+A resposta não.`,choices:[["“Não muito.”","truth"],["“Tô.”","street"]]},
+truth:{img:IMG.kitchen,time:"09:18 • COZINHA",chapter:"CAPÍTULO II",title:"Você pergunta",text:`Sua mãe olha para a xícara.
 
 “Ele precisa de um tempo.”
 
 Você sente vontade de perguntar mil coisas.
 
-Mas escolhe uma.`,
- choices:[["“Ele vai voltar?”","future"],["“Foi por minha causa?”","guilt"],["Não perguntar mais nada","street"]]
-},
-guilt:{
- time:"09:20 • COZINHA",title:"A culpa",text:`Sua mãe imediatamente diz que não.
+Mas escolhe uma.`,choices:[["“Ele vai voltar?”","future"],["“Foi por minha causa?”","guilt"],["Não perguntar mais nada","street"]]},
+guilt:{img:IMG.kitchen,time:"09:20 • COZINHA",chapter:"CAPÍTULO II",title:"A culpa",text:`Sua mãe imediatamente diz que não.
 
 Mas você percebe que já tinha pensado nisso antes mesmo de perguntar.
 
-Ela segura sua mão.`,
- dialogue:["MÃE","Você não precisa carregar tudo sozinho."],
- choices:[["Acreditar nela","future"],["Não responder","street"]]
-},
-street:{
- time:"10:02 • RUA",title:"Lá fora",text:`Você sai sem um plano.
+Ela segura sua mão.`,dialogue:["MÃE","Você não precisa carregar tudo sozinho."],choices:[["Acreditar nela","future"],["Não responder","street"]]},
+street:{img:IMG.street,time:"10:02 • RUA",chapter:"CAPÍTULO II",title:"Lá fora",text:`Você sai sem um plano.
 
 A cidade está seguindo normalmente.
 
-É estranho como o mundo continua funcionando quando a sua cabeça parece ter parado.`,
- choices:[["Ir encontrar Lucas","secret"],["Encontrar Marina","love"],["Andar sozinho","future"]]
-},
-secret:{
- time:"11:20 • PRAÇA",title:"A merda",text:`Lucas finalmente conta.
+É estranho como o mundo continua funcionando quando a sua cabeça parece ter parado.`,choices:[["Ir encontrar Lucas","secret"],["Encontrar Marina","love"],["Andar sozinho","future"]]},
+secret:{img:IMG.lucas,time:"11:20 • PRAÇA",chapter:"CAPÍTULO II",title:"A merda",text:`Lucas finalmente conta.
 
 Ele pegou dinheiro escondido em casa para pagar uma dívida.
 
 Não foi muito.
 
-Mas foi o suficiente para transformar uma coisa pequena em um problema enorme.`,
- choices:[["Ajudar a esconder","bad"],["Mandar ele contar a verdade","good"],["Oferecer seu próprio dinheiro","sacrifice"]]
-},
-love:{
- time:"11:37 • CAFÉ",title:"Marina",text:`Marina sorri quando te vê.
+Mas foi o suficiente para transformar uma coisa pequena em um problema enorme.`,choices:[["Ajudar a esconder","bad"],["Mandar ele contar a verdade","good"],["Oferecer seu próprio dinheiro","sacrifice"]]},
+love:{img:IMG.cafe,time:"11:37 • CAFÉ",chapter:"CAPÍTULO II",title:"Marina",text:`Marina sorri quando te vê.
 
 Vocês conversam sobre coisas bobas durante alguns minutos.
 
 Então ela pergunta:
 
-“Você está diferente. Aconteceu alguma coisa?”`,
- choices:[["Contar tudo","open"],["Dizer que está tudo normal","mask"],["Fazer uma piada","funny"]]
-},
-sacrifice:{
- time:"11:42 • PRAÇA",title:"“Eu resolvo.”",text:`Você sabe que talvez não devesse.
+“Você está diferente. Aconteceu alguma coisa?”`,choices:[["Contar tudo","open"],["Dizer que está tudo normal","mask"],["Fazer uma piada","funny"]]},
+sacrifice:{img:IMG.lucas,time:"11:42 • PRAÇA",chapter:"CAPÍTULO II",title:"“Eu resolvo.”",text:`Você sabe que talvez não devesse.
 
 Mesmo assim, oferece ajudar.
 
 Lucas olha para você como se não esperasse aquilo.
 
-“Por que você faria isso?”`,
- choices:[["“Porque você é meu amigo.”","friend"],["“Só paga depois.”","deal"]]
-},
-open:{
- time:"12:03 • CAFÉ",title:"Sem fingir",text:`Você conta.
+“Por que você faria isso?”`,choices:[["“Porque você é meu amigo.”","friend"],["“Só paga depois.”","deal"]]},
+open:{img:IMG.cafe,time:"12:03 • CAFÉ",chapter:"CAPÍTULO II",title:"Sem fingir",text:`Você conta.
 
-Não tudo. Mas o suficiente.
+Não tudo.
+Mas o suficiente.
 
 Marina não tenta resolver sua vida.
 
 Só escuta.
 
-E, estranhamente, isso já ajuda.`,
- choices:[["Continuar ali","future"],["Perguntar sobre ela","relationship"]]
-},
-mask:{
- time:"12:05 • CAFÉ",title:"“Nada.”",text:`Marina percebe a mentira.
+E, estranhamente, isso já ajuda.`,choices:[["Continuar ali","relationship"],["Perguntar sobre ela","relationship"]]},
+mask:{img:IMG.cafe,time:"12:05 • CAFÉ",chapter:"CAPÍTULO II",title:"“Nada.”",text:`Marina percebe a mentira.
 
 Ela não insiste.
 
-Mas o jeito como ela olha para você muda um pouco.`,
- choices:[["Mudar de assunto","future"],["Contar a verdade depois","relationship"]]
-},
-funny:{
- time:"12:08 • CAFÉ",title:"Você faz uma piada",text:`Ela ri.
+Mas o jeito como ela olha para você muda um pouco.`,choices:[["Mudar de assunto","relationship"],["Contar a verdade depois","relationship"]]},
+funny:{img:IMG.cafe,time:"12:08 • CAFÉ",chapter:"CAPÍTULO II",title:"Você faz uma piada",text:`Ela ri.
 
 Você também.
 
 Por alguns minutos, tudo fica leve.
 
-Talvez seja disso que você precisava.`,
- choices:[["Ficar mais um pouco","relationship"],["Ir embora","future"]]
-},
-relationship:{
- time:"13:02 • RUA",title:"Uma pergunta simples",text:`Marina pergunta:
+Talvez seja disso que você precisava.`,choices:[["Ficar mais um pouco","relationship"],["Ir embora","future"]]},
+relationship:{img:IMG.street,time:"13:02 • RUA",chapter:"CAPÍTULO III — O ESPELHO",title:"Uma pergunta simples",text:`Marina pergunta:
 
 “Você gosta de mim ou gosta da ideia de alguém gostar de você?”
 
-Você não esperava por essa.`,
- choices:[["“Eu gosto de você.”","romance"],["“Não sei.”","honestlove"],["Brincar para escapar","funny2"]]
-},
-romance:{
- time:"13:04 • RUA",title:"Sem certeza",text:`Você diz que gosta dela.
+Você não esperava por essa.`,choices:[["“Eu gosto de você.”","romance"],["“Não sei.”","honestlove"],["Brincar para escapar","funny2"]]},
+romance:{img:IMG.street,time:"13:04 • RUA",chapter:"CAPÍTULO III",title:"Sem certeza",text:`Você diz que gosta dela.
 
 E, dessa vez, não sabe se está dizendo isso para ela ou para você mesmo.
 
 Ela sorri.
 
-“Então vamos descobrir.”`,
- choices:[["Aceitar","future"],["Pedir tempo","future"]]
-},
-honestlove:{
- time:"13:05 • RUA",title:"“Não sei.”",text:`Marina fica em silêncio.
+“Então vamos descobrir.”`,choices:[["Aceitar","future"],["Pedir tempo","future"]]},
+honestlove:{img:IMG.street,time:"13:05 • RUA",chapter:"CAPÍTULO III",title:"“Não sei.”",text:`Marina fica em silêncio.
 
 Depois sorri de leve.
 
-“Pelo menos você foi sincero.”`,
- choices:[["Agradecer","future"],["Perguntar se ela ficou chateada","future"]]
-},
-funny2:{
- time:"13:06 • RUA",title:"Você foge pela piada",text:`Ela ri, mas dessa vez não acompanha.
+“Pelo menos você foi sincero.”`,choices:[["Agradecer","future"],["Perguntar se ela ficou chateada","future"]]},
+funny2:{img:IMG.street,time:"13:06 • RUA",chapter:"CAPÍTULO III",title:"Você foge pela piada",text:`Ela ri, mas dessa vez não acompanha.
 
 “Você sempre faz isso.”
 
-Você entende exatamente o que ela quis dizer.`,
- choices:[["Pedir desculpas","future"],["Fingir que não entendeu","future"]]
-},
-future:{
- time:"DOMINGO • 21:16",title:"Domingo à noite",text:`O fim de semana acabou.
+Você entende exatamente o que ela quis dizer.`,choices:[["Pedir desculpas","future"],["Fingir que não entendeu","future"]]},
+future:{img:IMG.night,time:"DOMINGO • 21:16",chapter:"CAPÍTULO IV — AMANHÃ",title:"Domingo à noite",text:`O fim de semana acabou.
 
 Seu pai ainda não voltou.
 
@@ -338,32 +357,27 @@ Marina mandou “boa noite”.
 Você está sentado na cama, pensando em tudo que aconteceu.
 
 Não existe uma música épica.
-
 Não existe uma resposta perfeita.
 
-Só existe amanhã.`,
- choices:[["Deixar o celular de lado","end_good"],["Mandar uma última mensagem","end_open"],["Sair para caminhar","end_gray"]]
-},
-friend:{
- time:"DOMINGO • 18:20",title:"Amigos",text:`Lucas pagou o que devia.
+Só existe amanhã.`,choices:[["Deixar o celular de lado","end_good"],["Mandar uma última mensagem","end_open"],["Sair para caminhar","end_gray"]]},
+good:{img:IMG.home,time:"DOMINGO • 18:20",chapter:"CAPÍTULO IV",title:"A verdade",text:`Lucas contou tudo.
+
+A situação em casa ficou difícil, mas a verdade veio antes que fosse tarde demais.
+
+Você percebe que fazer a coisa certa raramente parece heroico na hora.`,choices:[["Continuar","end_friend"]]},
+friend:{img:IMG.lucas,time:"DOMINGO • 18:20",chapter:"FINAL",title:"Rico em gente",text:`Lucas pagou o que devia.
 
 A situação em casa dele ficou difícil, mas a verdade veio antes que fosse tarde demais.
 
-Ele nunca esqueceu que você ficou do lado dele.`,
- choices:[["Continuar","end_friend"]]
-},
-deal:{
- time:"DOMINGO • 18:20",title:"Um acordo",text:`Lucas aceita.
+Ele nunca esqueceu que você ficou do lado dele.`,choices:[["Continuar","end_friend"]]},
+deal:{img:IMG.lucas,time:"DOMINGO • 18:20",chapter:"FINAL",title:"Um acordo",text:`Lucas aceita.
 
 Mas a dívida agora também é sua.
 
 Talvez amizade seja isso.
 
-Ou talvez você só tenha dificuldade de dizer não.`,
- choices:[["Continuar","end_gray"]]
-},
-bad:{
- time:"DOMINGO • 23:58",title:"A escolha que volta",text:`Você ajudou Lucas a esconder.
+Ou talvez você só tenha dificuldade de dizer não.`,choices:[["Continuar","end_gray"]]},
+bad:{img:IMG.night,time:"DOMINGO • 23:58",chapter:"FINAL",title:"A conta chega",text:`Você ajudou Lucas a esconder.
 
 Durante dois dias, parece que funcionou.
 
@@ -371,48 +385,42 @@ No terceiro, alguém descobre.
 
 E seu nome aparece junto.
 
-Você percebe tarde demais que proteger alguém também pode significar impedir essa pessoa de aprender.`,
- choices:[["Aceitar as consequências","end_bad"]]
-},
-end_good:{time:"FIM",title:"Você não resolveu tudo.",text:`Mas resolveu uma coisa importante:
+Você percebe tarde demais que proteger alguém também pode significar impedir essa pessoa de aprender.`,choices:[["Aceitar as consequências","end_bad"]]},
+end_good:{end:true,title:"Você não resolveu tudo.",text:`Mas resolveu uma coisa importante:
 
 parou de fingir que precisava resolver tudo.
 
 Talvez seja um começo.
 
 E, pela primeira vez em muito tempo, amanhã não parece tão assustador.`},
-end_open:{time:"FIM",title:"Amanhã.",text:`Você manda uma mensagem simples:
+end_open:{end:true,title:"Amanhã.",text:`Você manda uma mensagem simples:
 
 “Obrigado por hoje.”
 
 Não sabe exatamente para quem está falando.
 
 Talvez para Marina.
-
 Talvez para sua mãe.
-
 Talvez para você mesmo.
 
 A mensagem é visualizada.
 
 E a história continua.`},
-end_gray:{time:"FIM",title:"Sem resposta.",text:`Você caminha até a rua ficar silenciosa.
+end_gray:{end:true,title:"Sem resposta.",text:`Você caminha até a rua ficar silenciosa.
 
 Algumas decisões não são boas ou ruins.
 
 São apenas decisões.
 
 E você ainda vai descobrir o que elas significam.`},
-end_friend:{time:"FIM",title:"Rico em gente.",text:`Você não ficou rico.
-
+end_friend:{end:true,title:"Rico em gente.",text:`Você não ficou rico.
 Não virou famoso.
-
 Não resolveu a vida de ninguém.
 
 Mas quando você precisou de alguém, alguém apareceu.
 
 Talvez isso seja uma forma de riqueza.`},
-end_bad:{time:"FIM",title:"A conta chega.",text:`Você queria proteger seu amigo.
+end_bad:{end:true,title:"A conta chega.",text:`Você queria proteger seu amigo.
 
 Terminou precisando aprender que intenção e consequência são coisas diferentes.
 
@@ -421,26 +429,197 @@ Você perdeu algumas coisas.
 Mas ainda pode escolher o que fazer depois disso.`}
 };
 
-let state={scene:"start",history:[],seen:JSON.parse(localStorage.getItem("vidaEnds")||"[]")};
+/* =========================================================
+   CELULAR: dados persistentes das conversas
+   ========================================================= */
+const defaultChats={
+ mae:{
+  name:"Mãe",avatar:"👩",last:"Bom dia. Quando acordar, fala comigo.",time:"08:12",unread:1,
+  messages:[
+   ["them","Bom dia. Quando acordar, fala comigo.","08:12"],
+   ["them","Eu dormi pouco essa noite.","08:13"],
+   ["them","Quando puder, me chama.","08:14"]
+  ]
+ },
+ lucas:{
+  name:"Lucas",avatar:"👤",last:"Você pode me encontrar hoje?",time:"08:13",unread:2,
+  messages:[
+   ["them","Mano, tá acordado?","00:14"],
+   ["them","Preciso falar com você amanhã.","00:14"],
+   ["them","Você pode me encontrar hoje?","08:13"]
+  ]
+ },
+ marina:{
+  name:"Marina",avatar:"💗",last:"Sonhei com você ontem kkkkk.","time":"08:14",unread:1,
+  messages:[
+   ["them","Sonhei com você ontem kkkkk.","08:14"]
+  ]
+ }
+};
+
+function loadChats(){
+ try{
+  const saved=JSON.parse(localStorage.getItem("entrelinhasChats"));
+  return saved||JSON.parse(JSON.stringify(defaultChats));
+ }catch(e){return JSON.parse(JSON.stringify(defaultChats))}
+}
+let chats=loadChats();
+let phoneContact=null;
+let currentNotification=null;
+
+function saveChats(){localStorage.setItem("entrelinhasChats",JSON.stringify(chats))}
+function unreadCount(){return Object.values(chats).reduce((n,c)=>n+(c.unread||0),0)}
+function updatePhoneBadge(){
+ const n=unreadCount(),b=document.getElementById("phoneBadge");
+ b.textContent=n;b.style.display=n?"grid":"none";
+ document.getElementById("memory").innerHTML=`Finais descobertos: <b>${state.seen.length}/5</b>`;
+}
+function phoneTime(){
+ const s=scenes[state.scene];
+ const m=(s?.time||"08:14").match(/\d{2}:\d{2}/);
+ return m?m[0]:"08:14";
+}
+function renderPhoneHome(){
+ const list=Object.entries(chats).map(([id,c])=>`
+  <button class="contact" onclick="openPhone('${id}')">
+   <div class="contact-avatar">${c.avatar}</div>
+   <div class="contact-info">
+    <div class="contact-name">${c.name}</div>
+    <div class="contact-preview">${c.last||"Nenhuma mensagem"}</div>
+   </div>
+   <div>${c.unread?`<span class="unread">${c.unread}</span>`:`<span class="contact-time">${c.time||""}</span>`}</div>
+  </button>`).join("");
+ document.getElementById("phoneContent").innerHTML=`
+  <div class="phone-header"><div style="width:30px"></div><div><div class="phone-head-name">Mensagens</div><div class="phone-head-sub">${Object.keys(chats).length} conversas</div></div></div>
+  <div class="phone-list">${list}</div>
+  <div class="phone-home-list">● &nbsp; Todas as mensagens</div>`;
+}
+function renderChat(id){
+ const c=chats[id]; if(!c)return;
+ const msgs=c.messages.map(m=>`<div class="chat-msg ${m[0]}">${escapeHTML(m[1])}<span class="chat-time">${m[2]||""}</span></div>`).join("");
+ document.getElementById("phoneContent").innerHTML=`
+  <div class="phone-header">
+   <button class="phone-back" onclick="renderPhoneHome()">‹</button>
+   <div class="phone-avatar">${c.avatar}</div>
+   <div><div class="phone-head-name">${c.name}</div><div class="phone-head-sub">${c.unread?"mensagens não lidas":"online há pouco"}</div></div>
+  </div>
+  <div class="phone-body" id="chatBody"><div class="chat-day">SÁBADO</div>${msgs}</div>
+  <div class="phone-input"><input id="chatInput" placeholder="Mensagem..." onkeydown="if(event.key==='Enter')sendMessage('${id}')"><button class="send-btn" onclick="sendMessage('${id}')">↑</button></div>
+  <div class="phone-homebar"></div>`;
+ const body=document.getElementById("chatBody");setTimeout(()=>body.scrollTop=body.scrollHeight,20);
+}
+function escapeHTML(str){return String(str).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function openPhone(id){
+ document.getElementById("phoneOverlay").classList.add("open");
+ if(id && chats[id]){
+  phoneContact=id;chats[id].unread=0;saveChats();renderChat(id);
+ }else{phoneContact=null;renderPhoneHome()}
+ updatePhoneBadge();
+}
+function closePhone(){document.getElementById("phoneOverlay").classList.remove("open")}
+document.getElementById("phoneOverlay").addEventListener("click",e=>{if(e.target.id==="phoneOverlay")closePhone()});
+function sendMessage(id){
+ const input=document.getElementById("chatInput");if(!input||!input.value.trim())return;
+ const value=input.value.trim(),c=chats[id];
+ const now=phoneTime();
+ c.messages.push(["me",value,now]);c.last=value;c.time=now;
+ saveChats();renderChat(id);
+ /* resposta orgânica, sem mudar a cena automaticamente */
+ setTimeout(()=>{
+  const replies={
+   mae:"Tá bom. Depois me chama quando estiver tranquilo.",
+   lucas:"Valeu por responder. A gente fala pessoalmente.",
+   marina:"kkkkk eu sabia que você ia responder."
+  };
+  c.messages.push(["them",replies[id]||"Entendi.",""+now]);
+  c.last=replies[id]||"Entendi.";c.time=now;
+  saveChats();renderChat(id);
+  if(phoneContact!==id)showNotification(id,c.messages[c.messages.length-1][1]);
+ },900);
+}
+function showNotification(id,text){
+ currentNotification={contact:id};
+ const c=chats[id];
+ c.unread=(c.unread||0)+1;c.last=text;saveChats();updatePhoneBadge();
+ document.getElementById("notifAvatar").textContent=c.avatar;
+ document.getElementById("notifName").textContent=c.name;
+ document.getElementById("notifText").textContent=text;
+ const n=document.getElementById("notification");n.classList.add("show");
+ document.getElementById("phoneShell").classList.add("vibrate");
+ setTimeout(()=>{n.classList.remove("show");document.getElementById("phoneShell").classList.remove("vibrate")},4500);
+}
+
+/* =========================================================
+   RENDER DA HISTÓRIA
+   ========================================================= */
+let state={scene:"start",history:[],seen:JSON.parse(localStorage.getItem("entrelinhasEnds")||"[]")};
 
 function render(){
- const s=scenes[state.scene]; document.getElementById("date").textContent=s.time;
- const g=document.getElementById("game");
- if(s.time==="FIM"){
-   g.innerHTML=`<div class="ending"><span class="tag">FINAL DESCOBERTO</span><h1>${s.title}</h1><div class="text">${s.text}</div><div class="actions"><button class="action" onclick="restart()">↻ Viver de novo</button><button class="action" onclick="back()">← Voltar</button></div></div>`;
-   if(!state.seen.includes(state.scene)){state.seen.push(state.scene);localStorage.setItem("vidaEnds",JSON.stringify(state.seen))}
- }else{
-   let d=s.dialogue?`<div class="dialogue"><div class="speaker">${s.dialogue[0]}</div><div class="quote">“${s.dialogue[1]}”</div></div>`:"";
-   let c=(s.choices||[]).map((x,i)=>`<button class="choice" onclick="choose('${x[1]}')"><span class="num">${i+1}</span><span>${x[0]}</span></button>`).join("");
-   g.innerHTML=`<div class="sceneTop"><span>MEMÓRIA • ${state.history.length+1}</span><span>${state.history.length} decisões</span></div><div class="sceneBody"><div class="time">${s.time}</div><h1 class="title">${s.title}</h1><div class="text">${s.text}</div>${d}<div class="choices">${c}</div><div class="small">Suas escolhas não mostram o que vão causar. Algumas coisas só fazem sentido depois.</div></div>`;
+ const s=scenes[state.scene],g=document.getElementById("game");
+ updatePhoneBadge();
+ if(s.end){
+  g.innerHTML=`<section class="ending fade"><div class="endinner">
+   <span class="tag">FINAL DESCOBERTO</span><h1>${s.title}</h1><div class="endtext">${s.text}</div>
+   <div class="actions"><button class="action" onclick="restart()">↻ Viver de novo</button><button class="action" onclick="back()">← Voltar</button></div>
+  </div></section>`;
+  if(!state.seen.includes(state.scene)){state.seen.push(state.scene);localStorage.setItem("entrelinhasEnds",JSON.stringify(state.seen))}
+  return;
  }
- renderGallery();
+ const progress=Math.min(96,8+state.history.length*4);
+ let d=s.dialogue?`<div class="dialogue"><div class="speaker">${s.dialogue[0]}</div><div class="quote">“${s.dialogue[1]}”</div></div>`:"";
+ let c=(s.choices||[]).map((x,i)=>`<button class="choice" onclick="choose('${x[1]}')"><span class="num">${i+1}</span><span>${x[0]}</span></button>`).join("");
+ g.innerHTML=`<section class="scene fade" style="--image:url('${s.img}');--progress:${progress}%">
+  <div class="progress"></div><div class="topbar"><div class="logo">ENTRELINHAS</div><div class="chapter">${s.chapter}</div></div>
+  <div class="content"><div class="eyebrow">${s.time}</div><h1>${s.title}</h1><div class="text" id="storyText">${s.text.split("\n").map((line,i)=>line.trim()?`<span class="scene-text-line read-focus" style="animation-delay:${i*90}ms">${line}</span>`:"<br>").join("")}</div>${d}
+  <div class="choices">${c}</div><div class="hint">Suas escolhas mudam a história. Você nem sempre verá a consequência imediatamente.</div></div>
+ </section>`;
+ focusReading();
+ /* Algumas cenas agora fazem o celular vibrar como parte da narrativa. */
+ if(["start","ignore","morning","future"].includes(state.scene)){
+   setTimeout(()=>storyNotificationForScene(state.scene),700);
+ }
 }
-function choose(next){state.history.push(state.scene);state.scene=next;render();window.scrollTo({top:0,behavior:"smooth"})}
+function storyNotificationForScene(scene){
+ const map={
+  start:["mae","Você ainda está acordado?"],
+  ignore:["mae","Filho? Quando acordar, fala comigo."],
+  morning:["marina","Sonhei com você ontem kkkkk."],
+  future:["marina","boa noite."]
+ };
+ if(map[scene])showNotification(map[scene][0],map[scene][1]);
+}
+function startStory(){
+ const intro=document.getElementById("intro");intro.classList.add("hide");
+ setTimeout(()=>{intro.remove();focusReading()},800);
+}
+function focusReading(){
+ const lines=[...document.querySelectorAll(".read-focus")];let i=0;
+ const tick=()=>{lines.forEach(x=>x.classList.remove("active"));if(lines[i])lines[i].classList.add("active");i++;if(i<lines.length)setTimeout(tick,1200)};
+ setTimeout(tick,500);
+}
+function choose(next){
+ if(next==="phoneReal"){openPhone();return}
+ state.history.push(state.scene);state.scene=next;
+ const f=document.getElementById("flash");f.classList.remove("on");void f.offsetWidth;f.classList.add("on");
+ render();window.scrollTo({top:0,behavior:"smooth"});
+}
 function back(){if(!state.history.length)return;state.scene=state.history.pop();render()}
 function restart(){state={scene:"start",history:[],seen:state.seen};render()}
-function renderGallery(){let names={end_good:"Um começo",end_open:"Amanhã",end_gray:"Sem resposta",end_friend:"Rico em gente",end_bad:"A conta chega"};document.getElementById("gallery").innerHTML=Object.entries(names).map(([id,n])=>`<span class="end ${state.seen.includes(id)?"unlocked":""}">${state.seen.includes(id)?"✓ ":"○ "}${n}</span>`).join("")}
+
+/* Teclado: ESC fecha celular; números escolhem opções. */
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape")closePhone();
+ if(document.getElementById("phoneOverlay").classList.contains("open"))return;
+ if(["1","2","3","4"].includes(e.key)){
+  const btn=document.querySelectorAll(".choice")[Number(e.key)-1];if(btn)btn.click();
+ }
+});
+
 render();
 </script>
 </body>
-</html>
+</html>'''
+
+path = Path("/mnt/data/ENTRELINHAS_celular_narrativo.html")
+path.write_text(html, encoding="utf-8")
+print(path)
