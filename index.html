@@ -1,37 +1,13 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ENTRELINHAS — Uma História Interativa</title>
+<title>ECOCITY 2040 — IA e Meio Ambiente</title>
 
 <style>
-/* =========================================================
-   ENTRELINHAS
-   EXPERIÊNCIA FULLSCREEN — ZERO SCROLL
-   ========================================================= */
-
-:root{
-    --bg:#050608;
-    --panel:rgba(10,12,17,.82);
-    --panel2:rgba(16,18,25,.92);
-    --text:#f4f4f6;
-    --muted:#9da1ab;
-    --line:rgba(255,255,255,.12);
-    --white:#fff;
-    --accent:#dfe4eb;
-    --danger:#ff5c6c;
-    --success:#78e2a0;
-
-    --scene-x:50%;
-    --scene-y:50%;
-
-    --story-bottom:clamp(18px,4vh,58px);
-}
-
-/* RESET */
 
 *{
     box-sizing:border-box;
@@ -39,85 +15,46 @@
     padding:0;
 }
 
-html,
-body{
+html,body{
     width:100%;
-    height:100%;
-    min-width:0;
-    min-height:0;
-
-    overflow:hidden !important;
-    overscroll-behavior:none;
-
-    background:#000;
-    color:var(--text);
-
-    font-family:
-        Inter,
-        ui-sans-serif,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
+    min-height:100%;
+    font-family:Inter,Arial,sans-serif;
+    background:#06110c;
+    color:#f2fff6;
 }
 
 body{
-    position:fixed;
-    inset:0;
-}
-
-button,
-input{
-    font:inherit;
-}
-
-button{
-    border:0;
-}
-
-#app{
-    position:fixed;
-    inset:0;
-
-    width:100vw;
-    height:100dvh;
-    min-width:0;
-    min-height:0;
-
-    overflow:hidden;
-    isolation:isolate;
-
-    background:#050608;
+    overflow-x:hidden;
 }
 
 /* =========================================================
-   TELAS
+   FUNDO
    ========================================================= */
 
-.screen{
-    position:absolute;
+body::before{
+    content:"";
+    position:fixed;
     inset:0;
+    z-index:-3;
 
-    width:100%;
-    height:100%;
-
-    overflow:hidden;
-
-    opacity:0;
-    pointer-events:none;
-
-    transition:
-        opacity .55s ease,
-        transform .55s ease;
-
-    transform:scale(1.015);
+    background:
+        radial-gradient(circle at 20% 20%,rgba(45,220,130,.13),transparent 30%),
+        radial-gradient(circle at 80% 70%,rgba(0,180,255,.10),transparent 30%),
+        linear-gradient(180deg,#06110c,#020704);
 }
 
-.screen.active{
-    opacity:1;
-    pointer-events:auto;
-    transform:scale(1);
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    opacity:.08;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);
+
+    background-size:40px 40px;
 }
 
 /* =========================================================
@@ -125,1620 +62,422 @@ button{
    ========================================================= */
 
 #intro{
+    min-height:100vh;
     display:flex;
     align-items:center;
     justify-content:center;
-
-    background:
-        radial-gradient(
-            circle at 50% 35%,
-            rgba(90,100,120,.14),
-            transparent 42%
-        ),
-        #050608;
-}
-
-.intro-noise{
-    position:absolute;
-    inset:0;
-
-    pointer-events:none;
-
-    opacity:.055;
-
-    background-image:
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
-}
-
-.intro-center{
-    position:relative;
-    z-index:2;
-
-    width:min(720px,90vw);
-
     text-align:center;
-
-    animation:introIn 1.4s ease both;
+    padding:30px;
 }
 
-.intro-small{
-    color:#8e929c;
+.intro-box{
+    max-width:850px;
+    animation:entrada 1s ease;
+}
 
-    font-size:
-        clamp(9px,1vw,13px);
-
-    letter-spacing:
-        clamp(3px,.5vw,7px);
-
+.eyebrow{
+    font-size:13px;
+    letter-spacing:5px;
     text-transform:uppercase;
-
-    margin-bottom:22px;
+    color:#74e6a2;
+    margin-bottom:20px;
 }
 
 .logo{
-    font-size:
-        clamp(54px,9vw,145px);
-
-    line-height:.85;
-
-    letter-spacing:
-        clamp(5px,1.2vw,20px);
-
-    font-weight:300;
-
-    color:#f5f5f7;
-
-    text-shadow:
-        0 0 45px rgba(255,255,255,.08);
+    font-size:clamp(48px,9vw,105px);
+    font-weight:900;
+    letter-spacing:-5px;
+    line-height:.9;
 }
 
-.logo-line{
-    width:min(230px,35vw);
-    height:1px;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            #fff,
-            transparent
-        );
-
-    margin:30px auto;
-    opacity:.35;
+.logo span{
+    color:#63e59b;
 }
 
-.intro-sub{
-    color:#8f939d;
+.intro-line{
+    width:100px;
+    height:2px;
+    background:#63e59b;
+    margin:28px auto;
+}
 
-    font-size:
-        clamp(12px,1.4vw,17px);
-
-    letter-spacing:2px;
-
-    margin-bottom:38px;
+.subtitle{
+    color:#b6c9bd;
+    font-size:18px;
+    line-height:1.6;
 }
 
 .start-btn{
-    position:relative;
-
-    padding:
-        15px 28px;
-
-    border:1px solid rgba(255,255,255,.18);
-
-    border-radius:999px;
-
-    color:#fff;
-    background:rgba(255,255,255,.045);
-
+    margin-top:40px;
+    padding:17px 32px;
+    border:1px solid rgba(110,235,160,.5);
+    border-radius:10px;
+    background:rgba(50,180,100,.08);
+    color:white;
+    font-weight:800;
+    letter-spacing:2px;
     cursor:pointer;
-
-    transition:
-        background .25s,
-        border-color .25s,
-        transform .25s;
+    transition:.25s;
 }
 
 .start-btn:hover{
-    background:rgba(255,255,255,.11);
-    border-color:rgba(255,255,255,.4);
-    transform:translateY(-2px);
-}
-
-.start-btn span{
-    margin-left:8px;
-    opacity:.6;
-}
-
-@keyframes introIn{
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-    to{
-        opacity:1;
-        transform:none;
-    }
+    background:#63e59b;
+    color:#031008;
+    transform:translateY(-3px);
+    box-shadow:0 10px 40px rgba(70,230,150,.2);
 }
 
 /* =========================================================
-   STORY
+   APP
    ========================================================= */
 
-#story{
-    display:flex;
-    flex-direction:column;
-
-    background:#050608;
+#app{
+    display:none;
+    min-height:100vh;
 }
 
-/* HEADER */
+#app.active{
+    display:block;
+}
 
-.topbar{
-    position:absolute;
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-    z-index:40;
-
+header{
+    position:sticky;
     top:0;
-    left:0;
-    right:0;
+    z-index:20;
 
-    height:
-        clamp(54px,7vh,76px);
+    height:70px;
 
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
 
-    padding:
-        0 clamp(16px,3vw,48px);
+    padding:0 5vw;
 
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(0,0,0,.7),
-            transparent
-        );
+    background:rgba(3,10,6,.82);
+    backdrop-filter:blur(15px);
 
-    pointer-events:none;
+    border-bottom:1px solid rgba(255,255,255,.08);
 }
 
-.topbar > *{
-    pointer-events:auto;
+.brand{
+    font-weight:900;
+    letter-spacing:2px;
 }
 
-.story-title{
-    font-size:
-        clamp(10px,1vw,13px);
-
-    letter-spacing:
-        clamp(2px,.35vw,5px);
-
-    color:rgba(255,255,255,.68);
-
-    text-transform:uppercase;
+.brand span{
+    color:#63e59b;
 }
 
-.top-right{
+.status{
     display:flex;
     align-items:center;
-    gap:10px;
-}
-
-.time{
-    color:rgba(255,255,255,.55);
+    gap:9px;
     font-size:12px;
+    color:#9fb4a6;
 }
 
-.phone-open{
-    width:38px;
-    height:38px;
-
+.status-dot{
+    width:8px;
+    height:8px;
     border-radius:50%;
+    background:#63e59b;
+    box-shadow:0 0 15px #63e59b;
+}
 
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+    min-height:330px;
     display:flex;
     align-items:center;
     justify-content:center;
+    text-align:center;
+    padding:70px 20px 50px;
+}
 
-    color:#fff;
+.hero h1{
+    font-size:clamp(35px,6vw,70px);
+    letter-spacing:-3px;
+}
 
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.15);
+.hero p{
+    max-width:680px;
+    margin:20px auto 0;
+    color:#9eb4a6;
+    line-height:1.7;
+}
+
+.tag{
+    display:inline-block;
+    margin-bottom:20px;
+    padding:7px 12px;
+    border:1px solid rgba(99,229,155,.25);
+    border-radius:30px;
+    color:#63e59b;
+    font-size:11px;
+    letter-spacing:2px;
+}
+
+/* =========================================================
+   FLUXOGRAMA
+   ========================================================= */
+
+.flow{
+    width:min(1100px,92vw);
+    margin:auto;
+    padding-bottom:100px;
+}
+
+.node{
+    position:relative;
+    padding:25px;
+
+    background:rgba(10,24,16,.78);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:18px;
+
+    text-align:center;
+
+    transition:.3s;
+
+    box-shadow:
+        0 15px 50px rgba(0,0,0,.25);
+}
+
+.node:hover{
+    transform:translateY(-5px);
+    border-color:rgba(99,229,155,.5);
+}
+
+.node.main{
+    border-color:rgba(99,229,155,.5);
+    background:
+        radial-gradient(circle at 50% 0%,rgba(99,229,155,.15),transparent 60%),
+        rgba(8,28,17,.9);
+}
+
+.icon{
+    font-size:38px;
+    margin-bottom:12px;
+}
+
+.node h2{
+    font-size:20px;
+    margin-bottom:8px;
+}
+
+.node p{
+    color:#9fb4a6;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.arrow{
+    text-align:center;
+    font-size:30px;
+    color:#63e59b;
+    margin:14px 0;
+    animation:pulse 2s infinite;
+}
+
+/* =========================================================
+   MISSÕES
+   ========================================================= */
+
+.missions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.mission{
+    padding:25px;
+
+    background:rgba(8,20,13,.8);
+
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:18px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.mission:hover{
+    transform:translateY(-7px);
+    border-color:#63e59b;
+}
+
+.mission .icon{
+    font-size:32px;
+}
+
+.mission h3{
+    margin-bottom:8px;
+}
+
+.mission p{
+    font-size:13px;
+    color:#91a89a;
+    line-height:1.5;
+}
+
+.mission-result{
+    display:none;
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid rgba(255,255,255,.1);
+    color:#63e59b;
+    font-size:13px;
+}
+
+.mission.open .mission-result{
+    display:block;
+}
+
+/* =========================================================
+   DECISÃO
+   ========================================================= */
+
+.decision{
+    margin-top:25px;
+    padding:30px;
+
+    border:1px solid rgba(99,229,155,.25);
+    border-radius:20px;
+
+    background:
+        radial-gradient(circle at center,rgba(50,180,100,.08),transparent 70%);
+}
+
+.decision h2{
+    margin-bottom:10px;
+}
+
+.decision p{
+    color:#9eb4a6;
+    margin-bottom:25px;
+}
+
+.buttons{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.choice{
+    padding:13px 20px;
+
+    border-radius:9px;
+    border:1px solid rgba(255,255,255,.12);
+
+    background:#0c1d13;
+    color:white;
 
     cursor:pointer;
 
     transition:.25s;
-
-    position:relative;
-}
-
-.phone-open:hover{
-    background:rgba(255,255,255,.16);
-    transform:scale(1.05);
-}
-
-.phone-badge{
-    position:absolute;
-
-    top:-2px;
-    right:-2px;
-
-    min-width:15px;
-    height:15px;
-
-    padding:0 4px;
-
-    border-radius:20px;
-
-    display:none;
-    align-items:center;
-    justify-content:center;
-
-    background:#fff;
-    color:#111;
-
-    font-size:9px;
-    font-weight:800;
-}
-
-.phone-badge.visible{
-    display:flex;
-}
-
-/* =========================================================
-   CENA
-   ========================================================= */
-
-.scene{
-    position:absolute;
-    inset:0;
-
-    width:100%;
-    height:100%;
-
-    overflow:hidden;
-}
-
-.scene-image{
-    position:absolute;
-    inset:0;
-
-    width:100%;
-    height:100%;
-
-    overflow:hidden;
-
-    background:#0a0c10;
-}
-
-.scene-image::after{
-    content:"";
-
-    position:absolute;
-    inset:0;
-
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(0,0,0,.18),
-            transparent 28%,
-            rgba(0,0,0,.12) 55%,
-            rgba(0,0,0,.82) 100%
-        );
-}
-
-/* =========================================================
-   CENÁRIOS
-   ========================================================= */
-
-.art{
-    position:absolute;
-    inset:-3%;
-
-    width:106%;
-    height:106%;
-
-    transition:
-        opacity .8s ease,
-        transform 1.2s cubic-bezier(.2,.7,.2,1);
-
-    animation:
-        sceneBreath 12s ease-in-out infinite alternate;
-}
-
-.art.hidden{
-    opacity:0;
-}
-
-@keyframes sceneBreath{
-    from{
-        transform:scale(1);
-    }
-    to{
-        transform:scale(1.035);
-    }
-}
-
-/* Quarto */
-
-.room{
-    background:
-        radial-gradient(
-            ellipse at 70% 25%,
-            rgba(200,205,220,.14),
-            transparent 25%
-        ),
-        linear-gradient(
-            110deg,
-            #11151d 0%,
-            #090b10 45%,
-            #151923 100%
-        );
-}
-
-.room::before{
-    content:"";
-
-    position:absolute;
-
-    width:42%;
-    height:70%;
-
-    right:7%;
-    top:9%;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,.04),
-            rgba(255,255,255,.13),
-            rgba(255,255,255,.02)
-        );
-
-    box-shadow:
-        0 0 100px rgba(170,185,220,.08);
-
-    transform:skewY(-3deg);
-}
-
-.room::after{
-    content:"";
-
-    position:absolute;
-
-    width:45%;
-    height:15%;
-
-    left:3%;
-    bottom:7%;
-
-    background:#08090c;
-
-    border-radius:50%;
-
-    box-shadow:
-        0 -18px 0 -5px #171b23;
-}
-
-/* Rua */
-
-.street{
-    background:
-        radial-gradient(
-            ellipse at 70% 35%,
-            rgba(230,230,255,.2),
-            transparent 13%
-        ),
-        linear-gradient(
-            135deg,
-            #0a0d12,
-            #11151c 48%,
-            #06070a
-        );
-}
-
-.street::before{
-    content:"";
-
-    position:absolute;
-
-    width:55%;
-    height:130%;
-
-    left:15%;
-    top:-10%;
-
-    transform:skewX(-16deg);
-
-    background:
-        repeating-linear-gradient(
-            90deg,
-            rgba(255,255,255,.025) 0 5px,
-            transparent 5px 75px
-        );
-
-    filter:blur(1px);
-}
-
-.street::after{
-    content:"";
-
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-
-    height:35%;
-
-    background:
-        linear-gradient(
-            to top,
-            #030405,
-            transparent
-        );
-}
-
-/* Café */
-
-.cafe{
-    background:
-        radial-gradient(
-            ellipse at 50% 35%,
-            rgba(210,180,135,.18),
-            transparent 24%
-        ),
-        linear-gradient(
-            125deg,
-            #16120f,
-            #211914 50%,
-            #090807
-        );
-}
-
-.cafe::before{
-    content:"";
-
-    position:absolute;
-
-    left:12%;
-    top:13%;
-
-    width:76%;
-    height:48%;
-
-    border:1px solid rgba(255,255,255,.05);
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,.04),
-            rgba(0,0,0,.3)
-        );
-
-    box-shadow:
-        0 0 80px rgba(220,180,130,.08);
-}
-
-.cafe::after{
-    content:"";
-
-    position:absolute;
-
-    bottom:0;
-    left:0;
-    right:0;
-
-    height:33%;
-
-    background:
-        linear-gradient(
-            to top,
-            #050505,
-            transparent
-        );
-}
-
-/* =========================================================
-   PERSONAGENS SILHUETAS
-   ========================================================= */
-
-.character{
-    position:absolute;
-
-    bottom:7%;
-    left:50%;
-
-    width:clamp(130px,18vw,300px);
-    height:clamp(300px,64vh,650px);
-
-    transform:
-        translateX(-50%);
-
-    opacity:.9;
-
-    pointer-events:none;
-
-    transition:
-        transform .7s ease,
-        opacity .7s ease;
-}
-
-.character .head{
-    position:absolute;
-
-    top:0;
-    left:50%;
-
-    width:24%;
-    aspect-ratio:1;
-
-    transform:translateX(-50%);
-
-    border-radius:50%;
-
-    background:
-        radial-gradient(
-            circle at 40% 35%,
-            #a9a2a0,
-            #555052 70%,
-            #252326
-        );
-
-    box-shadow:
-        0 0 35px rgba(255,255,255,.08);
-}
-
-.character .body{
-    position:absolute;
-
-    left:50%;
-    bottom:0;
-
-    width:72%;
-    height:78%;
-
-    transform:translateX(-50%);
-
-    border-radius:
-        35% 35% 8% 8%;
-
-    background:
-        linear-gradient(
-            100deg,
-            #17191e,
-            #08090c 65%,
-            #191b20
-        );
-
-    box-shadow:
-        0 0 70px rgba(0,0,0,.8);
-}
-
-.character.left{
-    left:28%;
-}
-
-.character.right{
-    left:72%;
-}
-
-.character.hidden{
-    opacity:0;
-    transform:translateX(-50%) translateY(30px);
-}
-
-/* =========================================================
-   HISTÓRIA
-   ========================================================= */
-
-.story-layer{
-    position:absolute;
-    z-index:20;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    padding:
-        0 clamp(14px,5vw,100px)
-        var(--story-bottom);
-
-    pointer-events:none;
-}
-
-.story-content{
-    width:min(1100px,100%);
-    margin:auto;
-
-    pointer-events:auto;
-}
-
-.scene-location{
-    display:flex;
-    align-items:center;
-    gap:9px;
-
-    color:rgba(255,255,255,.48);
-
-    font-size:
-        clamp(9px,1vw,12px);
-
-    letter-spacing:3px;
-
-    text-transform:uppercase;
-
-    margin-bottom:10px;
-}
-
-.scene-location::before{
-    content:"";
-
-    width:24px;
-    height:1px;
-
-    background:rgba(255,255,255,.35);
-}
-
-.narrator{
-    color:rgba(255,255,255,.55);
-
-    font-size:
-        clamp(11px,1.25vw,15px);
-
-    line-height:1.5;
-
-    margin-bottom:10px;
-
-    max-width:850px;
-}
-
-.dialogue{
-    font-size:
-        clamp(19px,2.5vw,36px);
-
-    line-height:1.15;
-
-    font-weight:400;
-
-    max-width:1000px;
-
-    text-wrap:balance;
-
-    text-shadow:
-        0 2px 25px rgba(0,0,0,.8);
-}
-
-.speaker{
-    display:block;
-
-    font-size:
-        clamp(9px,1vw,12px);
-
-    letter-spacing:3px;
-
-    color:rgba(255,255,255,.48);
-
-    text-transform:uppercase;
-
-    margin-bottom:6px;
-}
-
-/* =========================================================
-   ESCOLHAS
-   ========================================================= */
-
-.choices{
-    display:grid;
-
-    grid-template-columns:
-        repeat(2,minmax(0,1fr));
-
-    gap:8px;
-
-    margin-top:18px;
-
-    max-width:920px;
-}
-
-.choice{
-    min-width:0;
-
-    min-height:48px;
-
-    padding:
-        12px 16px;
-
-    color:#e8e8eb;
-
-    text-align:left;
-
-    background:
-        rgba(5,6,9,.58);
-
-    border:
-        1px solid rgba(255,255,255,.12);
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    backdrop-filter:blur(12px);
-
-    transition:
-        background .2s,
-        border-color .2s,
-        transform .2s;
 }
 
 .choice:hover{
-    background:
-        rgba(255,255,255,.1);
-
-    border-color:
-        rgba(255,255,255,.3);
-
-    transform:
-        translateY(-2px);
+    border-color:#63e59b;
 }
 
-.choice small{
-    display:block;
-
-    color:rgba(255,255,255,.38);
-
-    margin-top:4px;
-
-    font-size:10px;
+.choice.selected{
+    background:#63e59b;
+    color:#031008;
 }
 
-/* =========================================================
-   CONTINUAR
-   ========================================================= */
-
-.continue{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-
-    margin-top:18px;
-
-    padding:10px 17px;
-
-    border-radius:999px;
-
-    color:#fff;
-
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.15);
-
-    cursor:pointer;
-
-    transition:.2s;
-}
-
-.continue:hover{
-    background:rgba(255,255,255,.14);
-}
-
-/* =========================================================
-   PHONE OVERLAY
-   ========================================================= */
-
-#phoneLayer{
-    position:fixed;
-    inset:0;
-
-    z-index:100;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    padding:
-        max(16px,env(safe-area-inset-top))
-        16px
-        max(16px,env(safe-area-inset-bottom));
-
-    background:
-        rgba(0,0,0,.72);
-
-    backdrop-filter:
-        blur(12px);
-
-    opacity:0;
-    pointer-events:none;
-
-    transition:
-        opacity .3s ease;
-}
-
-#phoneLayer.open{
-    opacity:1;
-    pointer-events:auto;
-}
-
-.phone{
-    position:relative;
-
-    width:min(390px,88vw);
-    height:min(760px,88dvh);
-
-    max-height:88dvh;
-
-    border:
-        7px solid #17191e;
-
-    border-radius:
-        clamp(30px,4vw,46px);
-
-    overflow:hidden;
-
-    background:#08090c;
-
-    box-shadow:
-        0 40px 100px rgba(0,0,0,.75),
-        0 0 0 1px rgba(255,255,255,.08);
-
-    transform:
-        translateY(30px)
-        scale(.94);
-
-    transition:
-        transform .4s cubic-bezier(.2,.8,.2,1);
-}
-
-#phoneLayer.open .phone{
-    transform:
-        translateY(0)
-        scale(1);
-}
-
-.phone-notch{
-    position:absolute;
-    z-index:50;
-
-    top:7px;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    width:100px;
-    height:25px;
-
-    border-radius:
-        0 0 16px 16px;
-
-    background:#050608;
-}
-
-.phone-screen{
-    position:absolute;
-    inset:0;
-
-    overflow:hidden;
-
-    background:
-        linear-gradient(
-            145deg,
-            #11141a,
-            #07080b
-        );
-}
-
-.phone-page{
-    position:absolute;
-    inset:0;
-
+.final{
     display:none;
-    flex-direction:column;
-
-    min-height:0;
-
-    overflow:hidden;
-}
-
-.phone-page.active{
-    display:flex;
-}
-
-/* Phone header */
-
-.phone-header{
-    flex:none;
-
-    height:64px;
-
-    padding:
-        25px 18px 5px;
-
-    display:flex;
-    align-items:flex-end;
-    justify-content:space-between;
-
-    border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-.phone-header h2{
-    font-size:17px;
-    font-weight:500;
-}
-
-.phone-header button{
-    color:#aaa;
-    background:none;
-    cursor:pointer;
-}
-
-/* Home */
-
-.phone-home{
-    flex:1;
-
-    padding:90px 22px 22px;
-
-    overflow:hidden;
-}
-
-.phone-clock{
-    font-size:52px;
-    font-weight:200;
-    letter-spacing:-3px;
-}
-
-.phone-date{
-    color:#777c86;
-    font-size:12px;
-
-    margin-top:2px;
-}
-
-.phone-apps{
-    display:grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap:16px;
-
-    margin-top:45px;
-}
-
-.app{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:7px;
-
-    color:#aaa;
-
-    cursor:pointer;
-}
-
-.app-icon{
-    width:57px;
-    height:57px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:17px;
-
-    background:
-        rgba(255,255,255,.08);
-
-    border:
-        1px solid rgba(255,255,255,.07);
-
-    font-size:22px;
-
-    position:relative;
-}
-
-.app-label{
-    font-size:10px;
-}
-
-.app-badge{
-    position:absolute;
-
-    top:-5px;
-    right:-5px;
-
-    min-width:17px;
-    height:17px;
-
-    padding:0 4px;
-
-    border-radius:20px;
-
-    background:#fff;
-    color:#111;
-
-    display:none;
-    align-items:center;
-    justify-content:center;
-
-    font-size:9px;
-    font-weight:800;
-}
-
-.app-badge.show{
-    display:flex;
-}
-
-/* Contacts */
-
-.contact-list{
-    flex:1;
-
-    min-height:0;
-
-    padding:12px;
-
-    overflow:auto;
-
-    scrollbar-width:none;
-}
-
-.contact-list::-webkit-scrollbar{
-    display:none;
-}
-
-.contact{
-    width:100%;
-
-    display:flex;
-    align-items:center;
-
-    gap:12px;
-
-    padding:13px 8px;
-
-    color:#eee;
-    background:none;
-
-    border-bottom:
-        1px solid rgba(255,255,255,.05);
-
-    cursor:pointer;
-
-    text-align:left;
-}
-
-.avatar{
-    width:42px;
-    height:42px;
-
-    flex:none;
-
-    border-radius:50%;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #3a3d45,
-            #15171c
-        );
-
-    color:#eee;
-
-    font-size:13px;
-}
-
-.contact-info{
-    min-width:0;
-    flex:1;
-}
-
-.contact-name{
-    font-size:13px;
-}
-
-.contact-last{
-    color:#6f737d;
-
-    font-size:10px;
-
-    margin-top:3px;
-
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
-
-.contact-unread{
-    min-width:18px;
-    height:18px;
-
-    padding:0 5px;
-
-    display:none;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:20px;
-
-    background:#eee;
-    color:#111;
-
-    font-size:9px;
-}
-
-/* Chat */
-
-.chat-head{
-    flex:none;
-
-    height:65px;
-
-    display:flex;
-    align-items:flex-end;
-
-    padding:
-        25px 12px 8px;
-
-    gap:10px;
-
-    border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-.chat-back{
-    color:#aaa;
-    background:none;
-
-    cursor:pointer;
-
-    padding:5px;
-}
-
-.chat-person{
-    flex:1;
-}
-
-.chat-person strong{
-    display:block;
-    font-size:13px;
-}
-
-.chat-status{
-    display:block;
-
-    color:#656a74;
-
-    font-size:9px;
-
-    margin-top:2px;
-}
-
-.chat-messages{
-    flex:1;
-
-    min-height:0;
-
-    overflow-y:auto;
-    overflow-x:hidden;
-
-    padding:
-        15px 12px 12px;
-
-    scrollbar-width:none;
-
-    display:flex;
-    flex-direction:column;
-    gap:7px;
-}
-
-.chat-messages::-webkit-scrollbar{
-    display:none;
-}
-
-.message{
-    max-width:78%;
-
-    padding:
-        9px 11px;
+    margin-top:25px;
+    padding:25px;
 
     border-radius:15px;
-
-    font-size:12px;
-    line-height:1.35;
-
-    animation:messageIn .25s ease both;
-}
-
-.message.me{
-    align-self:flex-end;
-
-    background:#e9e9ea;
-    color:#111;
-
-    border-bottom-right-radius:4px;
-}
-
-.message.them{
-    align-self:flex-start;
-
-    background:#20232a;
-    color:#eee;
-
-    border-bottom-left-radius:4px;
-}
-
-.message-time{
-    display:block;
-
-    margin-top:3px;
-
-    font-size:8px;
-
-    opacity:.38;
-
-    text-align:right;
-}
-
-@keyframes messageIn{
-    from{
-        opacity:0;
-        transform:translateY(8px) scale(.98);
-    }
-    to{
-        opacity:1;
-        transform:none;
-    }
-}
-
-.chat-input{
-    flex:none;
-
-    display:flex;
-    gap:6px;
-
-    padding:
-        8px;
-
-    border-top:
-        1px solid rgba(255,255,255,.08);
-}
-
-.chat-input input{
-    flex:1;
-
-    min-width:0;
-
-    height:38px;
-
-    padding:
-        0 12px;
-
-    color:#eee;
-
-    outline:none;
-
-    border:
-        1px solid rgba(255,255,255,.08);
-
-    border-radius:20px;
-
-    background:#14161b;
-}
-
-.chat-input button{
-    width:38px;
-    height:38px;
-
-    border-radius:50%;
-
-    color:#111;
-    background:#eee;
-
-    cursor:pointer;
-}
-
-/* Memories */
-
-.memory-list{
-    flex:1;
-
-    min-height:0;
-
-    overflow:auto;
-
-    padding:15px;
-
-    scrollbar-width:none;
-}
-
-.memory-list::-webkit-scrollbar{
-    display:none;
-}
-
-.memory{
-    padding:
-        13px;
-
-    margin-bottom:8px;
-
-    border-radius:12px;
-
-    background:
-        rgba(255,255,255,.045);
-
-    border:
-        1px solid rgba(255,255,255,.06);
-}
-
-.memory-title{
-    font-size:11px;
-    color:#eee;
-}
-
-.memory-text{
-    margin-top:5px;
-
-    font-size:10px;
-    line-height:1.4;
-
-    color:#737781;
-}
-
-/* =========================================================
-   TOAST
-   ========================================================= */
-
-.toast{
-    position:fixed;
-
-    z-index:200;
-
-    top:
-        max(20px,env(safe-area-inset-top));
-
-    left:50%;
-
-    transform:
-        translate(-50%,-120%);
-
-    width:min(360px,88vw);
-
-    padding:12px 14px;
-
-    border:
-        1px solid rgba(255,255,255,.13);
-
-    border-radius:12px;
-
-    background:
-        rgba(12,14,19,.92);
-
-    box-shadow:
-        0 20px 50px rgba(0,0,0,.45);
-
-    backdrop-filter:blur(15px);
-
-    transition:
-        transform .4s cubic-bezier(.2,.8,.2,1);
-
-    pointer-events:none;
-}
-
-.toast.show{
-    transform:
-        translate(-50%,0);
-}
-
-.toast-title{
-    font-size:11px;
-    color:#fff;
-}
-
-.toast-text{
-    margin-top:3px;
-
-    font-size:10px;
-
-    color:#777c86;
-}
-
-/* =========================================================
-   FINAIS
-   ========================================================= */
-
-#ending{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(160,170,190,.1),
-            transparent 38%
-        ),
-        #050608;
-}
-
-.ending-box{
-    width:min(700px,88vw);
+    background:rgba(99,229,155,.08);
+    border:1px solid rgba(99,229,155,.25);
 
     text-align:center;
 }
 
-.ending-over{
-    color:#747982;
-
-    text-transform:uppercase;
-
-    font-size:10px;
-
-    letter-spacing:4px;
-
-    margin-bottom:20px;
+.final.show{
+    display:block;
+    animation:entrada .5s ease;
 }
 
-.ending-title{
-    font-size:
-        clamp(38px,6vw,85px);
-
-    line-height:.95;
-
-    font-weight:300;
-}
-
-.ending-text{
-    margin:
-        25px auto 35px;
-
-    max-width:580px;
-
-    color:#858993;
-
-    font-size:
-        clamp(12px,1.4vw,16px);
-
-    line-height:1.7;
-}
-
-.restart{
-    padding:12px 22px;
-
-    border-radius:999px;
-
-    color:#fff;
-
-    background:
-        rgba(255,255,255,.07);
-
-    border:
-        1px solid rgba(255,255,255,.14);
-
-    cursor:pointer;
+.final strong{
+    color:#63e59b;
 }
 
 /* =========================================================
-   TRANSIÇÃO CINEMATOGRÁFICA
+   RODAPÉ
    ========================================================= */
 
-.scene-flash{
-    position:fixed;
-    inset:0;
-
-    z-index:80;
-
-    pointer-events:none;
-
-    background:#fff;
-
-    opacity:0;
+footer{
+    padding:35px;
+    text-align:center;
+    color:#64776b;
+    font-size:12px;
+    border-top:1px solid rgba(255,255,255,.06);
 }
 
-.scene-flash.play{
-    animation:
-        flash .65s ease;
+/* =========================================================
+   ANIMAÇÕES
+   ========================================================= */
+
+@keyframes entrada{
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
-@keyframes flash{
-    0%{opacity:0}
-    12%{opacity:.08}
-    100%{opacity:0}
+@keyframes pulse{
+    0%,100%{
+        opacity:.45;
+        transform:translateY(0);
+    }
+
+    50%{
+        opacity:1;
+        transform:translateY(4px);
+    }
 }
 
 /* =========================================================
    RESPONSIVO
    ========================================================= */
 
-@media(max-width:700px){
+@media(max-width:750px){
 
-    .choices{
+    header{
+        padding:0 20px;
+    }
+
+    .missions{
         grid-template-columns:1fr;
-        gap:6px;
     }
 
-    .choice{
-        min-height:43px;
-        padding:10px 12px;
-        font-size:12px;
+    .hero{
+        padding-top:55px;
     }
 
-    .dialogue{
-        font-size:
-            clamp(18px,5.2vw,27px);
+    .logo{
+        letter-spacing:-3px;
     }
 
-    .narrator{
-        font-size:11px;
-    }
-
-    .story-layer{
-        padding:
-            0 14px
-            max(14px,env(safe-area-inset-bottom));
-    }
-
-    .phone{
-        width:min(380px,94vw);
-        height:min(730px,92dvh);
-    }
-}
-
-@media(max-height:620px){
-
-    .story-layer{
-        --story-bottom:12px;
-    }
-
-    .dialogue{
-        font-size:
-            clamp(16px,3vw,25px);
-    }
-
-    .narrator{
-        display:none;
-    }
-
-    .choices{
-        margin-top:10px;
-    }
-
-    .choice{
-        min-height:39px;
-        padding:8px 11px;
-    }
-
-    .character{
-        height:78vh;
-    }
-}
-
-@media(min-width:1500px){
-
-    .story-layer{
-        padding-left:
-            clamp(60px,10vw,180px);
-
-        padding-right:
-            clamp(60px,10vw,180px);
-    }
-}
-
-/* =========================================================
-   ACESSIBILIDADE
-   ========================================================= */
-
-@media(prefers-reduced-motion:reduce){
-
-    *,
-    *::before,
-    *::after{
-        animation-duration:.01ms !important;
-        animation-iteration-count:1 !important;
-        transition-duration:.01ms !important;
-    }
 }
 
 </style>
@@ -1746,3229 +485,474 @@ button{
 
 <body>
 
-<div id="app">
+<!-- =====================================================
+     INTRO
+     ===================================================== -->
 
-    <!-- =====================================================
-         INTRO
-         ===================================================== -->
+<section id="intro">
 
-    <section id="intro" class="screen active">
+    <div class="intro-box">
 
-        <div class="intro-noise"></div>
+        <div class="eyebrow">
+            Projeto de tecnologia e sustentabilidade
+        </div>
 
-        <div class="intro-center">
+        <div class="logo">
+            ECO<span>CITY</span>
+        </div>
 
-            <div class="intro-small">
-                uma história sobre aquilo que não foi dito
+        <div class="intro-line"></div>
+
+        <div class="subtitle">
+
+            <strong>2040</strong><br><br>
+
+            Uma cidade enfrenta problemas de poluição,
+            desperdício de água, consumo excessivo de energia
+            e trânsito.
+
+            <br><br>
+
+            A missão da Inteligência Artificial:
+            <strong>entender os dados e ajudar a cidade
+            a tomar decisões melhores.</strong>
+
+        </div>
+
+        <button class="start-btn" onclick="startProject()">
+            INICIAR MISSÃO →
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     APLICAÇÃO
+     ===================================================== -->
+
+<main id="app">
+
+<header>
+
+    <div class="brand">
+        ECO<span>CITY</span> 2040
+    </div>
+
+    <div class="status">
+        <div class="status-dot"></div>
+        IA ONLINE
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     HERO
+     ===================================================== -->
+
+<section class="hero">
+
+    <div>
+
+        <div class="tag">
+            CENTRAL DE INTELIGÊNCIA AMBIENTAL
+        </div>
+
+        <h1>
+            A cidade está viva.
+        </h1>
+
+        <p>
+            A IA coleta informações do ambiente,
+            encontra problemas e sugere ações.
+            Mas a decisão final continua sendo humana.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FLUXOGRAMA
+     ===================================================== -->
+
+<section class="flow">
+
+    <!-- INÍCIO -->
+
+    <div class="node main">
+
+        <div class="icon">🌍</div>
+
+        <h2>
+            INÍCIO — ECOCITY
+        </h2>
+
+        <p>
+            Sensores espalhados pela cidade
+            começam a enviar dados ambientais
+            para a Inteligência Artificial.
+        </p>
+
+    </div>
+
+
+    <div class="arrow">↓</div>
+
+
+    <!-- IA -->
+
+    <div class="node main">
+
+        <div class="icon">🤖</div>
+
+        <h2>
+            IA ANALISA OS DADOS
+        </h2>
+
+        <p>
+            A inteligência artificial identifica
+            padrões, desperdícios e situações
+            que podem causar impactos ambientais.
+        </p>
+
+    </div>
+
+
+    <div class="arrow">↓</div>
+
+
+    <!-- PROBLEMAS -->
+
+    <div class="node">
+
+        <div class="icon">🔎</div>
+
+        <h2>
+            QUAL É O PROBLEMA?
+        </h2>
+
+        <p>
+            A IA separa os dados em diferentes
+            áreas ambientais e sugere possíveis
+            soluções.
+        </p>
+
+    </div>
+
+
+    <div class="arrow">↓</div>
+
+
+    <!-- MISSÕES -->
+
+    <div class="missions">
+
+        <div class="mission" onclick="toggleMission(this)">
+
+            <div class="icon">💧</div>
+
+            <h3>
+                ÁGUA
+            </h3>
+
+            <p>
+                A IA encontra padrões de consumo
+                e identifica possíveis vazamentos.
+            </p>
+
+            <div class="mission-result">
+                💦 Resultado: menos desperdício
+                e melhor distribuição da água.
             </div>
 
-            <div class="logo">
-                ENTRELINHAS
+        </div>
+
+
+        <div class="mission" onclick="toggleMission(this)">
+
+            <div class="icon">⚡</div>
+
+            <h3>
+                ENERGIA
+            </h3>
+
+            <p>
+                Analisa o consumo de energia
+                e identifica horários de maior demanda.
+            </p>
+
+            <div class="mission-result">
+                ☀️ Resultado: consumo mais eficiente
+                e possibilidade de integração
+                com fontes renováveis.
             </div>
 
-            <div class="logo-line"></div>
+        </div>
 
-            <div class="intro-sub">
-                Algumas escolhas mudam a história.
-                <br>
-                Outras mudam você.
+
+        <div class="mission" onclick="toggleMission(this)">
+
+            <div class="icon">🚗</div>
+
+            <h3>
+                TRANSPORTE
+            </h3>
+
+            <p>
+                Analisa o trânsito e procura
+                caminhos que reduzam congestionamentos.
+            </p>
+
+            <div class="mission-result">
+                🚌 Resultado: deslocamentos mais
+                eficientes e potencial redução
+                de emissões.
             </div>
 
-            <button
-                class="start-btn"
-                id="startButton">
+        </div>
 
-                COMEÇAR
 
-                <span>→</span>
+        <div class="mission" onclick="toggleMission(this)">
+
+            <div class="icon">🌳</div>
+
+            <h3>
+                ÁREAS VERDES
+            </h3>
+
+            <p>
+                Monitora áreas verdes e identifica
+                locais que precisam de atenção.
+            </p>
+
+            <div class="mission-result">
+                🌱 Resultado: planejamento melhor
+                para preservação e arborização.
+            </div>
+
+        </div>
+
+
+        <div class="mission" onclick="toggleMission(this)">
+
+            <div class="icon">🏭</div>
+
+            <h3>
+                POLUIÇÃO
+            </h3>
+
+            <p>
+                Cruza dados ambientais para
+                identificar regiões com maior impacto.
+            </p>
+
+            <div class="mission-result">
+                🌫️ Resultado: ações ambientais
+                podem ser direcionadas aos pontos
+                mais críticos.
+            </div>
+
+        </div>
+
+
+        <div class="mission" onclick="toggleMission(this)">
+
+            <div class="icon">♻️</div>
+
+            <h3>
+                RESÍDUOS
+            </h3>
+
+            <p>
+                Analisa a produção de resíduos
+                e ajuda a organizar a coleta.
+            </p>
+
+            <div class="mission-result">
+                ♻️ Resultado: coleta mais eficiente
+                e melhor aproveitamento dos resíduos.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="arrow">↓</div>
+
+
+    <!-- DECISÃO -->
+
+    <div class="decision">
+
+        <h2>
+            🧠 DECISÃO HUMANA
+        </h2>
+
+        <p>
+            A IA apresentou os dados e possibilidades.
+            Agora a cidade precisa decidir o que fazer.
+        </p>
+
+        <div class="buttons">
+
+            <button class="choice"
+                    onclick="choose(this,'sustentavel')">
+
+                🌱 INVESTIR EM SOLUÇÕES SUSTENTÁVEIS
+
+            </button>
+
+            <button class="choice"
+                    onclick="choose(this,'ignorar')">
+
+                ⚠️ IGNORAR OS ALERTAS
 
             </button>
 
         </div>
 
-    </section>
 
-
-    <!-- =====================================================
-         HISTÓRIA
-         ===================================================== -->
-
-    <section id="story" class="screen">
-
-        <header class="topbar">
-
-            <div class="story-title">
-                ENTRELINHAS
-            </div>
-
-            <div class="top-right">
-
-                <div
-                    class="time"
-                    id="gameTime">
-                    23:47
-                </div>
-
-                <button
-                    class="phone-open"
-                    id="phoneButton"
-                    aria-label="Abrir celular">
-
-                    ☎
-
-                    <span
-                        class="phone-badge"
-                        id="phoneBadge">
-                    </span>
-
-                </button>
-
-            </div>
-
-        </header>
-
-
-        <!-- CENA -->
-
-        <main class="scene">
-
-            <div class="scene-image">
-
-                <div
-                    class="art room"
-                    id="roomArt">
-                </div>
-
-                <div
-                    class="art street hidden"
-                    id="streetArt">
-                </div>
-
-                <div
-                    class="art cafe hidden"
-                    id="cafeArt">
-                </div>
-
-
-                <div
-                    class="character hidden"
-                    id="lucasCharacter">
-
-                    <div class="head"></div>
-                    <div class="body"></div>
-
-                </div>
-
-
-                <div
-                    class="character right hidden"
-                    id="marinaCharacter">
-
-                    <div class="head"></div>
-                    <div class="body"></div>
-
-                </div>
-
-            </div>
-
-
-            <!-- TEXTO -->
-
-            <div class="story-layer">
-
-                <div class="story-content">
-
-                    <div
-                        class="scene-location"
-                        id="sceneLocation">
-                        QUARTO
-                    </div>
-
-                    <div
-                        class="narrator"
-                        id="narrator">
-                    </div>
-
-                    <div
-                        class="dialogue"
-                        id="dialogue">
-                    </div>
-
-                    <div
-                        class="choices"
-                        id="choices">
-                    </div>
-
-                    <button
-                        class="continue"
-                        id="continueButton"
-                        style="display:none">
-
-                        continuar
-                        <span>→</span>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </main>
-
-    </section>
-
-
-    <!-- =====================================================
-         CELULAR
-         ===================================================== -->
-
-    <div
-        id="phoneLayer"
-        aria-hidden="true">
-
-        <div class="phone">
-
-            <div class="phone-notch"></div>
-
-            <div class="phone-screen">
-
-
-                <!-- HOME -->
-
-                <section
-                    class="phone-page active"
-                    id="phoneHome">
-
-                    <div class="phone-home">
-
-                        <div
-                            class="phone-clock"
-                            id="phoneClock">
-                            23:47
-                        </div>
-
-                        <div
-                            class="phone-date"
-                            id="phoneDate">
-                            quinta-feira, 3 de setembro
-                        </div>
-
-
-                        <div class="phone-apps">
-
-                            <button
-                                class="app"
-                                onclick="openContacts()">
-
-                                <div class="app-icon">
-                                    💬
-
-                                    <span
-                                        class="app-badge"
-                                        id="messageBadge">
-                                    </span>
-                                </div>
-
-                                <span class="app-label">
-                                    Mensagens
-                                </span>
-
-                            </button>
-
-
-                            <button
-                                class="app"
-                                onclick="openMemories()">
-
-                                <div class="app-icon">
-                                    🧠
-                                </div>
-
-                                <span class="app-label">
-                                    Memórias
-                                </span>
-
-                            </button>
-
-
-                            <button
-                                class="app"
-                                onclick="closePhone()">
-
-                                <div class="app-icon">
-                                    ◀
-                                </div>
-
-                                <span class="app-label">
-                                    Voltar
-                                </span>
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- CONTATOS -->
-
-                <section
-                    class="phone-page"
-                    id="phoneContacts">
-
-                    <div class="phone-header">
-
-                        <h2>
-                            Mensagens
-                        </h2>
-
-                        <button
-                            onclick="openPhoneHome()">
-                            Fechar
-                        </button>
-
-                    </div>
-
-                    <div
-                        class="contact-list"
-                        id="contactList">
-                    </div>
-
-                </section>
-
-
-                <!-- CHAT -->
-
-                <section
-                    class="phone-page"
-                    id="phoneChat">
-
-                    <div class="chat-head">
-
-                        <button
-                            class="chat-back"
-                            onclick="openContacts()">
-                            ←
-                        </button>
-
-                        <div class="avatar"
-                             id="chatAvatar">
-                            ?
-                        </div>
-
-                        <div class="chat-person">
-
-                            <strong
-                                id="chatName">
-                                —
-                            </strong>
-
-                            <span
-                                class="chat-status"
-                                id="chatStatus">
-                                online
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="chat-messages"
-                        id="chatMessages">
-                    </div>
-
-
-                    <form
-                        class="chat-input"
-                        id="chatForm">
-
-                        <input
-                            id="messageInput"
-                            autocomplete="off"
-                            placeholder="Mensagem...">
-
-                        <button
-                            type="submit">
-                            ↑
-                        </button>
-
-                    </form>
-
-                </section>
-
-
-                <!-- MEMÓRIAS -->
-
-                <section
-                    class="phone-page"
-                    id="phoneMemories">
-
-                    <div class="phone-header">
-
-                        <h2>
-                            Memórias
-                        </h2>
-
-                        <button
-                            onclick="openPhoneHome()">
-                            Fechar
-                        </button>
-
-                    </div>
-
-                    <div
-                        class="memory-list"
-                        id="memoryList">
-                    </div>
-
-                </section>
-
-            </div>
-
-        </div>
+        <div id="final" class="final"></div>
 
     </div>
 
 
-    <!-- TOAST -->
+    <div class="arrow">↓</div>
 
-    <div
-        class="toast"
-        id="toast">
 
-        <div
-            class="toast-title"
-            id="toastTitle">
-        </div>
+    <!-- FINAL -->
 
-        <div
-            class="toast-text"
-            id="toastText">
-        </div>
+    <div class="node main">
+
+        <div class="icon">🌎</div>
+
+        <h2>
+            IA MONITORA NOVAMENTE
+        </h2>
+
+        <p>
+            Depois das ações, novos dados são coletados.
+            A IA compara os resultados e ajuda a identificar
+            o que pode ser melhorado.
+        </p>
 
     </div>
 
 
-    <!-- FLASH -->
+    <div class="arrow">↓</div>
 
-    <div
-        class="scene-flash"
-        id="sceneFlash">
+
+    <div class="node main">
+
+        <div class="icon">🌱</div>
+
+        <h2>
+            ECOCITY CONTINUA EVOLUINDO
+        </h2>
+
+        <p>
+            Tecnologia, dados e decisões humanas
+            trabalham juntos para buscar uma cidade
+            mais eficiente e sustentável.
+        </p>
+
     </div>
 
+</section>
 
-    <!-- =====================================================
-         FINAL
-         ===================================================== -->
 
-    <section
-        id="ending"
-        class="screen">
+<footer>
 
-        <div class="ending-box">
+    ECOCITY 2040 · Inteligência Artificial + Sustentabilidade 🌎
 
-            <div class="ending-over">
-                fim — por enquanto
-            </div>
+</footer>
 
-            <div
-                class="ending-title"
-                id="endingTitle">
-                ENTRELINHAS
-            </div>
-
-            <div
-                class="ending-text"
-                id="endingText">
-            </div>
-
-            <button
-                class="restart"
-                onclick="restartGame()">
-
-                voltar ao começo
-
-            </button>
-
-        </div>
-
-    </section>
-
-</div>
+</main>
 
 
 <script>
 
 /* =========================================================
-   ESTADO
+   INICIAR
    ========================================================= */
 
-const game = {
+function startProject(){
 
-    scene:"arrival",
+    document.getElementById("intro").style.display="none";
 
-    timeMinutes:23 * 60 + 47,
+    document.getElementById("app").classList.add("active");
 
-    selectedCharacter:null,
-
-    history:[],
-
-    memories:[],
-
-    flags:{},
-
-    relationships:{
-
-        lucas:{
-            trust:50,
-            affection:55,
-            irritation:0,
-            hurt:0,
-            respect:50,
-            closeness:45,
-            suspicion:15
-        },
-
-        marina:{
-            trust:50,
-            affection:45,
-            irritation:0,
-            hurt:0,
-            respect:55,
-            closeness:40,
-            suspicion:25
-        },
-
-        mother:{
-            trust:80,
-            affection:90,
-            irritation:0,
-            hurt:0,
-            respect:80,
-            closeness:90,
-            suspicion:5
-        },
-
-        father:{
-            trust:60,
-            affection:55,
-            irritation:5,
-            hurt:0,
-            respect:65,
-            closeness:55,
-            suspicion:10
-        }
-
-    }
-
-};
-
-
-/* =========================================================
-   PERSONAGENS
-   ========================================================= */
-
-const characters = {
-
-    lucas:{
-        name:"Lucas",
-        initial:"L",
-
-        personality:{
-            humor:75,
-            pride:70,
-            temper:62,
-            sensitivity:57,
-            forgiveness:68,
-            loyalty:88,
-            sarcasm:72
-        }
-    },
-
-    marina:{
-        name:"Marina",
-        initial:"M",
-
-        personality:{
-            humor:58,
-            pride:78,
-            temper:43,
-            sensitivity:72,
-            forgiveness:44,
-            loyalty:55,
-            sarcasm:80,
-            suspicion:75,
-            curiosity:84
-        }
-    },
-
-    mother:{
-        name:"Mãe",
-        initial:"M",
-
-        personality:{
-            humor:45,
-            pride:30,
-            temper:30,
-            sensitivity:90,
-            forgiveness:90,
-            loyalty:100,
-            care:100,
-            worry:95
-        }
-    },
-
-    father:{
-        name:"Pai",
-        initial:"P",
-
-        personality:{
-            humor:40,
-            pride:82,
-            temper:75,
-            sensitivity:45,
-            forgiveness:55,
-            loyalty:90,
-            sarcasm:30,
-            care:75
-        }
-    }
-
-};
-
-
-/* =========================================================
-   CONVERSAS
-   ========================================================= */
-
-let chats = {
-
-    lucas:[
-        {
-            from:"them",
-            text:"mano, tu sumiu",
-            time:"22:13"
-        },
-        {
-            from:"them",
-            text:"tá vivo pelo menos?",
-            time:"22:14"
-        }
-    ],
-
-    marina:[
-        {
-            from:"them",
-            text:"preciso falar com você",
-            time:"23:02"
-        }
-    ],
-
-    mother:[
-        {
-            from:"them",
-            text:"Filho, não demora.",
-            time:"21:46"
-        },
-        {
-            from:"them",
-            text:"Me avisa quando chegar.",
-            time:"21:47"
-        }
-    ],
-
-    father:[
-        {
-            from:"them",
-            text:"Onde você está?",
-            time:"22:31"
-        }
-    ]
-
-};
-
-
-/* =========================================================
-   CENAS
-   ========================================================= */
-
-const scenes = {
-
-    arrival:{
-
-        location:"QUARTO",
-
-        art:"room",
-
-        narrator:
-            "23:47. A casa está silenciosa. Silenciosa demais.",
-
-        dialogue:
-            "Seu celular vibra em cima da cama.",
-
-        choices:[
-
-            {
-                text:"Pegar o celular",
-
-                action:()=>{
-
-                    remember(
-                        "A primeira mensagem da noite",
-                        "Você decidiu olhar o celular em vez de ignorar a vibração."
-                    );
-
-                    openPhone();
-
-                    return null;
-                }
-            },
-
-            {
-                text:"Ignorar",
-
-                action:()=>{
-
-                    remember(
-                        "Ignorou o celular",
-                        "Você viu a tela acender, mas decidiu não olhar."
-                    );
-
-                    return "door";
-                }
-            }
-
-        ]
-
-    },
-
-
-    door:{
-
-        location:"QUARTO",
-
-        art:"room",
-
-        narrator:
-            "A vibração para. Dois segundos depois, alguém bate na porta.",
-
-        dialogue:
-            "— Você ainda está acordado?",
-
-        speaker:"MÃE",
-
-        choices:[
-
-            {
-                text:"Tô. Pode entrar.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "mother",
-                        {
-                            trust:4,
-                            closeness:3
-                        }
-                    );
-
-                    remember(
-                        "Sua mãe entrou",
-                        "Você decidiu não esconder que estava acordado."
-                    );
-
-                    return "motherTalk";
-                }
-            },
-
-            {
-                text:"Já tô dormindo.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "mother",
-                        {
-                            trust:-4,
-                            suspicion:3
-                        }
-                    );
-
-                    return "outside";
-                }
-            }
-
-        ]
-
-    },
-
-
-    motherTalk:{
-
-        location:"QUARTO",
-
-        art:"room",
-
-        narrator:
-            "Ela abre a porta devagar. Olha para você. Depois olha para o celular.",
-
-        dialogue:
-            "— Você tá com aquela cara de quem tá pensando demais.",
-
-        speaker:"MÃE",
-
-        choices:[
-
-            {
-                text:"Não é nada.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "mother",
-                        {
-                            affection:-2
-                        }
-                    );
-
-                    remember(
-                        "Você disse que não era nada",
-                        "Sua mãe percebeu que você estava escondendo alguma coisa."
-                    );
-
-                    return "phoneBuzz";
-                }
-            },
-
-            {
-                text:"Na verdade... eu não sei o que tô fazendo.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "mother",
-                        {
-                            trust:7,
-                            closeness:6,
-                            affection:5
-                        }
-                    );
-
-                    remember(
-                        "Você foi honesto com sua mãe",
-                        "Pela primeira vez naquela noite, você admitiu que estava perdido."
-                    );
-
-                    return "motherTruth";
-                }
-            }
-
-        ]
-
-    },
-
-
-    motherTruth:{
-
-        location:"QUARTO",
-
-        art:"room",
-
-        narrator:
-            "Ela não responde imediatamente.",
-
-        dialogue:
-            "— Então começa parando de fingir que você precisa saber.",
-
-        speaker:"MÃE",
-
-        choices:[
-
-            {
-                text:"Abraçar ela.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "mother",
-                        {
-                            affection:8,
-                            closeness:8,
-                            trust:4
-                        }
-                    );
-
-                    remember(
-                        "O abraço",
-                        "Você não encontrou uma resposta. Só encontrou alguém ali."
-                    );
-
-                    return "phoneBuzz";
-                }
-            },
-
-            {
-                text:"Mudar de assunto.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "mother",
-                        {
-                            trust:-2
-                        }
-                    );
-
-                    return "phoneBuzz";
-                }
-            }
-
-        ]
-
-    },
-
-
-    phoneBuzz:{
-
-        location:"QUARTO",
-
-        art:"room",
-
-        narrator:
-            "O celular vibra novamente.",
-
-        dialogue:
-            "Dessa vez, você sabe que não vai conseguir ignorar.",
-
-        choices:[
-
-            {
-                text:"Abrir o celular",
-
-                action:()=>{
-
-                    openPhone();
-
-                    return null;
-                }
-            },
-
-            {
-                text:"Deixar tocar",
-
-                action:()=>{
-
-                    remember(
-                        "Segunda vibração ignorada",
-                        "Você deixou uma mensagem esperando."
-                    );
-
-                    return "outside";
-                }
-            }
-
-        ]
-
-    },
-
-
-    outside:{
-
-        location:"RUA",
-
-        art:"street",
-
-        narrator:
-            "Você sai de casa sem saber exatamente por quê.",
-
-        dialogue:
-            "O ar frio bate no rosto. O celular vibra no seu bolso.",
-
-        choices:[
-
-            {
-                text:"Olhar",
-
-                action:()=>{
-
-                    openPhone();
-
-                    return null;
-                }
-            },
-
-            {
-                text:"Continuar andando",
-
-                action:()=>{
-
-                    return "cafe";
-                }
-            }
-
-        ]
-
-    },
-
-
-    cafe:{
-
-        location:"CAFÉ",
-
-        art:"cafe",
-
-        narrator:
-            "Poucos minutos depois, você entra em um café quase vazio.",
-
-        dialogue:
-            "Lucas está sentado no fundo.",
-
-        speaker:"LUCAS",
-
-        choices:[
-
-            {
-                text:"Sentar com ele",
-
-                action:()=>{
-
-                    showCharacter("lucas");
-
-                    return "lucasStart";
-                }
-            },
-
-            {
-                text:"Mandar mensagem antes",
-
-                action:()=>{
-
-                    openChat("lucas");
-
-                    return null;
-                }
-            }
-
-        ]
-
-    },
-
-
-    lucasStart:{
-
-        location:"CAFÉ",
-
-        art:"cafe",
-
-        narrator:
-            "Lucas olha para você durante alguns segundos antes de sorrir.",
-
-        dialogue:
-            "— Finalmente apareceu.",
-
-        speaker:"LUCAS",
-
-        choices:[
-
-            {
-                text:"Foi mal. Tive umas coisas pra resolver.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "lucas",
-                        {
-                            trust:3,
-                            affection:2,
-                            closeness:3
-                        }
-                    );
-
-                    remember(
-                        "Lucas estava esperando",
-                        "Ele tentou esconder, mas claramente estava esperando você."
-                    );
-
-                    return "lucasTalk";
-                }
-            },
-
-            {
-                text:"Não começa.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "lucas",
-                        {
-                            irritation:8,
-                            respect:-2
-                        }
-                    );
-
-                    return "lucasTalk";
-                }
-            },
-
-            {
-                text:"Vai tomar no cu, Lucas.",
-
-                action:()=>{
-
-                    return reactToMessage(
-                        "lucas",
-                        "vai tomar no cu, lucas"
-                    );
-                }
-            }
-
-        ]
-
-    },
-
-
-    lucasTalk:{
-
-        location:"CAFÉ",
-
-        art:"cafe",
-
-        narrator:
-            "Ele mexe no copo. Parece estar escolhendo as palavras.",
-
-        dialogue:
-            "— Tu percebeu que eu tô tentando falar sério contigo faz uns dias?",
-
-        speaker:"LUCAS",
-
-        choices:[
-
-            {
-                text:"Percebi.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "lucas",
-                        {
-                            trust:5,
-                            respect:4
-                        }
-                    );
-
-                    return "lucasSerious";
-                }
-            },
-
-            {
-                text:"Não. O que você quer?",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "lucas",
-                        {
-                            irritation:3
-                        }
-                    );
-
-                    return "lucasSerious";
-                }
-            }
-
-        ]
-
-    },
-
-
-    lucasSerious:{
-
-        location:"CAFÉ",
-
-        art:"cafe",
-
-        narrator:
-            "Ele finalmente olha diretamente para você.",
-
-        dialogue:
-            "— Eu acho que você tá se afastando de todo mundo.",
-
-        speaker:"LUCAS",
-
-        choices:[
-
-            {
-                text:"Talvez eu esteja.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "lucas",
-                        {
-                            trust:7,
-                            closeness:6,
-                            affection:3
-                        }
-                    );
-
-                    remember(
-                        "Lucas percebeu seu afastamento",
-                        "Ele foi uma das primeiras pessoas a perceber que você estava diferente."
-                    );
-
-                    return "lucasConcern";
-                }
-            },
-
-            {
-                text:"Você tá viajando.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "lucas",
-                        {
-                            trust:-4,
-                            irritation:3
-                        }
-                    );
-
-                    return "lucasConcern";
-                }
-            }
-
-        ]
-
-    },
-
-
-    lucasConcern:{
-
-        location:"CAFÉ",
-
-        art:"cafe",
-
-        narrator:
-            "Lucas dá uma risada curta. Não parece achar graça.",
-
-        dialogue:
-            "— Beleza. Então finge que eu não falei nada.",
-
-        speaker:"LUCAS",
-
-        choices:[
-
-            {
-                text:"Não. Continua.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "lucas",
-                        {
-                            trust:5,
-                            closeness:7
-                        }
-                    );
-
-                    return "marinaReveal";
-                }
-            },
-
-            {
-                text:"Talvez seja melhor.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "lucas",
-                        {
-                            closeness:-7,
-                            trust:-5
-                        }
-                    );
-
-                    return "marinaReveal";
-                }
-            }
-
-        ]
-
-    },
-
-
-    marinaReveal:{
-
-        location:"CAFÉ",
-
-        art:"cafe",
-
-        narrator:
-            "Seu celular vibra sobre a mesa.",
-
-        dialogue:
-            "Marina: \"A gente precisa conversar. Hoje.\"",
-
-        choices:[
-
-            {
-                text:"Responder Marina",
-
-                action:()=>{
-
-                    addMessage(
-                        "marina",
-                        "me",
-                        "Onde?"
-                    );
-
-                    changeRelationship(
-                        "marina",
-                        {
-                            closeness:2
-                        }
-                    );
-
-                    showToast(
-                        "Marina",
-                        "Nova mensagem"
-                    );
-
-                    return "marinaCall";
-                }
-            },
-
-            {
-                text:"Ignorar por enquanto",
-
-                action:()=>{
-
-                    remember(
-                        "Você adiou Marina",
-                        "A mensagem dela ficou sem resposta."
-                    );
-
-                    changeRelationship(
-                        "marina",
-                        {
-                            irritation:5,
-                            suspicion:5
-                        }
-                    );
-
-                    return "night";
-                }
-            }
-
-        ]
-
-    },
-
-
-    marinaCall:{
-
-        location:"RUA",
-
-        art:"street",
-
-        narrator:
-            "Marina responde quase imediatamente.",
-
-        dialogue:
-            "— Vem pra praça. Sozinho.",
-
-        speaker:"MARINA",
-
-        choices:[
-
-            {
-                text:"Vou.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "marina",
-                        {
-                            trust:5,
-                            closeness:5
-                        }
-                    );
-
-                    return "marinaTalk";
-                }
-            },
-
-            {
-                text:"Por quê?",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "marina",
-                        {
-                            suspicion:-2
-                        }
-                    );
-
-                    return "marinaQuestion";
-                }
-            }
-
-        ]
-
-    },
-
-
-    marinaQuestion:{
-
-        location:"RUA",
-
-        art:"street",
-
-        narrator:
-            "A resposta demora quase um minuto.",
-
-        dialogue:
-            "— Porque tem uma coisa que você precisa saber.",
-
-        speaker:"MARINA",
-
-        choices:[
-
-            {
-                text:"Sobre o quê?",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "marina",
-                        {
-                            curiosity:4,
-                            trust:2
-                        }
-                    );
-
-                    return "marinaTalk";
-                }
-            },
-
-            {
-                text:"Se for drama, esquece.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "marina",
-                        {
-                            irritation:8,
-                            trust:-5
-                        }
-                    );
-
-                    return "marinaTalk";
-                }
-            }
-
-        ]
-
-    },
-
-
-    marinaTalk:{
-
-        location:"PRAÇA",
-
-        art:"street",
-
-        narrator:
-            "Ela está esperando perto de um poste. Quando você chega, ela guarda o celular.",
-
-        dialogue:
-            "— Eu descobri uma coisa sobre aquela noite.",
-
-        speaker:"MARINA",
-
-        choices:[
-
-            {
-                text:"Que coisa?",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "marina",
-                        {
-                            trust:5,
-                            closeness:5
-                        }
-                    );
-
-                    remember(
-                        "Marina revelou que descobriu algo",
-                        "Existe alguma coisa sobre aquela noite que ainda não foi contada."
-                    );
-
-                    return "reveal";
-                }
-            },
-
-            {
-                text:"Eu não quero saber.",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "marina",
-                        {
-                            irritation:10,
-                            closeness:-8
-                        }
-                    );
-
-                    return "reveal";
-                }
-            }
-
-        ]
-
-    },
-
-
-    reveal:{
-
-        location:"PRAÇA",
-
-        art:"street",
-
-        narrator:
-            "Marina respira fundo.",
-
-        dialogue:
-            "— Foi o Lucas que te ligou naquela noite.",
-
-        speaker:"MARINA",
-
-        choices:[
-
-            {
-                text:"Eu sabia.",
-
-                action:()=>{
-
-                    game.flags.knewLucas=true;
-
-                    return "endTalk";
-                }
-            },
-
-            {
-                text:"Isso não faz sentido.",
-
-                action:()=>{
-
-                    game.flags.doubt=true;
-
-                    return "endTalk";
-                }
-            },
-
-            {
-                text:"Por que você só está me contando agora?",
-
-                action:()=>{
-
-                    game.flags.confrontMarina=true;
-
-                    changeRelationship(
-                        "marina",
-                        {
-                            respect:5
-                        }
-                    );
-
-                    return "endTalk";
-                }
-            }
-
-        ]
-
-    },
-
-
-    endTalk:{
-
-        location:"PRAÇA",
-
-        art:"street",
-
-        narrator:
-            "Marina observa sua reação.",
-
-        dialogue:
-            "— A questão não é o que aconteceu naquela noite. É por que ninguém te contou a verdade.",
-
-        speaker:"MARINA",
-
-        choices:[
-
-            {
-                text:"Quero a verdade.",
-
-                action:()=>{
-
-                    return "truth";
-                }
-            },
-
-            {
-                text:"Cansei disso.",
-
-                action:()=>{
-
-                    return "night";
-                }
-            }
-
-        ]
-
-    },
-
-
-    truth:{
-
-        location:"PRAÇA",
-
-        art:"street",
-
-        narrator:
-            "Por alguns segundos, nenhum dos dois fala.",
-
-        dialogue:
-            "E então seu celular começa a tocar.",
-
-        choices:[
-
-            {
-                text:"Atender",
-
-                action:()=>{
-
-                    showToast(
-                        "Lucas",
-                        "Ligação recebida"
-                    );
-
-                    addMessage(
-                        "lucas",
-                        "them",
-                        "atende. por favor."
-                    );
-
-                    return "call";
-                }
-            },
-
-            {
-                text:"Desligar",
-
-                action:()=>{
-
-                    remember(
-                        "Você recusou a ligação de Lucas",
-                        "Pela primeira vez, você decidiu não responder imediatamente."
-                    );
-
-                    changeRelationship(
-                        "lucas",
-                        {
-                            irritation:8,
-                            hurt:5
-                        }
-                    );
-
-                    return "night";
-                }
-            }
-
-        ]
-
-    },
-
-
-    call:{
-
-        location:"RUA",
-
-        art:"street",
-
-        narrator:
-            "Você atende.",
-
-        dialogue:
-            "— Finalmente.",
-
-        speaker:"LUCAS",
-
-        choices:[
-
-            {
-                text:"Fala.",
-
-                action:()=>{
-
-                    return "night";
-                }
-            },
-
-            {
-                text:"O que você quer?",
-
-                action:()=>{
-
-                    changeRelationship(
-                        "lucas",
-                        {
-                            irritation:5
-                        }
-                    );
-
-                    return "night";
-                }
-            }
-
-        ]
-
-    },
-
-
-    night:{
-
-        location:"NOITE",
-
-        art:"street",
-
-        narrator:
-            "Mais tarde, você está sozinho novamente.",
-
-        dialogue:
-            "Algumas mensagens ficaram sem resposta. Outras talvez nunca sejam respondidas.",
-
-        choices:[
-
-            {
-                text:"Olhar o celular uma última vez",
-
-                action:()=>{
-
-                    openPhone();
-
-                    return null;
-                }
-            },
-
-            {
-                text:"Dormir",
-
-                action:()=>{
-
-                    return "ending";
-                }
-            }
-
-        ]
-
-    }
-
-};
-
-
-/* =========================================================
-   ELEMENTOS
-   ========================================================= */
-
-const $ = id =>
-    document.getElementById(id);
-
-const intro =
-    $("intro");
-
-const story =
-    $("story");
-
-const ending =
-    $("ending");
-
-const narrator =
-    $("narrator");
-
-const dialogue =
-    $("dialogue");
-
-const choices =
-    $("choices");
-
-const sceneLocation =
-    $("sceneLocation");
-
-const continueButton =
-    $("continueButton");
-
-const phoneLayer =
-    $("phoneLayer");
-
-const chatMessages =
-    $("chatMessages");
-
-const contactList =
-    $("contactList");
-
-const memoryList =
-    $("memoryList");
-
-const toast =
-    $("toast");
-
-
-/* =========================================================
-   TEMPO
-   ========================================================= */
-
-function formatTime(){
-
-    const h =
-        Math.floor(
-            game.timeMinutes / 60
-        ) % 24;
-
-    const m =
-        game.timeMinutes % 60;
-
-    return String(h).padStart(2,"0")
-        + ":"
-        + String(m).padStart(2,"0");
-}
-
-function advanceTime(minutes){
-
-    game.timeMinutes += minutes;
-
-    $("gameTime").textContent =
-        formatTime();
-
-    $("phoneClock").textContent =
-        formatTime();
-}
-
-
-/* =========================================================
-   MEMÓRIA
-   ========================================================= */
-
-function remember(title,text){
-
-    game.memories.unshift({
-        title,
-        text,
-        time:formatTime()
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
     });
 
-    if(game.memories.length>30){
-
-        game.memories =
-            game.memories.slice(0,30);
-
-    }
-
-    renderMemories();
-
-    saveGame();
 }
 
-function renderMemories(){
 
-    memoryList.innerHTML = "";
+/* =========================================================
+   ABRIR MISSÕES
+   ========================================================= */
 
-    if(!game.memories.length){
+function toggleMission(element){
 
-        memoryList.innerHTML = `
-            <div class="memory">
-                <div class="memory-title">
-                    Ainda não há memórias.
-                </div>
-            </div>
+    element.classList.toggle("open");
+
+}
+
+
+/* =========================================================
+   ESCOLHAS
+   ========================================================= */
+
+function choose(button,type){
+
+    document.querySelectorAll(".choice")
+        .forEach(btn=>{
+            btn.classList.remove("selected");
+        });
+
+    button.classList.add("selected");
+
+    const final = document.getElementById("final");
+
+    final.classList.add("show");
+
+
+    if(type === "sustentavel"){
+
+        final.innerHTML = `
+            🌱 <strong>CAMINHO SUSTENTÁVEL</strong><br><br>
+
+            A cidade utiliza os dados fornecidos pela IA
+            para planejar ações ambientais.
+
+            <br><br>
+
+            O processo continua:
+            <strong>analisar → agir → medir → melhorar.</strong>
         `;
-
-        return;
-    }
-
-    game.memories.forEach(memory=>{
-
-        const el =
-            document.createElement("div");
-
-        el.className="memory";
-
-        el.innerHTML=`
-
-            <div class="memory-title">
-                ${escapeHTML(memory.title)}
-            </div>
-
-            <div class="memory-text">
-                ${escapeHTML(memory.text)}
-            </div>
-
-        `;
-
-        memoryList.appendChild(el);
-
-    });
-}
-
-
-/* =========================================================
-   RELACIONAMENTOS
-   ========================================================= */
-
-function changeRelationship(
-    character,
-    changes
-){
-
-    const r =
-        game.relationships[character];
-
-    if(!r)return;
-
-    Object.entries(changes)
-        .forEach(([key,value])=>{
-
-            if(typeof r[key] !== "number"){
-                r[key]=0;
-            }
-
-            r[key] += value;
-
-            r[key] =
-                Math.max(
-                    0,
-                    Math.min(100,r[key])
-                );
-
-        });
-
-    saveGame();
-}
-
-
-/* =========================================================
-   CLASSIFICADOR DE MENSAGEM
-   ========================================================= */
-
-function classifyMessage(text){
-
-    const t =
-        text
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g,"");
-
-    if(
-        /(vai tomar no cu|vai se foder|idiota|imbecil|otario|babaca|merda|porra)/.test(t)
-    ){
-        return "insult";
-    }
-
-    if(
-        /(desculpa|foi mal|perdao|perdoa|nao queria)/.test(t)
-    ){
-        return "apology";
-    }
-
-    if(
-        /(amo|gosto de voce|te adoro|saudade|sinto sua falta)/.test(t)
-    ){
-        return "affection";
-    }
-
-    if(
-        /(nao sei|tanto faz|deixa|esquece)/.test(t)
-    ){
-        return "cold";
-    }
-
-    if(
-        /(obrigado|valeu|vlw)/.test(t)
-    ){
-        return "kind";
-    }
-
-    if(
-        /(por que|porque|como assim|o que aconteceu)/.test(t)
-    ){
-        return "question";
-    }
-
-    if(
-        /(kkkk|haha|hahaha|brincadeira)/.test(t)
-    ){
-        return "joke";
-    }
-
-    return "neutral";
-}
-
-
-/* =========================================================
-   REAÇÃO INTELIGENTE
-   ========================================================= */
-
-function reactToMessage(
-    character,
-    text
-){
-
-    const type =
-        classifyMessage(text);
-
-    const p =
-        characters[character].personality;
-
-    const r =
-        game.relationships[character];
-
-    addMessage(
-        character,
-        "me",
-        text
-    );
-
-    /*
-       A resposta depende de:
-
-       - personalidade
-       - confiança
-       - mágoa
-       - irritação
-       - proximidade
-       - histórico
-    */
-
-    let reply = "";
-
-    let effect = {};
-
-
-    /* INSULTO */
-
-    if(type==="insult"){
-
-        if(character==="lucas"){
-
-            if(r.hurt > 30){
-
-                reply =
-                    "beleza. então conversa com você mesmo.";
-
-                effect={
-                    hurt:8,
-                    irritation:10,
-                    closeness:-8,
-                    trust:-4
-                };
-
-            }else if(r.closeness > 65){
-
-                reply =
-                    "KKKK beleza, seu filho da puta. mas eu sei que tu tá puto por outra coisa.";
-
-                effect={
-                    irritation:5,
-                    hurt:2,
-                    respect:1
-                };
-
-            }else if(r.irritation > 25){
-
-                reply =
-                    "sabia que tu ia chegar nessa parte.";
-
-                effect={
-                    irritation:9,
-                    trust:-5
-                };
-
-            }else{
-
-                reply =
-                    "caralho. precisava disso?";
-
-                effect={
-                    hurt:6,
-                    irritation:7,
-                    trust:-4
-                };
-
-            }
-
-        }
-
-        else if(character==="marina"){
-
-            if(r.suspicion > 55){
-
-                reply =
-                    "é exatamente esse tipo de resposta que me faz não confiar em você.";
-
-                effect={
-                    suspicion:8,
-                    trust:-7,
-                    closeness:-6
-                };
-
-            }else{
-
-                reply =
-                    "ótimo. quando você aprender a conversar, me procura.";
-
-                effect={
-                    irritation:9,
-                    respect:-3,
-                    closeness:-5
-                };
-
-            }
-
-        }
-
-        else if(character==="mother"){
-
-            reply =
-                "Eu sei que você está nervoso. Mas não precisa falar assim comigo.";
-
-            effect={
-                hurt:4,
-                closeness:-3
-            };
-
-        }
-
-        else if(character==="father"){
-
-            reply =
-                "Então escolhe melhor as palavras.";
-
-            effect={
-                irritation:8,
-                respect:-4
-            };
-
-        }
-
-    }
-
-
-    /* DESCULPA */
-
-    else if(type==="apology"){
-
-        if(character==="lucas"){
-
-            if(r.hurt > 20){
-
-                reply =
-                    "eu aceito. só não quero que vire aquele negócio de pedir desculpa e repetir.";
-
-            }else{
-
-                reply =
-                    "relaxa. só não faz isso de novo.";
-
-            }
-
-            effect={
-                hurt:-8,
-                irritation:-8,
-                trust:5,
-                closeness:3
-            };
-
-        }
-
-        else if(character==="marina"){
-
-            if(r.irritation > 30){
-
-                reply =
-                    "eu ouvi. mas ainda tô tentando decidir se acredito.";
-
-                effect={
-                    hurt:-3,
-                    irritation:-4,
-                    suspicion:-3
-                };
-
-            }else{
-
-                reply =
-                    "tá. obrigada por falar.";
-
-                effect={
-                    trust:4,
-                    closeness:2
-                };
-
-            }
-
-        }
-
-        else{
-
-            reply =
-                "Tá tudo bem. Só conversa comigo.";
-
-            effect={
-                hurt:-8,
-                closeness:4
-            };
-
-        }
-
-    }
-
-
-    /* CARINHO */
-
-    else if(type==="affection"){
-
-        if(character==="lucas"){
-
-            reply =
-                "ih rapaz. tá sentimental hoje?";
-
-            effect={
-                affection:6,
-                closeness:7,
-                trust:4
-            };
-
-        }
-
-        else if(character==="marina"){
-
-            if(r.suspicion > 50){
-
-                reply =
-                    "não fala isso só porque sabe que eu quero ouvir.";
-
-                effect={
-                    suspicion:4,
-                    affection:2
-                };
-
-            }else{
-
-                reply =
-                    "eu também sinto falta.";
-
-                effect={
-                    affection:8,
-                    closeness:7,
-                    trust:3
-                };
-
-            }
-
-        }
-
-        else{
-
-            reply =
-                "Eu também te amo.";
-
-            effect={
-                affection:8,
-                closeness:5
-            };
-
-        }
-
-    }
-
-
-    /* FRIO */
-
-    else if(type==="cold"){
-
-        if(character==="lucas"){
-
-            reply =
-                "beleza. vou parar de insistir.";
-
-            effect={
-                closeness:-5,
-                irritation:3
-            };
-
-        }
-
-        else if(character==="marina"){
-
-            reply =
-                "é. talvez seja melhor deixar isso pra lá.";
-
-            effect={
-                closeness:-8,
-                suspicion:5,
-                trust:-3
-            };
-
-        }
-
-        else{
-
-            reply =
-                "Tudo bem. Quando quiser falar, eu estou aqui.";
-
-            effect={
-                closeness:-1
-            };
-
-        }
-
-    }
-
-
-    /* PERGUNTA */
-
-    else if(type==="question"){
-
-        if(character==="lucas"){
-
-            reply =
-                "eu ia justamente te explicar.";
-
-            effect={
-                trust:3
-            };
-
-        }
-
-        else if(character==="marina"){
-
-            reply =
-                "porque eu achei que você precisava saber.";
-
-            effect={
-                trust:3,
-                curiosity:3
-            };
-
-        }
-
-        else{
-
-            reply =
-                "Eu te conto. Só fica comigo um minuto.";
-
-            effect={
-                trust:4
-            };
-
-        }
-
-    }
-
-
-    /* PIADA */
-
-    else if(type==="joke"){
-
-        if(character==="lucas"){
-
-            reply =
-                "KKKKKK agora sim voltou ao normal.";
-
-            effect={
-                affection:4,
-                closeness:4,
-                irritation:-3
-            };
-
-        }else{
-
-            reply =
-                "você realmente faz piada quando fica nervoso.";
-
-            effect={
-                affection:2
-            };
-
-        }
-
-    }
-
-
-    /* NORMAL */
-
-    else{
-
-        if(character==="lucas"){
-
-            if(r.hurt > 30){
-
-                reply =
-                    "tá.";
-
-            }else if(r.closeness > 65){
-
-                reply =
-                    "fala. tô ouvindo.";
-
-            }else{
-
-                reply =
-                    "manda.";
-
-            }
-
-        }
-
-        else if(character==="marina"){
-
-            if(r.suspicion > 60){
-
-                reply =
-                    "fala logo.";
-
-            }else{
-
-                reply =
-                    "tô aqui.";
-
-            }
-
-        }
-
-        else{
-
-            reply =
-                "Estou ouvindo.";
-
-        }
-
-        effect={
-            trust:1
-        };
-
-    }
-
-
-    changeRelationship(
-        character,
-        effect
-    );
-
-
-    setTimeout(()=>{
-
-        addMessage(
-            character,
-            "them",
-            reply
-        );
-
-        showToast(
-            characters[character].name,
-            reply
-        );
-
-        updatePhoneBadge();
-
-    },650);
-
-
-    /*
-       O jogador não escolhe a fala.
-       A pessoa reage de acordo com o estado atual.
-    */
-
-    return null;
-}
-
-
-/* =========================================================
-   CHAT
-   ========================================================= */
-
-function addMessage(
-    character,
-    from,
-    text
-){
-
-    if(!chats[character]){
-        chats[character]=[];
-    }
-
-    chats[character].push({
-
-        from,
-        text,
-        time:formatTime()
-
-    });
-
-    renderContacts();
-
-    if(
-        game.selectedCharacter===character &&
-        phoneLayer.classList.contains("open")
-    ){
-
-        renderChat(character);
-
-    }
-
-    updatePhoneBadge();
-
-    saveGame();
-}
-
-
-function renderContacts(){
-
-    contactList.innerHTML="";
-
-    Object.keys(chats)
-        .forEach(character=>{
-
-            const person =
-                characters[character];
-
-            const list =
-                chats[character];
-
-            const last =
-                list[list.length-1];
-
-            const unread =
-                list.filter(
-                    m=>m.from==="them" && !m.read
-                ).length;
-
-            const el =
-                document.createElement("button");
-
-            el.className="contact";
-
-            el.onclick=()=>{
-                openChat(character);
-            };
-
-            el.innerHTML=`
-
-                <div class="avatar">
-                    ${person.initial}
-                </div>
-
-                <div class="contact-info">
-
-                    <div class="contact-name">
-                        ${person.name}
-                    </div>
-
-                    <div class="contact-last">
-                        ${escapeHTML(last?.text || "")}
-                    </div>
-
-                </div>
-
-                <span
-                    class="contact-unread"
-                    style="
-                        display:${unread ? "flex":"none"}
-                    ">
-                    ${unread}
-                </span>
-
-            `;
-
-            contactList.appendChild(el);
-
-        });
-
-}
-
-
-function openChat(character){
-
-    game.selectedCharacter =
-        character;
-
-    switchPhonePage("phoneChat");
-
-    $("chatName").textContent =
-        characters[character].name;
-
-    $("chatAvatar").textContent =
-        characters[character].initial;
-
-    const r =
-        game.relationships[character];
-
-    if(r.hurt > 35){
-
-        $("chatStatus").textContent =
-            "digitando...";
-
-    }else if(r.irritation > 35){
-
-        $("chatStatus").textContent =
-            "visto recentemente";
-
-    }else{
-
-        $("chatStatus").textContent =
-            "online";
-    }
-
-    chats[character].forEach(
-        message=>{
-
-            if(message.from==="them"){
-                message.read=true;
-            }
-
-        }
-    );
-
-    renderChat(character);
-
-    updatePhoneBadge();
-
-}
-
-
-function renderChat(character){
-
-    chatMessages.innerHTML="";
-
-    chats[character]
-        .forEach(message=>{
-
-            const el =
-                document.createElement("div");
-
-            el.className =
-                "message " +
-                (
-                    message.from==="me"
-                        ? "me"
-                        : "them"
-                );
-
-            el.innerHTML=`
-
-                ${escapeHTML(message.text)}
-
-                <span class="message-time">
-                    ${message.time}
-                </span>
-
-            `;
-
-            chatMessages.appendChild(el);
-
-        });
-
-    requestAnimationFrame(()=>{
-
-        chatMessages.scrollTop =
-            chatMessages.scrollHeight;
-
-    });
-
-}
-
-
-/* =========================================================
-   FORMULÁRIO DO CHAT
-   ========================================================= */
-
-$("chatForm")
-    .addEventListener(
-        "submit",
-        event=>{
-
-            event.preventDefault();
-
-            const input =
-                $("messageInput");
-
-            const text =
-                input.value.trim();
-
-            if(!text)return;
-
-            const character =
-                game.selectedCharacter;
-
-            input.value="";
-
-            reactToMessage(
-                character,
-                text
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   PHONE
-   ========================================================= */
-
-function openPhone(){
-
-    phoneLayer.classList.add("open");
-
-    phoneLayer.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-    openPhoneHome();
-
-    updatePhoneBadge();
-
-}
-
-
-function closePhone(){
-
-    phoneLayer.classList.remove("open");
-
-    phoneLayer.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-    game.selectedCharacter=null;
-
-}
-
-
-function switchPhonePage(id){
-
-    document
-        .querySelectorAll(".phone-page")
-        .forEach(page=>{
-            page.classList.remove("active");
-        });
-
-    $(id).classList.add("active");
-
-}
-
-
-function openPhoneHome(){
-
-    switchPhonePage(
-        "phoneHome"
-    );
-
-}
-
-
-function openContacts(){
-
-    renderContacts();
-
-    switchPhonePage(
-        "phoneContacts"
-    );
-
-}
-
-
-function openMemories(){
-
-    renderMemories();
-
-    switchPhonePage(
-        "phoneMemories"
-    );
-
-}
-
-
-function updatePhoneBadge(){
-
-    let unread=0;
-
-    Object.values(chats)
-        .forEach(list=>{
-
-            unread +=
-                list.filter(
-                    m=>m.from==="them" && !m.read
-                ).length;
-
-        });
-
-    const badge =
-        $("phoneBadge");
-
-    const messageBadge =
-        $("messageBadge");
-
-    if(unread){
-
-        badge.textContent =
-            unread > 9 ? "9+" : unread;
-
-        badge.classList.add("visible");
-
-        messageBadge.textContent =
-            unread > 9 ? "9+" : unread;
-
-        messageBadge.classList.add("show");
-
-    }else{
-
-        badge.classList.remove(
-            "visible"
-        );
-
-        messageBadge.classList.remove(
-            "show"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   NOTIFICAÇÃO
-   ========================================================= */
-
-let toastTimer;
-
-function showToast(
-    title,
-    text
-){
-
-    $("toastTitle").textContent =
-        title;
-
-    $("toastText").textContent =
-        text;
-
-    toast.classList.add("show");
-
-    clearTimeout(toastTimer);
-
-    toastTimer =
-        setTimeout(()=>{
-
-            toast.classList.remove(
-                "show"
-            );
-
-        },3000);
-
-}
-
-
-/* =========================================================
-   CENA
-   ========================================================= */
-
-function setArt(type){
-
-    $("roomArt")
-        .classList.toggle(
-            "hidden",
-            type!=="room"
-        );
-
-    $("streetArt")
-        .classList.toggle(
-            "hidden",
-            type!=="street"
-        );
-
-    $("cafeArt")
-        .classList.toggle(
-            "hidden",
-            type!=="cafe"
-        );
-
-}
-
-
-function showCharacter(name){
-
-    $("lucasCharacter")
-        .classList.toggle(
-            "hidden",
-            name!=="lucas"
-        );
-
-    $("marinaCharacter")
-        .classList.toggle(
-            "hidden",
-            name!=="marina"
-        );
-
-}
-
-
-function hideCharacters(){
-
-    $("lucasCharacter")
-        .classList.add("hidden");
-
-    $("marinaCharacter")
-        .classList.add("hidden");
-
-}
-
-
-/* =========================================================
-   TYPEWRITER
-   ========================================================= */
-
-let typingTimer=null;
-
-function typeText(
-    element,
-    text,
-    speed=13
-){
-
-    clearInterval(
-        typingTimer
-    );
-
-    element.textContent="";
-
-    let i=0;
-
-    typingTimer =
-        setInterval(()=>{
-
-            element.textContent +=
-                text[i];
-
-            i++;
-
-            if(i>=text.length){
-
-                clearInterval(
-                    typingTimer
-                );
-
-            }
-
-        },speed);
-
-}
-
-
-/* =========================================================
-   RENDER
-   ========================================================= */
-
-function render(){
-
-    const scene =
-        scenes[game.scene];
-
-    if(!scene)return;
-
-    setArt(
-        scene.art
-    );
-
-    if(
-        game.scene!=="cafe" &&
-        game.scene!=="lucasStart" &&
-        game.scene!=="lucasTalk" &&
-        game.scene!=="lucasSerious" &&
-        game.scene!=="lucasConcern"
-    ){
-
-        hideCharacters();
-
-    }
-
-    if(
-        game.scene==="marinaTalk" ||
-        game.scene==="marinaQuestion" ||
-        game.scene==="reveal" ||
-        game.scene==="endTalk"
-    ){
-
-        showCharacter("marina");
-
-    }
-
-    sceneLocation.textContent =
-        scene.location;
-
-    narrator.textContent =
-        scene.narrator || "";
-
-    dialogue.innerHTML="";
-
-    if(scene.speaker){
-
-        dialogue.innerHTML=`
-
-            <span class="speaker">
-                ${escapeHTML(scene.speaker)}
-            </span>
-
-        `;
-
-    }
-
-    const text =
-        scene.dialogue || "";
-
-    const textNode =
-        document.createElement("span");
-
-    dialogue.appendChild(
-        textNode
-    );
-
-    typeText(
-        textNode,
-        text,
-        10
-    );
-
-
-    choices.innerHTML="";
-
-    scene.choices
-        .forEach(
-            (choice,index)=>{
-
-                const button =
-                    document.createElement("button");
-
-                button.className="choice";
-
-                button.innerHTML =
-                    escapeHTML(
-                        choice.text
-                    );
-
-                button.onclick=()=>{
-
-                    choose(
-                        choice
-                    );
-
-                };
-
-                choices.appendChild(
-                    button
-                );
-
-            }
-        );
-
-
-    advanceTime(1);
-
-    saveGame();
-
-}
-
-
-/* =========================================================
-   ESCOLHA
-   ========================================================= */
-
-function choose(choice){
-
-    if(!choice)return;
-
-    choices
-        .querySelectorAll("button")
-        .forEach(
-            b=>b.disabled=true
-        );
-
-    const next =
-        choice.action
-            ? choice.action()
-            : null;
-
-    if(!next){
-
-        choices
-            .querySelectorAll("button")
-            .forEach(
-                b=>b.disabled=false
-            );
-
-        return;
-    }
-
-    transitionScene(
-        next
-    );
-
-}
-
-
-function transitionScene(next){
-
-    $("sceneFlash")
-        .classList.remove("play");
-
-    void $("sceneFlash").offsetWidth;
-
-    $("sceneFlash")
-        .classList.add("play");
-
-    setTimeout(()=>{
-
-        game.scene =
-            next;
-
-        if(next==="ending"){
-
-            showEnding();
-
-        }else{
-
-            render();
-
-        }
-
-    },220);
-
-}
-
-
-/* =========================================================
-   FINAL
-   ========================================================= */
-
-function showEnding(){
-
-    story.classList.remove("active");
-
-    ending.classList.add("active");
-
-    const score =
-        game.relationships.lucas.trust +
-        game.relationships.marina.trust +
-        game.relationships.mother.trust;
-
-    if(score>=210){
-
-        $("endingTitle").textContent =
-            "AINDA HÁ TEMPO";
-
-        $("endingText").textContent =
-            "Você não resolveu tudo. Mas, pela primeira vez, parou de fugir de todas as conversas ao mesmo tempo. Algumas pessoas ficaram. Outras ainda estavam decidindo.";
-
-    }
-
-    else if(
-        game.relationships.lucas.closeness < 30
-    ){
-
-        $("endingTitle").textContent =
-            "SILÊNCIO";
-
-        $("endingText").textContent =
-            "Você ganhou algumas horas de paz. O problema é que paz e silêncio nem sempre são a mesma coisa.";
 
     }
 
     else{
 
-        $("endingTitle").textContent =
-            "ENTRELINHAS";
+        final.innerHTML = `
+            ⚠️ <strong>ALERTA AMBIENTAL</strong><br><br>
 
-        $("endingText").textContent =
-            "Nem tudo foi dito. Talvez essa seja justamente a parte mais perigosa da história.";
+            Os dados continuam mostrando os problemas,
+            mas sem ações eles podem permanecer ou aumentar.
 
-    }
+            <br><br>
 
-}
-
-
-/* =========================================================
-   RESTART
-   ========================================================= */
-
-function restartGame(){
-
-    localStorage.removeItem(
-        "entrelinhas_save"
-    );
-
-    location.reload();
-
-}
-
-
-/* =========================================================
-   STORAGE
-   ========================================================= */
-
-function saveGame(){
-
-    try{
-
-        localStorage.setItem(
-            "entrelinhas_save",
-            JSON.stringify({
-
-                scene:game.scene,
-
-                timeMinutes:
-                    game.timeMinutes,
-
-                history:
-                    game.history,
-
-                memories:
-                    game.memories,
-
-                flags:
-                    game.flags,
-
-                relationships:
-                    game.relationships,
-
-                chats
-
-            })
-        );
-
-    }catch(error){
-
-        console.warn(
-            "Não foi possível salvar:",
-            error
-        );
+            A IA pode apontar o problema.
+            <strong>A decisão ainda depende das pessoas.</strong>
+        `;
 
     }
 
@@ -4976,267 +960,40 @@ function saveGame(){
 
 
 /* =========================================================
-   LOAD
+   ANIMAÇÃO DE ENTRADA
    ========================================================= */
 
-function loadGame(){
+const observer = new IntersectionObserver(
 
-    try{
+    entries => {
 
-        const raw =
-            localStorage.getItem(
-                "entrelinhas_save"
-            );
+        entries.forEach(entry => {
 
-        if(!raw)return false;
+            if(entry.isIntersecting){
 
-        const data =
-            JSON.parse(raw);
-
-        if(!data)return false;
-
-        game.scene =
-            data.scene || "arrival";
-
-        game.timeMinutes =
-            data.timeMinutes ||
-            game.timeMinutes;
-
-        game.history =
-            data.history || [];
-
-        game.memories =
-            data.memories || [];
-
-        game.flags =
-            data.flags || {};
-
-        if(data.relationships){
-
-            Object.keys(
-                game.relationships
-            ).forEach(character=>{
-
-                if(
-                    data.relationships[character]
-                ){
-
-                    game.relationships[character] =
-                        {
-                            ...game.relationships[character],
-                            ...data.relationships[character]
-                        };
-
-                }
-
-            });
-
-        }
-
-        if(data.chats){
-
-            chats =
-                data.chats;
-
-        }
-
-        return true;
-
-    }catch(error){
-
-        console.warn(
-            "Save inválido:",
-            error
-        );
-
-        return false;
-
-    }
-
-}
-
-
-/* =========================================================
-   UTIL
-   ========================================================= */
-
-function escapeHTML(text){
-
-    return String(text)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================================================
-   BOTÃO COMEÇAR
-   ========================================================= */
-
-$("startButton")
-    .addEventListener(
-        "click",
-        ()=>{
-
-            intro.classList.remove(
-                "active"
-            );
-
-            story.classList.add(
-                "active"
-            );
-
-            game.scene="arrival";
-
-            render();
-
-            setTimeout(()=>{
-
-                showToast(
-                    "23:47",
-                    "Uma nova noite começou."
-                );
-
-            },800);
-
-        }
-    );
-
-
-/* =========================================================
-   BOTÃO CELULAR
-   ========================================================= */
-
-$("phoneButton")
-    .addEventListener(
-        "click",
-        openPhone
-    );
-
-
-/* =========================================================
-   ESC
-   ========================================================= */
-
-document.addEventListener(
-    "keydown",
-    event=>{
-
-        if(event.key==="Escape"){
-
-            closePhone();
-
-        }
-
-        if(
-            event.key.toLowerCase()==="p"
-        ){
-
-            if(
-                phoneLayer.classList.contains(
-                    "open"
-                )
-            ){
-
-                closePhone();
-
-            }else{
-
-                openPhone();
+                entry.target.style.animation =
+                    "entrada .7s ease";
 
             }
 
-        }
+        });
 
+    },
+
+    {
+        threshold:.15
     }
+
 );
 
 
-/* =========================================================
-   RELÓGIO
-   ========================================================= */
+document.querySelectorAll(".node,.mission,.decision")
+    .forEach(element => observer.observe(element));
 
-setInterval(()=>{
-
-    $("gameTime").textContent =
-        formatTime();
-
-    $("phoneClock").textContent =
-        formatTime();
-
-},1000);
-
-
-/* =========================================================
-   EVENTO ALEATÓRIO
-   ========================================================= */
-
-setInterval(()=>{
-
-    if(
-        !story.classList.contains(
-            "active"
-        )
-    )return;
-
-    if(
-        phoneLayer.classList.contains(
-            "open"
-        )
-    )return;
-
-    const random =
-        Math.random();
-
-    if(
-        random < .18 &&
-        game.scene!=="arrival"
-    ){
-
-        addMessage(
-            "lucas",
-            "them",
-            "mano..."
-        );
-
-        showToast(
-            "Lucas",
-            "Nova mensagem"
-        );
-
-    }
-
-},30000);
-
-
-/* =========================================================
-   INICIALIZAÇÃO
-   ========================================================= */
-
-loadGame();
-
-renderContacts();
-
-renderMemories();
-
-updatePhoneBadge();
-
-
-/*
-   IMPORTANTE:
-
-   O jogo começa na tela inicial.
-   O save continua existindo mesmo após fechar
-   o navegador.
-
-   E a página inteira continua travada:
-   não existe scroll vertical nem horizontal.
-*/
 
 </script>
 
 </body>
 </html>
+```
+
